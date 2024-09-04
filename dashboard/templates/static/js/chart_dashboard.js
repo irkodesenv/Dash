@@ -1,5 +1,5 @@
-
-    let labelColor, headingColor, borderColor, legendColor;
+   
+      let labelColor, headingColor, borderColor, legendColor;
   
       labelColor = config.colors_dark.textMuted;
       headingColor = config.colors_dark.headingColor;

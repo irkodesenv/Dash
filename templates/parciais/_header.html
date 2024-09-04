@@ -4,19 +4,10 @@
       <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
         <a href="index.html" class="app-brand-link gap-2">
 
-           
-          
-          
 
-
-                
             
             <span class="app-brand-logo demo">
                 <img src="{% static 'assets/img/logo_irko/irko.png' %}" alt class="w-px-50 h-auto" />
-
-
-
-
 
           </span>
           <span class="app-brand-text demo menu-text fw-bold text-heading" style="color: #5c719e !important"> IRKO ORGANIZAÇÃO CONTÁBIL</span>
@@ -75,7 +66,7 @@
           -->
           <!-- /Language -->
 
-          
+          <!---->
           <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
               <i class="bx bx-md"></i>
@@ -98,6 +89,16 @@
               </li>
             </ul>
           </li>
+
+          <li class="nav-item navbar-dropdown dropdown-user dropdown">
+            <a class="dropdown-item" href="{% url 'accounts:logoff' %}">
+            <span style="font-size: 20px;">Logoff</span>
+            </a>           
+          </li>
+
+          
+
+          
           
           <!-- / Style Switcher-->
 <!-- Style Switcher 

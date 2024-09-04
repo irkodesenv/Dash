@@ -17,7 +17,8 @@ class Conexao:
             database = self.database, 
             port = self.port,
             user = self.user, 
-            password = self.password
+            password = self.password,
+        	charset='ISO8859_1',
         )
         
         return self.conexao
@@ -33,10 +34,10 @@ class QueryBuilder:
         self.conn = conn
         self.values_prop = None
         self.tabela = tabela
-        self.joins = None
+        self.joins_prop = None
         self.where_clause = None
-        self.group_by = None
-        self.order_by = None
+        self.group_by_prop = None
+        self.order_by_prop = None
 
 
     def joins(self, joins):
@@ -54,8 +55,7 @@ class QueryBuilder:
             Returns:
             - QueryBuilder: Instância do QueryBuilder para encadeamento.
         """
-
-        self.joins = joins
+        self.joins_prop = joins
         return self
 
 
@@ -113,8 +113,7 @@ class QueryBuilder:
             Returns:
             - QueryBuilder: Instância do QueryBuilder para encadeamento.
         """
-
-        self.group_by = group
+        self.group_by_prop = group
         return self
 
 
@@ -134,7 +133,7 @@ class QueryBuilder:
             - QueryBuilder: Instância do QueryBuilder para encadeamento.
         """
 
-        self.order_by = orders
+        self.order_by_prop = orders
         return self
 
 
@@ -143,15 +142,15 @@ class QueryBuilder:
             # Construção da consulta SQL baseada nos parâmetros fornecidos
             sql = f"SELECT {self.values_prop.strip() if self.values_prop else "*"} FROM {self.tabela.strip()}"
 
-            if self.joins:
-                sql += f" {self.joins.strip()}"
+            if self.joins_prop:
+                sql += f" {self.joins_prop.strip()}"
             if self.where_clause:
                 sql += f" WHERE {self.where_clause.strip()}"
-            if self.group_by:
-                sql += f" GROUP BY {self.group_by.strip()}"
-            if self.order_by:
-                sql += f" ORDER BY {self.order_by.strip()}"
-
+            if self.group_by_prop:
+                sql += f" GROUP BY {self.group_by_prop.strip()}"
+            if self.order_by_prop:
+                sql += f" ORDER BY {self.order_by_prop.strip()}"
+ 
             cursor = self.conn.cursor()
             cursor.execute(sql)
             rows = cursor.fetchall()

@@ -8,7 +8,6 @@ class Financeiro:
 
         
     def retorna_obj_error(self):
-
         self.obj_retorno['success'] = False
         self.obj_retorno['data']['code'] = 500
         self.obj_retorno['data']['message'] = "Não foi possível retornar dados."
@@ -43,8 +42,12 @@ class Financeiro:
         # Calcula as porcentagens
         porcentagens = {}
         for chave, valor in dados.items():
-            porcentagem = (valor / total) * 100
-            porcentagens[chave] = round(porcentagem, 2)  # Arredonda para 2 casas decimais
+            porcentagem = 0
+            try:
+                porcentagem = (valor / total) * 100
+            except Exception as e:
+                porcentagem = 0
+            porcentagens[chave] = int(porcentagem)
         
         return porcentagens
     

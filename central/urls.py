@@ -16,6 +16,8 @@ Including another URLconf
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('dashboard.urls')),
+    path('', include('accounts.urls')),
+    path('dashboard/', include('dashboard.urls', namespace="dashboard")),
     path('rel_financeiro/', include('relatorios_financeiro.urls',namespace='relatorios_financeiro')),
+    path('bancos/', include('bancos.urls',namespace='bancos')),
 ]

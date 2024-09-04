@@ -1,0 +1,129 @@
+{% load static %}
+<!doctype html>
+
+<html
+  lang="en"
+  class="light-style layout-wide customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../../assets/"
+  data-template="horizontal-menu-template-no-customizer"
+  data-style="light">
+  <head>
+     <!-- Favicon -->
+     <link href="{% static 'assets/img/favicon/favicon.ico' %}" rel="stylesheet">
+     <!-- Icons -->
+     <link href="{% static 'assets/vendor/fonts/boxicons.css' %}" rel="stylesheet">
+     <link href="{% static 'assets/vendor/fonts/fontawesome.css' %}" rel="stylesheet">
+     <link href="{% static 'assets/vendor/fonts/flag-icons.css' %}" rel="stylesheet">
+     <!-- Core CSS -->
+     <link href="{% static 'assets/vendor/css/rtl/core.css' %}" rel="stylesheet">
+     <link href="{% static 'assets/vendor/css/rtl/theme-default.css' %}" rel="stylesheet">
+     <link href="{% static 'assets/css/demo.css' %}" rel="stylesheet">
+     <!-- Vendors CSS -->
+     <link href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" rel="stylesheet">
+     <link href="{% static 'assets/vendor/libs/typeahead-js/typeahead.css' %}" rel="stylesheet">
+     <!-- Vendor -->
+     <link href="{% static 'assets/vendor/libs/@form-validation/form-validation.css' %}" rel="stylesheet">
+     <link href="{% static 'assets/vendor/css/pages/page-auth.css' %}" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Login</title>
+  </head>
+
+  <body>
+
+    <!-- Content -->
+    <div class="authentication-wrapper authentication-cover">
+      <!-- Logo -->
+      <a class="app-brand auth-cover-brand gap-2">
+        <span class="app-brand-logo demo">
+            <img src="{% static 'assets/img/logo_irko/irko.png' %}" alt class="w-px-50 h-auto mt-2" />
+        </span>
+        <span class="app-brand-text demo text-heading fw-bold mt-2">IRKO</span>
+      </a>
+      <!-- /Logo -->
+      <div class="authentication-inner row m-0">
+        <!-- /Left Text -->
+        <div class="d-none d-lg-flex col-lg-7 col-xl-8 align-items-center p-5">
+          <div class="w-100 d-flex justify-content-center">
+            <img
+              src="{% static 'assets/img/illustrations/boy-with-rocket-light.png' %}"
+              class="img-fluid"
+              alt="Login image"
+              width="700"
+              data-app-dark-img="illustrations/boy-with-rocket-dark.png"
+              data-app-light-img="illustrations/boy-with-rocket-light.png" />
+          </div>
+        </div>
+        <!-- /Left Text -->
+
+        <!-- Login -->
+        <div class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg p-sm-12 p-6">
+          <div class="w-px-400 mx-auto mt-12 pt-5">
+            <h2 class="mb-1">Bem vindo! 👋</h2>
+            <p class="mb-6"> <h4> Digite suas credenciais para acesso.</h4></p>
+
+            <form id="formAuthentication" class="mb-6" action="{% url 'accounts:login' %}" method="POST">
+                {% csrf_token %}
+
+              <div class="mb-6">
+                <label for="usuario" class="form-label">  <h5>Usuário </h5> </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="usuario"
+                  id="usuario"
+                  placeholder="Digite seu usuário"
+                  autofocus 
+                  style="height: 50px;"/>
+              </div>
+              <div class="mb-6 form-password-toggle">
+                <label class="form-label" for="senha"> <h5>Senha </h5></label>
+                <div class="input-group input-group-merge">
+                  <input
+                    type="password"
+                    id="senha"
+                    class="form-control"
+                    name="senha"
+                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                    aria-describedby="password" 
+                    style="height: 50px;"/>
+                </div>
+              </div> 
+              
+              {% if error %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                  {{error}}   
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>    
+              {% endif %}     
+
+              <button class="btn btn-primary d-grid w-100" style="background-color: #f68549; border-color: #f68549; height: 60px !important"> <h3 style="color: #FFF"> Entrar</h3></button>
+            </form>       
+          </div>
+        </div>
+        <!-- /Login -->
+      </div>
+    </div>
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/hammer/hammer.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/i18n/i18n.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/typeahead-js/typeahead.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <!-- Vendors JS -->
+    <script src="{% static 'assets/vendor/libs/@form-validation/popular.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/@form-validation/auto-focus.js' %}"></script>
+    <script src="{% static 'assets/js/pages-auth.js' %}"></script>
+    <!-- Page JS -->
+  </body>
+</html>

@@ -39,4 +39,4 @@ class Api:
             data = response.json()
             return {'success': True, 'code': response.status_code, 'data': data}
         else:
-            return {'error': True, 'code': response.status_code, 'data': 'Erro ao chamar API'}
+            return {'success': False, 'code': response.status_code, 'data': 'Erro ao chamar API'}

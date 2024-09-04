@@ -26,6 +26,10 @@
     padding-left: 10px !important;
 }
 
+.padding-left-0{
+    padding-left: 0px !important;
+}
+
 /* Fonts */
 .f-size-13{
     font-size: 10px !important;
@@ -47,8 +51,23 @@
     font-size: 23px !important;
 }
 
+.f-size-28{
+    font-size: 28px !important;
+}
+
 .f-bold{
     font-weight: bold !important;
+}
+
+
+/* Paddings */
+.pl-5{
+    padding-left: 3px !important;
+}
+
+
+.pr-5{
+    padding-right: 3px !important;
 }
 
 
@@ -59,12 +78,14 @@
     border: 1px solid #ccc; /* Apenas para visualização */
 }
 
+
 .scrollable-table {
     width: 100%;
     overflow-y: auto; /* Adiciona barra de rolagem vertical quando necessário */
     padding-right: 18px; /* Adiciona espaço para a barra de rolagem vertical */
     box-sizing: content-box; /* Garante que o padding não aumente a largura */
 }
+
 
 .scrollable-table-wrapper:hover .scrollable-table {
     overflow-y: auto; /* Mostra a barra de rolagem vertical ao passar o mouse */

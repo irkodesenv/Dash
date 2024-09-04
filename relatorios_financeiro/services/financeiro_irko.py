@@ -135,8 +135,11 @@ class FinanceiroIrko(Financeiro):
                     empresas_nexxera += 1
                 else:
                     empresas_sem_nexxecera += 1
+            
+            total_em_porcentagem = 0
 
-            total_em_porcentagem = (empresas_nexxera / total) *100
+            if empresas_nexxera:
+                total_em_porcentagem = (empresas_nexxera / total) *100
 
             return {
                 "total_empresas": total,
@@ -161,18 +164,16 @@ class FinanceiroIrko(Financeiro):
 
         try:
             if 'success' in self.dados:
-                financeiro_irko = FinanceiroIrko()
                 obj_retorno['success'] = True
                 obj_retorno['data']['code'] = self.dados['code']
-                obj_retorno['data']['total_clientes'] = financeiro_irko.retorna_total_clientes(self.dados)
-                obj_retorno['data']['nexxera'] = financeiro_irko.retorna_qtd_clientes_nexxera(self.dados)
+                obj_retorno['data']['total_clientes'] = self.retorna_total_clientes(self.dados)
+                obj_retorno['data']['nexxera'] = self.retorna_qtd_clientes_nexxera(self.dados)
             else:
                 self.codigo_retorno = self.dados['code']
-                self.retorna_obj_error()
-                return obj_retorno
-
+                return self.retorna_obj_error()
+            
             return obj_retorno
-        except ValueError as error:
+        except Exception as error:
                 self.codigo_retorno = 500
                 return self.retorna_obj_error()
 
@@ -190,14 +191,18 @@ class FinanceiroIrko(Financeiro):
                     for empresa in values['ListaEmpresa']:
                         # Possui master
                         if int(empresa['QtdeMaster']) > 0:
-                            total_master += 1
+                            total_master += int(empresa['QtdeMaster'])
                             # Mais de um Master
                             if int(empresa['QtdeMaster']) > 1:
                                 total_mais_de_um_master += 1
                             else:
                                 total_um_master += 1
-                        else:     
-                            total_nao_master += 1
+                        else:
+                            total_master += 0
+                            total_mais_de_um_master += 0
+                            total_um_master += 0                           
+                    
+                        total_nao_master += int(empresa['QtdeNaoMaster'])
 
             return {
                 "master": total_master,
@@ -264,6 +269,6 @@ class FinanceiroIrko(Financeiro):
             }
 
         # Criar o dicionário de bancos ordenados
-        bancos = {banco['Nome'][0:14]: {'qtd_contas': banco['QtdeContas'], 'codigo': banco['Codigo'], 'qtd_clientes': banco['QtdeClientes']} for banco in sorted_bancos}
-
+        bancos = {banco['Codigo']: {'qtd_contas': banco['QtdeContas'], 'nome': banco['Nome'][0:14], 'qtd_clientes': banco['QtdeClientes']} for banco in sorted_bancos}
+        
         return {'lista_bancos': bancos, 'ranking_bancos': ranking_seis_bancos}

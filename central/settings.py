@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import os 
 from pathlib import Path
 from .conf_banco_homolog import DATABASE, HOST, PASSWORD, PORT, USER
+from .conf_url_apis import TOKEN_API_IRKO, URL_API_IRKO
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +28,10 @@ SECRET_KEY = '-ieps1_l6-h6=06kj-ib1hz#$m^6bt)5@n&$yau+u=c(tv++_f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+	'10.11.100.122',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -39,9 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts.apps.AccountsConfig',
     'dashboard.apps.DashboardConfig',
     'relatorios_financeiro.apps.RelatoriosFinanceiroConfig',
-    'conexoes.apps.ConexoesConfig'
+    'conexoes.apps.ConexoesConfig',
+    'clientes.apps.ClientesConfig',
+    'bancos.apps.BancosConfig'
 ]
 
 MIDDLEWARE = [
@@ -52,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'central.urls'
@@ -81,8 +89,8 @@ WSGI_APPLICATION = 'central.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase', # This is where you put the name of the db file. 
-                 # If one doesn't exist, it will be created at migration time.
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+                 
     }   
 }
 
@@ -123,7 +131,8 @@ STATIC_URL = 'templates/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'templates' / 'static',
     BASE_DIR / 'dashboard/templates/static',
-    BASE_DIR / 'relatorios_financeiro/templates/static'
+    BASE_DIR / 'relatorios_financeiro/templates/static',
+    BASE_DIR / 'clientes/templates/static'
 ]
 
 # BD
@@ -132,3 +141,6 @@ DATABASE = DATABASE
 PORT = PORT
 USER = USER
 PASSWORD = PASSWORD
+
+URL_API_IRKO = URL_API_IRKO
+TOKEN_API_IRKO = TOKEN_API_IRKO

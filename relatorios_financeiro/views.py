@@ -1,76 +1,187 @@
-from django.shortcuts import render
-from pprint import pprint
-from .services.financeiro_irko import FinanceiroIrko 
-from .services.financeiro_athenas import FinanceiroAthenas
-from .services.financeiro_athenas import Financeiro
-from conexoes.services.firebird import Conexao
-from conexoes.services.api import Api
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from pprint import pprint 
+from django.http import JsonResponse
+from .services.relatorios_irko import RelatorioIrkoService
+from .services.relatorios_athenas import RelatorioAthenasService
+from clientes.services.controller_irko import ControllerClienteIrko
+from clientes.services.controller_athenas import ControllerClienteAthenas
 import json
+import logging
+from .utils.utils import combinar_dados_nexxcera, combinar_dados_bancos
+
+logger = logging.getLogger(__name__)
 
 
+@login_required(redirect_field_name='login')
 def retorna_relatorio_financeiro(request):
 
-    # Athenas
-    #dados_athenas = processa_relatorio_empresas_nexxera_athenas()
+    # Se for uma solicitação Formulario
+    if request.method == 'POST':
+        filtros = request.POST  
+        request.session['filtros'] = filtros
 
-    # Irko
-    dados_nexxera = processa_relatorio_empresas_nexxera_irko()
+        return redirect('relatorios_financeiro:rel_financeiro')
     
-    # Provisorio
-    dados_athenas = dados_nexxera
-    dados_operadores = processsa_dados_operadores()
+    filtros = request.session.get('filtros', {})
+    
+    codigo_cliente = filtros.get('select-clientes', []) 
 
-    dados_bancos = processa_grafico_bancos()
+    #Clientes 
+    clientes_irko = processa_clientes_irko([])
+    clientes_athenas = processa_clientes_athenas("")
 
+    clientes = combina_clientes(clientes_irko, clientes_athenas)
+
+    # Nexxcera
+    dados_nexxcera_irko = processa_relatorio_empresas_nexxera_irko([codigo_cliente])
+    dados_nexxcera_athenas = processa_relatorio_empresas_nexxera_athenas(codigo_cliente)
+
+    if dados_nexxcera_irko['success'] and dados_nexxcera_athenas['success']:
+        dados_nexxcera_combinado = combinar_dados_nexxcera(dados_nexxcera_athenas, dados_nexxcera_irko)
+    else:
+        dados_nexxcera_combinado = {'success': False, 'code': 404, 'data': 'Erro ao chamar API'}
+
+    # Operadores Irko
+    dados_operadores = processsa_dados_operadores_irko([codigo_cliente])
+
+    # Bancos
+    dados_bancos_athenas = processa_grafico_bancos_athenas(codigo_cliente)
+    dados_bancos_irko = processa_grafico_bancos_irko([codigo_cliente])
+
+    combinar_dados_bancos(dados_bancos_irko, dados_bancos_athenas)
+    dados_bancos_combinados_ordenados = dict(sorted(dados_bancos_irko['lista_bancos'].items(), key=lambda x: x[1]['qtd_contas'], reverse=True))
+
+    request.session['filtros'] = {}
     return render(request, 'relatorios_financeiro/relatorio_financeiro.html', 
-                  {"dados_nexxera": dados_nexxera, 
-                   "dados_athenas": dados_athenas, 
+                { 
+                   "dados_athenas": dados_nexxcera_combinado, 
                    "dados_operadores": dados_operadores['operadores'], 
                    "contagem_operadores_inteiro": dados_operadores['contagem_inteiro'], 
                    'dados_operadores_porcentagem': dados_operadores['contagem_porcentagem'],
-                   'lista_bancos': dados_bancos['lista_bancos'],
-                   'ranking_bancos': json.dumps(dados_bancos['ranking_bancos'] )
-                   })
+                   'lista_bancos': dados_bancos_combinados_ordenados,
+                   'ranking_bancos': json.dumps(dados_bancos_irko['ranking_bancos']),
+                   'clientes': clientes,
+                   'filtro_cliente': codigo_cliente
+                })
 
 
-def processa_relatorio_empresas_nexxera_irko():
-    api = Api(url = "http://diamante2:57773/csp/prgfnc/dash/EmpresasFinanceiro")
- 
-    financeiro_irko = FinanceiroIrko()
-    financeiro_irko.dados = api.get()
-
-    return financeiro_irko.processa_relatorio_empresas_nexxcera() 
-
-
-def processa_relatorio_empresas_nexxera_athenas():
-    financeiro_athenas = FinanceiroAthenas()
-    return financeiro_athenas.processa_relatorio_empresas_nexxcera()
+def processa_relatorio_empresas_nexxera_irko(arr_clientes):
+    try:
+        relatorio_service = RelatorioIrkoService(arr_clientes = arr_clientes)    
+        return relatorio_service.empresas_nexxcera()
+    except Exception as e:        
+        #logger.error(f"Erro ao processar relatório: {str(e)}")
+        return {'data': {'code': 500, 'message': 'Não foi possível retornar dados.'}, 'success': False}
 
 
-def processsa_dados_operadores():
-    # Dados operadores
-    api_operadores  = Api(url = "http://diamante2:57773/csp/prgfnc/dash/Operadores")
-    dados_operadores = FinanceiroIrko()
-    dados_operadores.dados = api_operadores.get()
+def processa_relatorio_empresas_nexxera_athenas(arr_clientes):
+    try:
+        relatorio_service = RelatorioAthenasService(arr_clientes = arr_clientes)    
+        return relatorio_service.empresas_nexxcera()
+    except Exception as e:       
+        #logger.error(f"Erro ao processar relatório: {str(e)}")
+        return {
+            'success': False,
+            'code': 500,
+            'data': 'Não foi possível retornar nexxcera do Athenas'
+        }
 
-    # Contagem de operadores por clientes
-    api_contagem_master = Api(url = 'http://diamante2:57773/csp/prgfnc/dash/OperadoresMasterPorCliente')
-    contagem_operadores = FinanceiroIrko()
-    contagem_operadores.dados = api_contagem_master.get()
+
+def processsa_dados_operadores_irko(arr_clientes):
+    try:
+        relatorio_service = RelatorioIrkoService(arr_clientes = arr_clientes) 
+        return relatorio_service.dados_operadores()   
+    except Exception as e:
+        return {'data': {'code': 500, 'message': 'Não foi possível retornar dados.'}, 'success': False}
+
+
+def processa_grafico_bancos_irko(arr_clientes):
+    try:
+        relatorio_service = RelatorioIrkoService(arr_clientes = arr_clientes) 
+        return relatorio_service.bancos()   
+    except Exception as e:
+        return {'data': {'code': 500, 'message': 'Não foi possível retornar dados.'}, 'success': False}
+
+
+def processa_grafico_bancos_athenas(arr_clientes):
+    try:
+        relatorio_service = RelatorioAthenasService(arr_clientes = arr_clientes)    
+        return relatorio_service.ranking_bancos()
+    except Exception as e:  
+        #logger.error(f"Erro ao processar relatório: {str(e)}")
+        return {
+            'success': False,
+            'code': 500,
+            'data': 'Não foi possível retornar bancos do Athenas'
+        }
     
-    # Define masters para calcular o grafico de operadores
-    contagem_operadores.masters = contagem_operadores.retorna_contagem_operadores()
+
+def processa_clientes_irko(arr_clientes):
+    try:
+        clientes = ControllerClienteIrko(arr_clientes = arr_clientes)    
+        return clientes.retorna_cadastro_clientes()
+    except Exception as e:  
+        #logger.error(f"Erro ao processar relatório: {str(e)}")
+        return {
+            'success': False,
+            'code': 500,
+            'data': 'Não foi possível retornar clientes do Irko'
+        }
+    
+
+def processa_clientes_athenas(arr_clientes):
+    try:
+        clientes = ControllerClienteAthenas(arr_clientes = arr_clientes)
+        dados_clientes = clientes.retorna_cadastro_clientes()  
+
+        return {
+            'success': True,
+            'code': 200,
+            'data': {'ListaEmpresas': dados_clientes}
+        }
+    except Exception as e:  
+        return {
+            'success': False,
+            'code': 500,
+            'data': 'Não foi possível retornar clientes do Athenas'
+        }
+    
+
+def combina_clientes(clientes_irko, clientes_athenas):
+
+    # Verifica se ambas as respostas foram bem-sucedidas
+    if not (clientes_irko['success'] and clientes_athenas['success']):
+        return {'success': False, 'code': 500, 'data': {'message': 'Erro ao processar os dados.'}}
+
+    lista_empresas_irko = clientes_irko.get('data', {}).get('ListaEmpresas', [])
+    lista_empresas_athenas = clientes_athenas.get('data', {}).get('ListaEmpresas', [])
+
+    # Merge das duas listas
+    lista_empresas_combinada = lista_empresas_irko + lista_empresas_athenas
+
+    # Ordena a lista combinada pelo campo 'Codigo'
+    lista_empresas_combinada.sort(key=lambda empresa: int(empresa.get('Codigo', 0)))
 
     return {
-        "operadores": dados_operadores.retorna_operadores(),
-        "contagem_inteiro": contagem_operadores.retorna_contagem_operadores(),
-        "contagem_porcentagem": contagem_operadores.separa_contadores_masters()
+        'success': True,
+        'code': 200,
+        'data': {'ListaEmpresas': lista_empresas_combinada}
     }
 
 
-def processa_grafico_bancos():
-    api_info_bancos = Api(url = "http://diamante2:57773/csp/prgfnc/dash/TotalizadoresBancos")
-    dados_bancos = FinanceiroIrko()
-    dados_bancos.dados = api_info_bancos.get()
-    
-    return dados_bancos.retorna_ranking_bancos()
+def retorna_operadores(request):
+    codigo_cliente = request.POST.get('codigo_cliente', "")
+    codigo_operador = request.POST.get('codigo', "")
+
+    dados_operadores = processsa_dados_operadores_irko([codigo_cliente])
+
+    try:
+        if codigo_operador:
+            for operador in dados_operadores['operadores']:    
+                if operador['id_usuario'] == codigo_operador:
+                    return JsonResponse([operador], safe=False)
+
+        return JsonResponse(dados_operadores['operadores'], safe=False)
+    except Exception as e:
+        return JsonResponse(dados_operadores['operadores'], safe=False)
