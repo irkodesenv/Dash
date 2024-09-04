@@ -1,16 +1,7 @@
 // Ranking Bancos
-function gera_grafico_rank_bancos(array_nomes, array_percents){
+function gera_grafico_rank_bancos(array_nomes, array_percents, cores, percent_max){
 
-  const cores = {
-    'BANCO BRADESCO S/A': '#FF0000',
-    'BANCO ITAU S.A': '#FFA500',
-    'BANCO SANTANDER BANESPA':'#FF6666',
-    'HSBC S/A': config.colors.secondary,
-    'CITIBANK S/A': '#ADD8E6',
-    'MERRYL LYNCH': '#0000FF',
-  };
-
-  const coresParaGrafico = array_nomes.map(banco => cores[banco] || 'defaultColor');
+const coresParaGrafico = array_nomes.map(banco => cores[banco] || 'defaultColor');
 
 const horizontalRankBancos = document.querySelector('#horizontalbancos'),
     horizontalBarChartConfig = {
@@ -100,12 +91,12 @@ const horizontalRankBancos = document.querySelector('#horizontalbancos'),
             fontSize: '13px'
           },
           formatter: function (val) {
-            return `${val}%`;
+            return `${Math.round(val)}%`;
           }
         }
       },
       yaxis: {
-        max: 35,
+        max: percent_max,
         labels: {
           style: {
             colors: [config.colors_dark.borderColor],

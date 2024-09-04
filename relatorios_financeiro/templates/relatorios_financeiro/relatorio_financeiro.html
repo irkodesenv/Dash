@@ -7,16 +7,60 @@ Parâmetros Bancários
 
 {% block 'content' %}
 
-{% if dados_nexxera.success == False %}
-  <div class="alert alert-solid-danger f-size-18" role="alert">
-    Estamos com instabilidade na conexão, por favor acionar a equipe responsável.
-  </div>
+{% if dados_athenas.success == False %}
+<div class="alert alert-solid-danger f-size-18" role="alert">
+  Estamos com instabilidade na conexão de clientes, por favor acionar a equipe responsável.
+</div>
 {% endif %}
 
+{% if lista_bancos.success == False %}
+<div class="alert alert-solid-danger f-size-18" role="alert">
+  Estamos com instabilidade na conexão de bancos, por favor acionar a equipe responsável.
+</div>
+{% endif %}
+
+<link href="{% static 'assets/vendor/libs/select2/select2.css' %}" rel="stylesheet">
+
+<div class="row">
+
+  <div class="col">
+    <div class="card mb-6">
+
+      <form action="{% url 'relatorios_financeiro:rel_financeiro' %}" method="POST" class="card-body">
+        {% csrf_token %}
+        <h6>Filtro(s): </h6>
+        <div class="row g-6">
+          <div class="col-md-5">
+            <label class="form-label" for="multicol-country">Cliente</label>
+            <select id="select-clientes" name="select-clientes" class="select2 form-select" data-allow-clear="true">
+              <option value="">Select</option>
+              {% for cliente in clientes.data.ListaEmpresas %}
+                {% if filtro_cliente and cliente.Codigo == filtro_cliente %}
+                  <option value="{{cliente.Codigo}}" selected> {{cliente.Codigo}} - {{cliente.Razao}}</option>
+                {% else %}
+                  <option value="{{cliente.Codigo}}"> {{cliente.Codigo}} - {{cliente.Razao}}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" name="btn-filtro" id="btn-filtro" class="btn btn-primary me-3">Filtrar</button>
+            {% if filtro_cliente %}
+              <button type="button" onclick="window.location.reload()" class="btn btn-danger me-3">Limpar Filtro</button>
+            {% endif %}
+          </div>
+        </div>
+      </form>
+    </div>
+    <!--/ Content -->
+  </div>
+</div>
+
 <!-- Card Clientes  -->
-<div class="row mb-6" id="sortable-cards">
+<div class="row mb-6">
   <div class="col-lg-4 col-md-4 col-sm-12">
-    <div class="card drag-item cursor-move mb-lg-0 mb-6 card-border-shadow-primary">
+    <div class="card mb-lg-0 mb-6 card-border-shadow-primary">
       <div class="card-body">
         <div class="card-title d-flex align-items-start justify-content-between mb-4">
           <div class="avatar flex-shrink-0">
@@ -24,13 +68,9 @@ Parâmetros Bancários
           </div>
           <p class="mb-1 f-size-20 f-bold"> Total de Clientes </p>
         </div>
-
         <hr>
-
         <div class="row gy-4 gy-sm-1">
-
-          <div class="col"> 
-
+          <div class="col">
           </div>
 
           <div class="col-sm-6 col-lg-4 align-self-end">
@@ -49,7 +89,7 @@ Parâmetros Bancários
 
   <!-- Card Masters -->
   <div class="col-lg-4 col-md-4 col-sm-12">
-    <div class="card drag-item cursor-move mb-lg-0 mb-6 card-border-shadow-primary">
+    <div class="card mb-lg-0 mb-6 card-border-shadow-primary">
       <div class="card-body">
         <div class="card-title d-flex align-items-start justify-content-between mb-4">
           <div class="avatar flex-shrink-0">
@@ -92,7 +132,7 @@ Parâmetros Bancários
             <hr class="d-none d-sm-block d-lg-none">
           </div>
 
-          
+
         </div>
       </div>
     </div>
@@ -100,7 +140,7 @@ Parâmetros Bancários
 
   <!-- Card Nexxera -->
   <div class="col-lg-4 col-md-4 col-sm-12">
-    <div class="card drag-item cursor-move mb-lg-0 mb-6 card-border-shadow-primary">
+    <div class="card mb-lg-0 mb-6 card-border-shadow-primary">
       <div class="card-body">
         <div class="card-title d-flex align-items-start justify-content-between mb-4">
           <div class="avatar flex-shrink-0">
@@ -142,7 +182,7 @@ Parâmetros Bancários
             </div>
             <hr class="d-none d-sm-block d-lg-none">
           </div>
-          
+
         </div>
       </div>
     </div>
@@ -157,7 +197,7 @@ Parâmetros Bancários
     <div class="card h-100">
       <div class="card-header d-flex align-items-center justify-content-between">
         <div class="card-title mb-0">
-          <h5 class="m-0 me-2 f-size-23">Clientes</h5>
+          <h5 class="m-0 me-2 f-size-23">Operadores</h5>
         </div>
       </div>
 
@@ -165,60 +205,84 @@ Parâmetros Bancários
 
       <div class="card-body">
         <div class="d-none d-lg-flex vehicles-progress-labels mb-6">
-          <div class="vehicles-progress-label on-the-way-text f-size-18 f-bold" id="header_nao_master">Não Master</div>
-          <div class="vehicles-progress-label unloading-text f-size-18 f-bold" id="header_master">Master</div>
-        </div>
-        <div class="vehicles-overview-progress progress rounded-3 mb-6 bg-transparent overflow-hidden"
-          style="height: 46px">
-          <div class="progress-bar fw-medium text-start shadow-none bg-lighter text-heading px-4 rounded-0"
-            role="progressbar" id="table_nao_master" aria-valuenow="{{dados_operadores_porcentagem.nao_master}}" aria-valuemin="0" aria-valuemax="100">
-            {{dados_operadores_porcentagem.nao_master}}%
-          </div>
-          <div class="progress-bar fw-medium text-start shadow-none bg-primary px-4" role="progressbar" id="table_master"
-            aria-valuenow="{{dados_operadores_porcentagem.master}}" aria-valuemin="0" aria-valuemax="100">
-            {{dados_operadores_porcentagem.master}}%
-          </div>
+
+          {% if dados_operadores_porcentagem.nao_master %}
+            <div class="vehicles-progress-label on-the-way-text f-size-18 f-bold" id="header_nao_master">Não Master</div>
+          {% endif %}
+
+          {% if dados_operadores_porcentagem.master %}
+            <div class="vehicles-progress-label unloading-text f-size-18 f-bold" id="header_master">Master</div>
+          {% endif %}
+
         </div>
 
+        <div class="vehicles-overview-progress progress rounded-3 mb-6 bg-transparent overflow-hidden" style="height: 46px">
+
+            <div class="progress-bar fw-medium text-start shadow-none bg-lighter text-heading px-4 rounded-0"
+              role="progressbar" id="table_nao_master" aria-valuenow="{{dados_operadores_porcentagem.nao_master}}"
+              aria-valuemin="0" aria-valuemax="100">
+              {{dados_operadores_porcentagem.nao_master}}%
+            </div>
+
+          {% if dados_operadores_porcentagem.master %}
+            <div class="progress-bar fw-medium text-start shadow-none bg-primary px-4" role="progressbar" id="table_master" aria-valuenow="{{dados_operadores_porcentagem.master}}" aria-valuemin="0" aria-valuemax="100">
+              {{dados_operadores_porcentagem.master}}%
+            </div>
+          {% endif %}
+
+        </div>
       </div>
     </div>
   </div>
 
-
-    <!-- Grafico master -->
-    <div class="col-xxl-4 col-md-6 col-sm-12 mb-6">
-      <div class="card h-100">
-        <div class="card-header d-flex align-items-center justify-content-between">
-          <div class="card-title mb-0">
-            <h5 class="m-0 me-2 f-size-23">Clientes Masters</h5>
-          </div>
+  <!-- Grafico master -->
+  <div class="col-xxl-4 col-md-6 col-sm-12 mb-6">
+    <div class="card h-100">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="card-title mb-0">
+          <h5 class="m-0 me-2 f-size-23">Masters</h5>
         </div>
-  
-        <hr>
-  
-        <div class="card-body">
-          <div class="d-none d-lg-flex vehicles-progress-labels mb-6">
+      </div>
 
+      <hr>
+
+      <div class="card-body">
+        <div class="d-none d-lg-flex vehicles-progress-labels mb-6">
+          {% if dados_operadores_porcentagem.mais_de_um_master %}
             <div class="vehicles-progress-label loading-text f-size-18 f-bold" id="header_mais_de_um">Mais de 1</div>
-            <div class="vehicles-progress-label waiting-text text-nowrap f-size-18 f-bold" id="header_apenas_um">Apenas 1
-            </div>
-          </div>
-          <div class="vehicles-overview-progress progress rounded-3 mb-6 bg-transparent overflow-hidden"
-            style="height: 46px">
+          {% endif %}
 
-            <div class="progress-bar fw-medium text-start shadow-none text-bg-info px-2 px-sm-4" role="progressbar" id="table_mais_de_um"
-              aria-valuenow="{{dados_operadores_porcentagem.mais_de_um_master}}" aria-valuemin="0" aria-valuemax="100">
+          {% if dados_operadores_porcentagem.apenas_um_master %}
+            <div class="vehicles-progress-label waiting-text text-nowrap f-size-18 f-bold" id="header_apenas_um">Apenas 1  </div>
+          {% endif %}
+        </div>
+        <div class="vehicles-overview-progress progress rounded-3 mb-6 bg-transparent overflow-hidden"
+          style="height: 46px">
+
+
+          {% if dados_operadores_porcentagem.mais_de_um_master %}
+            <div class="progress-bar fw-medium text-start shadow-none text-bg-info px-2 px-sm-4" role="progressbar"
+              id="table_mais_de_um" aria-valuenow="{{dados_operadores_porcentagem.mais_de_um_master}}" aria-valuemin="0"
+              aria-valuemax="100">
               {{dados_operadores_porcentagem.mais_de_um_master}}%
             </div>
-            <div class="progress-bar fw-medium text-start shadow-none snackbar text-paper px-1 px-sm-3 rounded-0 px-lg-4" id="table_apenas_um"
-              role="progressbar" aria-valuenow="{{dados_operadores_porcentagem.apenas_um_master}}" aria-valuemin="0" aria-valuemax="100">
+          {% elif not dados_operadores_porcentagem.apenas_um_master %}            
+            <div class="f-size-18"> Não possui operadores masters </div>   
+          {% endif %}
+
+
+          {% if dados_operadores_porcentagem.apenas_um_master %}
+            <div class="progress-bar fw-medium text-start shadow-none snackbar text-paper px-1 px-sm-3 rounded-0 px-lg-4"
+              id="table_apenas_um" role="progressbar" aria-valuenow="{{dados_operadores_porcentagem.apenas_um_master}}"
+              aria-valuemin="0" aria-valuemax="100">
               {{dados_operadores_porcentagem.apenas_um_master}}%
-            </div>
-          </div>
-  
+            </div>         
+          {% endif %}
+
         </div>
       </div>
     </div>
+  </div>
   <!-- Grafico Clientes master -->
 
   <div class="col-xxl-4 col-md-6 col-sm-12 mb-6">
@@ -250,21 +314,21 @@ Parâmetros Bancários
         <div class="col-md-4 d-flex justify-content-around align-items-center">
           <div>
             <div class="d-flex align-items-baseline">
-              <span class="text-primary me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <span class="me-2" id="color_banco_0"><i class="bx bxs-circle bx-12px"></i></span>
               <div>
                 <p class="mb-0" id="nome_banco_0"></p>
                 <h5 id="percent_0"></h5>
               </div>
             </div>
             <div class="d-flex align-items-baseline my-12">
-              <span class="text-success me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <span class="me-2" id="color_banco_1"><i class="bx bxs-circle bx-12px"></i></span>
               <div>
                 <p class="mb-0" id="nome_banco_1"></p>
                 <h5 id="percent_1"></h5>
               </div>
             </div>
             <div class="d-flex align-items-baseline">
-              <span class="text-danger me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <span class="me-2" id="color_banco_2"><i class="bx bxs-circle bx-12px"></i></span>
               <div>
                 <p class="mb-0" id="nome_banco_2"></p>
                 <h5 id="percent_2"></h5>
@@ -274,24 +338,25 @@ Parâmetros Bancários
 
           <div>
             <div class="d-flex align-items-baseline">
-              <span class="text-info me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <span class="me-2" id="color_banco_3"><i class="bx bxs-circle bx-12px"></i></span>
               <div>
                 <p class="mb-0" id="nome_banco_3"></p>
                 <h5 id="percent_3"></h5>
               </div>
             </div>
             <div class="d-flex align-items-baseline my-12">
-              <span class="text-secondary me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <span class="me-2" id="color_banco_4"><i class="bx bxs-circle bx-12px"></i></span>
               <div>
                 <p class="mb-0" id="nome_banco_4"></p>
                 <h5 id="percent_4"></h5>
               </div>
             </div>
             <div class="d-flex align-items-baseline">
-              <span class="text-warning me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <span class="me-2" id="color_banco_5"><i class="bx bxs-circle bx-12px"></i></span>
               <div>
                 <p class="mb-0" id="nome_banco_5"></p>
-                <h5 id="percent_5"><h5>
+                <h5 id="percent_5">
+                  <h5>
               </div>
             </div>
           </div>
@@ -335,7 +400,8 @@ Parâmetros Bancários
       </div>
       <div class="tab-content pt-0">
         <div class="tab-pane fade show active" id="navs-pills-browser" role="tabpanel">
-          <div class="table-responsive text-start text-nowrap scrollable-table" style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
+          <div class="table-responsive text-start text-nowrap scrollable-table"
+            style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
             <table class="table table-borderless">
               <thead>
                 <tr>
@@ -344,21 +410,21 @@ Parâmetros Bancários
                   <th>Clientes</th>
                 </tr>
               </thead>
-              <tbody>                
+              <tbody>
 
                 {% for lista, info in lista_bancos.items %}
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img src="{% static 'media/bancos/' %}{{ info.codigo}}.png" class="img-fluid" width="20" />
-                          <span class="text-heading" style="margin-left: 5px;"> {{lista}}</span>
-                        </div>
-                      </td>
-                      <td class="text-heading">{{info.qtd_contas}}</td>
-                      <td class="text-heading">{{info.qtd_clientes}}</td>
-                    </tr>
-                {% endfor %}      
-             
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="{% static 'media/bancos/' %}{{lista}}.png" class="img-fluid" width="20" />
+                      <span class="text-heading" style="margin-left: 5px;"> {{info.nome}}</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">{{info.qtd_contas}}</td>
+                  <td class="text-heading">{{info.qtd_clientes}}</td>
+                </tr>
+                {% endfor %}
+
               </tbody>
             </table>
           </div>
@@ -590,21 +656,37 @@ Parâmetros Bancários
         </div>
       </div>
     </div>
-
-
   </div>
 </div>
-<!--  Bancos -->
 
-<div class="row">
+
   <!-- Tabela masters -->
   <div class="col-12 mb-0">
-    <div class="card scrollable-table-wrapper">
+    <div class="card">      
+      <div class="row g-6" style="padding-left: 20px; padding-right: 20px;">
+        <div class="col-md-5 mb-2 mt-8 col-sm-5">
+          <select id="select-operadores" onchange="retorna_operadores(this.value)" name="select-operadores" class="select2 form-select" data-allow-clear="true">
+            <option value="">Todos</option>
+              {% if dados_operadores %}
+                {% for operador in dados_operadores %}                    
+                    <option value="{{operador.id_usuario}}"> {{operador.id_usuario}} - {{operador.nome}}</option>
+                {% endfor %}
+              {% endif %}
+          </select>
+        </div>
+
+        <div class="col-md-5 mb-2 mt-md-9 col-sm-5">
+          <button type="button" id="btn_operadores" onclick="limparSelectOperadores()" class="btn btn-sm btn-danger me-3 d-none">Limpar Filtro</button>
+        </div>
+      </div>
+
+    <div class="card scrollable-table-wrapper" style="min-height: 480px;">
       <div class="card-datatable table-responsive scrollable-table">
         <table class="invoice-list-table table table-border-top-0">
           <thead>
             <tr>
               <th>Usuário</th>
+              <th>Procuração</th>
               <th>Cód Operador</th>
               <th class="cell-fit">Master</th>
               <th class="text-center">Banco</th>
@@ -618,53 +700,55 @@ Parâmetros Bancários
 
             {% for usuario in dados_operadores %}
 
-                {% for bancos_operador in usuario.bancos %}
-                    <tr>
-                      <td>
-                        <div class="d-flex justify-content-start align-items-center">
-                          <div class="avatar-wrapper">
-                            <div class="avatar avatar-sm me-2">
-                              <span class="avatar-initial rounded-circle bg-label-warning">{{usuario.iniciais}}</span>
-                            </div>
-                          </div>
-                          <div class="d-flex flex-column">
-                            <a href="pages-profile-user.html" class="text-heading text-truncate fw-medium">{{usuario.nome}}</a>
-                            <small class="text-truncate text-body">{{usuario.id_usuario}}</small>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{{bancos_operador.CodigoOperador}}</td>
+            {% for bancos_operador in usuario.bancos %}
+            <tr>
+              <td>
+                <div class="d-flex justify-content-start align-items-center">
+                  <div class="avatar-wrapper">
+                    <div class="avatar avatar-sm me-2">
+                      <span class="avatar-initial rounded-circle bg-label-warning">{{usuario.iniciais}}</span>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-column">
+                    <a href="pages-profile-user.html" class="text-heading text-truncate fw-medium">{{usuario.nome}}</a>
+                    <small class="text-truncate text-body">{{usuario.id_usuario}}</small>
+                  </div>
+                </div>
+              </td>
+              
+              <td>{{bancos_operador.DtaProcuracao}}</td>
+              <td>{{bancos_operador.CodigoOperador}}</td>
 
-                      {% if bancos_operador.FlgMaster == "S" %}
-                        <td><span class="badge bg-label-success"> Sim </span></td>
-                      {% else %}
-                        <td><span class="badge bg-label-danger"> Não </span></td>
-                      {% endif %}      
-                      
-                      <td class="text-center padding-right-10 padding-left-10">
-                        <img src="{% static 'media/bancos/' %}{{ bancos_operador.Banco}}.png" class="img-fluid" width="20" />
-        
-                          <span style="margin-top: 3px !important"> {{bancos_operador.Banco}} </span>
-                      </td>
-                      <td class="text-center">
-                        {{bancos_operador.Agencia}}
-                      </td>
-                      <td class="text-center">
-                        {{bancos_operador.ContaCorrente}}
-                      </td>
+              {% if bancos_operador.FlgMaster == "S" %}
+              <td><span class="badge bg-label-success"> Sim </span></td>
+              {% else %}
+              <td><span class="badge bg-label-danger"> Não </span></td>
+              {% endif %}
 
-                      {% if bancos_operador.Nexxcera == "1" %}
-                        <td><span class="badge bg-label-success"> Sim </span></td>
-                      {% else %}
-                        <td><span class="badge bg-label-danger"> Não </span></td>
-                      {% endif %}
+              <td class="text-center padding-right-10 padding-left-10">
+                <img src="{% static 'media/bancos/' %}{{ bancos_operador.Banco}}.png" class="img-fluid" width="20" />
 
-                      <td>
-                        {{bancos_operador.CodCli}} - {{bancos_operador.RazaoSocial}}
-                      </td>
-                    </tr>
-                      
-                {% endfor %}                
+                <span style="margin-top: 3px !important"> {{bancos_operador.Banco}} </span>
+              </td>
+              <td class="text-center">
+                {{bancos_operador.Agencia}}
+              </td>
+              <td class="text-center">
+                {{bancos_operador.ContaCorrente}}
+              </td>
+
+                {% if bancos_operador.Nexxcera == "1" %}
+                  <td><span class="badge bg-label-success"> Sim </span></td>
+                {% else %}
+                  <td><span class="badge bg-label-danger"> Não </span></td>
+                {% endif %}
+
+              <td>
+                {{bancos_operador.CodCli}} - {{bancos_operador.RazaoSocial}}
+              </td>
+            </tr>
+
+            {% endfor %}
             {% endfor %}
           </tbody>
         </table>
@@ -677,46 +761,48 @@ Parâmetros Bancários
 
 <script>
   const porcentagem_nexxera = '{{dados_athenas.data.nexxera.porcentagem}}'
+  const operadores = '{% url "relatorios_financeiro:operadores" %}';
+  
 </script>
 
 <script>
-    // Nao master
-    var nao_master = "{{dados_operadores_porcentagem.nao_master}}";
-    var nao_master_float = parseFloat(nao_master.replace(",", "."));
-    var header_nao_master = document.getElementById('header_nao_master');
-    var table_nao_master = document.getElementById('table_nao_master');
-    popula_grafico_operadores_master(header_nao_master, table_nao_master, nao_master, nao_master_float)
+  // Nao master
+  var nao_master = "{{dados_operadores_porcentagem.nao_master}}";
+  var nao_master_float = parseFloat(nao_master.replace(",", "."));
+  var header_nao_master = document.getElementById('header_nao_master');
+  var table_nao_master = document.getElementById('table_nao_master');
+  popula_grafico_operadores_master(header_nao_master, table_nao_master, nao_master, nao_master_float)
 
-    // Master
-    var master = "{{dados_operadores_porcentagem.master}}";
-    var master_float = parseFloat(nao_master.replace(",", "."));
-    var header_master = document.getElementById('header_master');
-    var table_master = document.getElementById('table_master');
-    popula_grafico_operadores_master(header_master, table_master, master, master_float)
+  // Master
+  var master = "{{dados_operadores_porcentagem.master}}";
+  var master_float = parseFloat(nao_master.replace(",", "."));
+  var header_master = document.getElementById('header_master');
+  var table_master = document.getElementById('table_master');
+  popula_grafico_operadores_master(header_master, table_master, master, master_float)
 
-    // Mais de um 
-    var mais_de_um = "{{dados_operadores_porcentagem.mais_de_um_master}}";
-    var mais_de_um_float = parseFloat(mais_de_um.replace(",", "."));
-    var header_mais_de_um = document.getElementById('header_mais_de_um');
-    var table_mais_de_um = document.getElementById('table_mais_de_um');
-    popula_grafico_operadores_master(header_mais_de_um, table_mais_de_um, mais_de_um, mais_de_um_float)
+  // Mais de um 
+  var mais_de_um = "{{dados_operadores_porcentagem.mais_de_um_master}}";
+  var mais_de_um_float = parseFloat(mais_de_um.replace(",", "."));
+  var header_mais_de_um = document.getElementById('header_mais_de_um');
+  var table_mais_de_um = document.getElementById('table_mais_de_um');
+  popula_grafico_operadores_master(header_mais_de_um, table_mais_de_um, mais_de_um, mais_de_um_float)
 
-    // Apenas um
-    var apenas_um = "{{dados_operadores_porcentagem.apenas_um_master}}";
-    var apenas_um_float = parseFloat(apenas_um.replace(",", "."));
-    var header_apenas_um = document.getElementById('header_apenas_um');
-    var table_apenas_um = document.getElementById('table_apenas_um');
-    popula_grafico_operadores_master(header_apenas_um, table_apenas_um, apenas_um, apenas_um_float)
-    
-    function popula_grafico_operadores_master(elemento, table, progresso, progressoFloat){
-      if (elemento) {
-        elemento.style.width = progressoFloat + '%';
-        elemento.setAttribute('aria-valuenow', progresso); // Atualiza o valor acessível da barra de progresso
-        
-        table.style.width = progressoFloat + '%';
-        table.setAttribute('aria-valuenow', progresso); // Atualiza o valor acessível da barra de progresso
-      } 
+  // Apenas um
+  var apenas_um = "{{dados_operadores_porcentagem.apenas_um_master}}";
+  var apenas_um_float = parseFloat(apenas_um.replace(",", "."));
+  var header_apenas_um = document.getElementById('header_apenas_um');
+  var table_apenas_um = document.getElementById('table_apenas_um');
+  popula_grafico_operadores_master(header_apenas_um, table_apenas_um, apenas_um, apenas_um_float)
+
+  function popula_grafico_operadores_master(elemento, table, progresso, progressoFloat) {
+    if (elemento) {
+      elemento.style.width = progressoFloat + '%';
+      elemento.setAttribute('aria-valuenow', progresso); // Atualiza o valor acessível da barra de progresso
+
+      table.style.width = progressoFloat + '%';
+      table.setAttribute('aria-valuenow', progresso); // Atualiza o valor acessível da barra de progresso
     }
+  }
 </script>
 
 <script src="{% static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
@@ -725,12 +811,25 @@ Parâmetros Bancários
 <script src="{% static 'assets/js/app-ecommerce-dashboard.js' %}"></script>
 <script src="{% static 'js/charts_financeiros.js' %}"></script>
 
+
+<script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+<script src="{% static 'js/relatorios_financeiro.js' %}"></script>
+
+
 <script>
   const ranking_bancos = JSON.parse('{{ ranking_bancos|escapejs }}');
-  
-  prepara_bancos_relatorio(ranking_bancos)
+  const cores = {
+    'BANCO BRADESCO S/A': '#FF0000',
+    'BANCO ITAU S.A': '#FFA500',
+    'BANCO SANTANDER BANESPA': '#FF6666',
+    'HSBC S/A': config.colors.secondary,
+    'CITIBANK S/A': '#ADD8E6',
+    'MERRYL LYNCH': '#0000FF',
+  };
 
-  function prepara_bancos_relatorio(array){
+  prepara_bancos_relatorio(ranking_bancos, cores)
+
+  function prepara_bancos_relatorio(array, cores) {
     let array_nomes = [];
     let array_percents = [];
     const bancosArray = Object.entries(ranking_bancos);
@@ -739,17 +838,23 @@ Parâmetros Bancários
     bancosArray.sort((a, b) => b[1].QtdeContas - a[1].QtdeContas);
     var i = 0
     bancosArray.forEach(([key, info]) => {
-        var element = document.getElementById("nome_banco_" + i);
-        if (element) {
-            element.textContent = info.nome;
-        }
+      var element = document.getElementById("nome_banco_" + i);
+      var element_color = document.getElementById("color_banco_" + i);
 
-        array_nomes.push(info.nome);
-        array_percents.push(info.Porcentagem);
-        i ++
+      if (element) {
+        element.textContent = info.nome;
+      }
+
+      if (element_color) {
+        element_color.style.color = cores[info.nome];
+      }
+
+      array_nomes.push(info.nome);
+      array_percents.push(info.Porcentagem);
+      i++
     });
 
-    gera_grafico_rank_bancos(array_nomes, array_percents)
+    gera_grafico_rank_bancos(array_nomes, array_percents, cores, Math.round(bancosArray[0][1]['Porcentagem'] + 2))
   }
 </script>
 
