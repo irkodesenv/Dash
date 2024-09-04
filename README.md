@@ -23,7 +23,7 @@ Sistema volta ao controle gerenciais
 
 
 ```
-git clone https://github.com/lucasviana78/dash_gerenciais2.git
+git clone https://github.com/irkodesenv/Dash.git
 cd dash_financeiro
 python -m venv .venv  ou  py -m venv .venv
 .venv/Scripts/activate
