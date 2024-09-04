@@ -1,0 +1,641 @@
+{% extends 'templates/base.html' %}
+{% load static %}
+
+{% block 'content' %}
+
+<link href="{% static 'css_dashboard.css' %}" rel="stylesheet">
+
+<!-- *** PAINEL PARA CONTROLE DO CONTAS A PAGAR *** -->
+
+<div class="row mb-6" id="sortable-cards">
+  <!-- Painel com Total de Contas a Pagar no DIA -->
+  <div class="card mb-6">
+    <div class="card-widget-separator-wrapper">
+      <div class="card-body card-widget-separator">
+        <div class="row gy-4 gy-sm-1">
+          <div class="col-sm-6 col-lg-3">
+            <div class="d-flex justify-content-between align-items-center card-widget-1 border-end pb-4 pb-sm-0">
+              <div>
+                <h4 class="mb-0">24</h4>
+                <p class="mb-0">Clientes</p>
+              </div>
+              <div class="avatar me-sm-6">
+                <span class="avatar-initial rounded bg-label-primary text-heading">
+                  <i class="bx bx-user bx-26px"></i>
+                </span>
+              </div>
+            </div>
+            <hr class="d-none d-sm-block d-lg-none me-6" />
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="d-flex justify-content-between align-items-center card-widget-2 border-end pb-4 pb-sm-0">
+              <div>
+                <h4 class="mb-0">185</h4>
+                <p class="mb-0">Qtd. Documentos</p>
+              </div>
+              <div class="avatar me-sm-6">
+                <span class="avatar-initial rounded bg-label-primary text-primary">
+                  <i class="bx bx-file bx-lg"></i>
+                </span>
+              </div>
+            </div>
+            <hr class="d-none d-sm-block d-lg-none" />
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="d-flex justify-content-between align-items-center border-end pb-4 pb-sm-0 card-widget-3">
+              <div>
+                <h4 class="mb-0">R$ 325.230,00</h4>
+                <p class="mb-0">Valor a Pagar</p>
+              </div>
+              <div class="avatar me-sm-6">
+                <span class="badge rounded-2 bg-label-danger p-2">
+                  <i class="bx bx-dollar bx-lg text-danger"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h4 class="mb-0 f-size-23 f-bold text-danger">29/07/2024</h4>
+                <p class="mb-0 f-size-20 f-bold">Data de Vencimento</p>
+              </div>
+              <div class="avatar">
+                <span class="avatar-initial rounded bg-label-danger text-danger">
+                  <i class="bx bx-error-circle bx-26px"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/Painel com Total de Contas a Pagar no DIA -->
+
+<div class="row">
+  <!-- Clientes Nexxera x Cnabs Gerados -->
+  <!--<div class="col-xxl-6 col-md-6 col-sm-12 mb-6">
+    <div class="card h-100">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="card-title mb-0">
+          <h5 class="m-0 me-2">Empresas Nexxera x Cnab's Gerados</h5>
+        </div>
+        <div class="dropdown">
+          <button class="btn p-0" type="button" id="vehiclesOverview" data-bs-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            <i class="bx bx-dots-vertical-rounded bx-lg text-muted"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="vehiclesOverview">
+            <a class="dropdown-item" href="javascript:void(0);">Select All</a>
+            <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+            <a class="dropdown-item" href="javascript:void(0);">Share</a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="d-none d-lg-flex vehicles-progress-labels mb-6">
+          <div class="vehicles-progress-label on-the-way-text" style="width: 39.7%">Clientes Nexxera</div>
+          <div class="vehicles-progress-label unloading-text" style="width: 28.3%">Cnab's Gerados</div>
+          <div class="vehicles-progress-label loading-text" style="width: 17.4%">Diferença</div>
+          <div class="vehicles-progress-label waiting-text text-nowrap" style="width: 14.6%">%</div>
+        </div>
+        <div class="vehicles-overview-progress progress rounded-3 mb-6 bg-transparent overflow-hidden"
+          style="height: 46px">
+          <div class="progress-bar fw-medium text-start shadow-none bg-lighter text-heading px-4 rounded-0"
+            role="progressbar" style="width: 39.7%" aria-valuenow="39.7" aria-valuemin="0" aria-valuemax="100">
+            39.7%
+          </div>
+          <div class="progress-bar fw-medium text-start shadow-none bg-primary px-4" role="progressbar"
+            style="width: 28.3%" aria-valuenow="28.3" aria-valuemin="0" aria-valuemax="100">
+            28.3%
+          </div>
+          <div class="progress-bar fw-medium text-start shadow-none text-bg-info px-2 px-sm-4" role="progressbar"
+            style="width: 17.4%" aria-valuenow="17.4" aria-valuemin="0" aria-valuemax="100">
+            17.4%
+          </div>
+          <div class="progress-bar fw-medium text-start shadow-none snackbar text-paper px-1 px-sm-3 rounded-0 px-lg-4"
+            role="progressbar" style="width: 14.6%" aria-valuenow="14.6" aria-valuemin="0" aria-valuemax="100">
+            14.6%
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table card-table table-border-top-0">
+            <tbody class="table-border-bottom-0">
+              <tr>
+                <td class="w-50 ps-0">
+                  <div class="d-flex justify-content-start align-items-center">
+                    <div class="me-2">
+                      <i class="bx bx-car bx-lg text-heading"></i>
+                    </div>
+                    <h6 class="mb-0 fw-normal">On the way</h6>
+                  </div>
+                </td>
+                <td class="text-end pe-0 text-nowrap">
+                  <h6 class="mb-0">2hr 10min</h6>
+                </td>
+                <td class="text-end pe-0">
+                  <span>39.7%</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-50 ps-0">
+                  <div class="d-flex justify-content-start align-items-center">
+                    <div class="me-2">
+                      <i class="bx bx-down-arrow-circle bx-lg text-heading"></i>
+                    </div>
+                    <h6 class="mb-0 fw-normal">Unloading</h6>
+                  </div>
+                </td>
+                <td class="text-end pe-0 text-nowrap">
+                  <h6 class="mb-0">3hr 15min</h6>
+                </td>
+                <td class="text-end pe-0">
+                  <span>28.3%</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-50 ps-0">
+                  <div class="d-flex justify-content-start align-items-center">
+                    <div class="me-2">
+                      <i class="bx bx-up-arrow-circle bx-lg text-heading"></i>
+                    </div>
+                    <h6 class="mb-0 fw-normal">Loading</h6>
+                  </div>
+                </td>
+                <td class="text-end pe-0 text-nowrap">
+                  <h6 class="mb-0">1hr 24min</h6>
+                </td>
+                <td class="text-end pe-0">
+                  <span>17.4%</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="w-50 ps-0">
+                  <div class="d-flex justify-content-start align-items-center">
+                    <div class="me-2">
+                      <i class="bx bx-time-five bx-lg text-heading"></i>
+                    </div>
+                    <h6 class="mb-0 fw-normal">Waiting</h6>
+                  </div>
+                </td>
+                <td class="text-end pe-0 text-nowrap">
+                  <h6 class="mb-0">5hr 19min</h6>
+                </td>
+                <td class="text-end pe-0">
+                  <span>14.6%</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!--/ Clientes Nexxera x Cnabs Gerados -->
+
+  <!-- Dash do Ranking dos 6 clientes com mais movimento  -->
+  <div class="col-xxl-6 col-md-6 col-sm-12 mb-6">
+    <div class="card text-center h-100">
+      <div class="card-header nav-align-top">
+        <ul class="nav nav-pills" role="tablist">
+          <li class="nav-item">
+            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+              data-bs-target="#navs-pills-browser" aria-controls="navs-pills-browser" aria-selected="true">
+              Clientes
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content pt-0 pb-4">
+        <div class="tab-pane fade show active" id="navs-pills-browser" role="tabpanel">
+          <div class="table-responsive text-start text-nowrap">
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Cliente</th>
+                  <th>Qtd.</th>
+                  <th>Valor</th>
+                  <th class="w-50">Percentual</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!--<img
+                      src="../../assets/img/icons/brands/edge.png"
+                      alt="Edge"
+                      height="24"
+                      class="me-3" /> -->
+                      <span class="text-heading f-bold">E-UB COMERCIO</span>
+                    </div>
+                  </td>
+                  <!--Quantidade de Documentos-->
+                  <td class="text-heading">35</td>
+                  <td class="text-heading">R$ 99.000,00</td>
+                  </td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 30.44%"
+                          aria-valuenow="30.44" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">30.44%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!--<img
+                        src="../../assets/img/icons/brands/edge.png"
+                        alt="Edge"
+                        height="24"
+                        class="me-3" /> -->
+                      <span class="text-heading f-bold">DOLCE & GABBANA</span>
+                    </div>
+                  </td>
+                  <!--Quantidade de Documentos -->
+                  <td class="text-heading">26</td>
+                  <!-- Valor total a pagar -->
+                  <td class="text-heading">R$ 98.000,00 </td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 30.13%"
+                          aria-valuenow="30.13" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">30.13%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!--<img
+                          src="../../assets/img/icons/brands/edge.png"
+                          alt="Edge"
+                          height="24"
+                          class="me-3" /> -->
+                      <span class="text-heading f-bold">NISSAN</span>
+                    </div>
+                  </td>
+                  </td>
+                  <td class="text-heading">24</td>
+                  <td class="text-heading">R$ 95.000,00</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 29.21%" aria-valuenow="29.21"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">29.21%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!--<img
+                        src="../../assets/img/icons/brands/edge.png"
+                        alt="Edge"
+                        height="24"
+                        class="me-3" /> -->
+                      <span class="text-heading f-bold">DASSAULT</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">23</td>
+                  <td class="text-heading">R$ 90.000,00</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 27.67%"
+                          aria-valuenow="27.67" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">27.67%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!-- <img
+                        src="../../assets/img/icons/brands/opera.png"
+                        alt="Opera"
+                        height="24"
+                        class="me-3" />
+                    -->
+                      <span class="text-heading f-bold">CHRISTIAN DIOR</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">22</td>
+                  <td class="text-heading">R$ 84.000,00</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 25.83%"
+                          aria-valuenow="1.94" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">25.83%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!-- <img src="../../assets/img/icons/brands/uc.png" 
+                            alt="uc" 
+                            height="24"
+                            class="me-3" />
+                     -->
+                      <span class="text-heading f-bold">IRKO CONTÁBIL</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">20</td>
+                  <td class="text-heading">R$ 72.000,00</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 22.14%"
+                          aria-valuenow="1.94" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">22.14%</small>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dash do Ranking dos 6 clientes com mais movimento  -->
+  <div class="col-xxl-6 col-md-6 col-sm-12 mb-6">
+    <div class="card text-center h-100">
+      <div class="card-header nav-align-top">
+        <ul class="nav nav-pills" role="tablist">
+          <li class="nav-item">
+            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+              data-bs-target="#navs-pills-browser" aria-controls="navs-pills-browser" aria-selected="true">
+              Clientes
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content pt-0 pb-4">
+        <div class="tab-pane fade show active" id="navs-pills-browser" role="tabpanel">
+          <div class="table-responsive text-start text-nowrap">
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Cliente</th>
+                  <th>Qtd.</th>
+                  <th>Valor</th>
+                  <th class="w-50">Percentual</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>7</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!--<img
+                      src="../../assets/img/icons/brands/edge.png"
+                      alt="Edge"
+                      height="24"
+                      class="me-3" /> -->
+                      <span class="text-heading f-bold">E-UB COMERCIO</span>
+                    </div>
+                  </td>
+                  <!--Quantidade de Documentos-->
+                  <td class="text-heading">35</td>
+                  <td class="text-heading">R$ 99.000,00</td>
+                  </td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 30.44%"
+                          aria-valuenow="30.44" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">30.44%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!--<img
+                        src="../../assets/img/icons/brands/edge.png"
+                        alt="Edge"
+                        height="24"
+                        class="me-3" /> -->
+                      <span class="text-heading f-bold">DOLCE & GABBANA</span>
+                    </div>
+                  </td>
+                  <!--Quantidade de Documentos -->
+                  <td class="text-heading">26</td>
+                  <!-- Valor total a pagar -->
+                  <td class="text-heading">R$ 98.000,00 </td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 30.13%"
+                          aria-valuenow="30.13" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">30.13%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!--<img
+                          src="../../assets/img/icons/brands/edge.png"
+                          alt="Edge"
+                          height="24"
+                          class="me-3" /> -->
+                      <span class="text-heading f-bold">NISSAN</span>
+                    </div>
+                  </td>
+                  </td>
+                  <td class="text-heading">24</td>
+                  <td class="text-heading">R$ 95.000,00</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 29.21%" aria-valuenow="29.21"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">29.21%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!--<img
+                        src="../../assets/img/icons/brands/edge.png"
+                        alt="Edge"
+                        height="24"
+                        class="me-3" /> -->
+                      <span class="text-heading f-bold">DASSAULT</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">23</td>
+                  <td class="text-heading">R$ 90.000,00</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 27.67%"
+                          aria-valuenow="27.67" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">27.67%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!-- <img
+                        src="../../assets/img/icons/brands/opera.png"
+                        alt="Opera"
+                        height="24"
+                        class="me-3" />
+                    -->
+                      <span class="text-heading f-bold">CHRISTIAN DIOR</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">22</td>
+                  <td class="text-heading">R$ 84.000,00</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 25.83%"
+                          aria-valuenow="1.94" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">25.83%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!-- <img src="../../assets/img/icons/brands/uc.png" 
+                            alt="uc" 
+                            height="24"
+                            class="me-3" />
+                     -->
+                      <span class="text-heading f-bold">IRKO CONTÁBIL</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">20</td>
+                  <td class="text-heading">R$ 72.000,00</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 22.14%"
+                          aria-valuenow="1.94" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">22.14%</small>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-6" id="sortable-cards">
+
+    <!-- Painel com Total de Contas a Pagar no DIA -->
+    <div class="card mb-6">
+      <div class="card-widget-separator-wrapper">
+        <div class="card-body card-widget-separator">
+          <div class="row gy-4 gy-sm-1">
+            <div class="col-sm-6 col-lg-3">
+              <div class="d-flex justify-content-between align-items-center card-widget-1 border-end pb-4 pb-sm-0">
+                <div>
+                  <h4 class="mb-0">24</h4>
+                  <p class="mb-0">Documentos Nexxera</p>
+                </div>
+                <div class="avatar me-sm-6">
+                  <span class="avatar-initial rounded bg-label-primary text-heading">
+                    <i class="bx bx-user bx-26px"></i>
+                  </span>
+                </div>
+              </div>
+              <hr class="d-none d-sm-block d-lg-none me-6" />
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="d-flex justify-content-between align-items-center card-widget-2 border-end pb-4 pb-sm-0">
+                <div>
+                  <h4 class="mb-0">60</h4>
+                  <p class="mb-0">Documentos Cnab's</p>
+                </div>
+                <div class="avatar me-sm-6">
+                  <span class="avatar-initial rounded bg-label-primary text-primary">
+                    <i class="bx bx-file bx-lg"></i>
+                  </span>
+                </div>
+              </div>
+              <hr class="d-none d-sm-block d-lg-none" />
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="d-flex justify-content-between align-items-center border-end pb-4 pb-sm-0 card-widget-3">
+                <div>
+                  <h4 class="mb-0">10</h4>
+                  <p class="mb-0">Outros</p>
+                </div>
+                <div class="avatar me-sm-6">
+                  <span class="badge rounded-2 bg-label-danger p-2">
+                    <i class="bx bx-dollar bx-lg text-danger"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="mb-0">185</h4>
+                  <p class="mb-0">Total Documentos</p>
+                </div>
+                <div class="avatar">
+                  <span class="avatar-initial rounded bg-label-danger text-danger">
+                    <i class="bx bx-error-circle bx-26px"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Dash do Ranking dos 6 clientes com mais movimento -->
+
+<script src="{% static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
+<script src="{% static 'assets/js/app-logistics-dashboard.js' %}"></script>
+
+<script src="{% static 'js/chart_dashboard.js' %}"></script>
+
+{% endblock %}

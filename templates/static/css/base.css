@@ -1,0 +1,71 @@
+/* Paddings */
+.padding-all-10{
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
+}
+
+.padding-all-15{
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+    padding-bottom: 15px !important;
+    padding-top: 15px !important;
+}
+
+.padding-lateral-15{
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+}
+
+.padding-right-10{
+    padding-right: 10px !important;
+}
+
+.padding-left-10{
+    padding-left: 10px !important;
+}
+
+/* Fonts */
+.f-size-13{
+    font-size: 10px !important;
+}
+
+.f-size-15{
+    font-size: 15px !important;
+}
+
+.f-size-18{
+    font-size: 18px !important;
+}
+
+.f-size-20{
+    font-size: 20px !important;
+}
+
+.f-size-23{
+    font-size: 23px !important;
+}
+
+.f-bold{
+    font-weight: bold !important;
+}
+
+
+.scrollable-table-wrapper {
+    max-height: 530px; /* Altura máxima da tabela */
+    overflow: hidden; /* Esconde as barras de rolagem por padrão */
+    position: relative; /* Define uma posição relativa */
+    border: 1px solid #ccc; /* Apenas para visualização */
+}
+
+.scrollable-table {
+    width: 100%;
+    overflow-y: auto; /* Adiciona barra de rolagem vertical quando necessário */
+    padding-right: 18px; /* Adiciona espaço para a barra de rolagem vertical */
+    box-sizing: content-box; /* Garante que o padding não aumente a largura */
+}
+
+.scrollable-table-wrapper:hover .scrollable-table {
+    overflow-y: auto; /* Mostra a barra de rolagem vertical ao passar o mouse */
+}

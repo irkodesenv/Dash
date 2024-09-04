@@ -1,0 +1,758 @@
+{% extends 'templates/base.html' %}
+{% load static %}
+
+{% block 'title' %}
+Parâmetros Bancários
+{% endblock %}
+
+{% block 'content' %}
+
+{% if dados_nexxera.success == False %}
+  <div class="alert alert-solid-danger f-size-18" role="alert">
+    Estamos com instabilidade na conexão, por favor acionar a equipe responsável.
+  </div>
+{% endif %}
+
+<!-- Card Clientes  -->
+<div class="row mb-6" id="sortable-cards">
+  <div class="col-lg-4 col-md-4 col-sm-12">
+    <div class="card drag-item cursor-move mb-lg-0 mb-6 card-border-shadow-primary">
+      <div class="card-body">
+        <div class="card-title d-flex align-items-start justify-content-between mb-4">
+          <div class="avatar flex-shrink-0">
+            <i class="bx bx-bar-chart-alt-2 bx-42px text-primary"></i>
+          </div>
+          <p class="mb-1 f-size-20 f-bold"> Total de Clientes </p>
+        </div>
+
+        <hr>
+
+        <div class="row gy-4 gy-sm-1">
+
+          <div class="col"> 
+
+          </div>
+
+          <div class="col-sm-6 col-lg-4 align-self-end">
+            <div class="d-flex justify-content-end align-items-center card-widget-1 pb-4 pb-sm-0">
+              <div class="padding-right-10">
+                <h4 class="mb-0">{{dados_athenas.data.total_clientes}}</h4>
+              </div>
+            </div>
+            <hr class="d-none d-sm-block d-lg-none me-6">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Masters -->
+  <div class="col-lg-4 col-md-4 col-sm-12">
+    <div class="card drag-item cursor-move mb-lg-0 mb-6 card-border-shadow-primary">
+      <div class="card-body">
+        <div class="card-title d-flex align-items-start justify-content-between mb-4">
+          <div class="avatar flex-shrink-0">
+            <i class="bx bx-user bx-42px text-primary"></i>
+          </div>
+          <p class="f-size-20 f-bold"> Operadores Masters </p>
+        </div>
+
+        <hr>
+
+        <div class="row gy-4 gy-sm-1 justify-content-center">
+
+          <div class="col-sm-6 col-lg-4">
+            <div class="d-flex justify-content-between align-items-center card-widget-1 border-end pb-4 pb-sm-0">
+              <div>
+                <h4 class="mb-0">{{contagem_operadores_inteiro.master}}</h4>
+                <p class="mb-0"></p>
+              </div>
+              <div class="avatar me-sm-6">
+                <span class="avatar-initial rounded bg-label-success text-heading">
+                  <i class="bx bxs-user-check bx-26px text-success"></i>
+                </span>
+              </div>
+            </div>
+            <hr class="d-none d-sm-block d-lg-none me-6">
+          </div>
+
+          <div class="col-sm-6 col-lg-4">
+            <div class="d-flex justify-content-between align-items-center card-widget-2 pb-4 pb-sm-0">
+              <div>
+                <h4 class="mb-0">{{contagem_operadores_inteiro.nao_master}}</h4>
+                <p class="mb-0"></p>
+              </div>
+              <div class="avatar me-lg-6">
+                <span class="avatar-initial rounded bg-label-danger text-heading">
+                  <i class="bx bxs-user-x bx-26px text-danger"></i>
+                </span>
+              </div>
+            </div>
+            <hr class="d-none d-sm-block d-lg-none">
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Nexxera -->
+  <div class="col-lg-4 col-md-4 col-sm-12">
+    <div class="card drag-item cursor-move mb-lg-0 mb-6 card-border-shadow-primary">
+      <div class="card-body">
+        <div class="card-title d-flex align-items-start justify-content-between mb-4">
+          <div class="avatar flex-shrink-0">
+            <i class="bx bx-buildings bx-42px text-primary"></i>
+          </div>
+          <p class="mb-1 f-size-20 f-bold"> Clientes com Nexxera </p>
+        </div>
+
+        <hr>
+
+        <div class="row gy-4 gy-sm-1 justify-content-center">
+          <div class="col-sm-6 col-lg-4">
+            <div class="d-flex justify-content-between align-items-center card-widget-1 border-end pb-4 pb-sm-0">
+              <div>
+                <h4 class="mb-0">{{dados_athenas.data.nexxera.empresas_nexxera}}</h4>
+                <p class="mb-0"></p>
+              </div>
+
+              <div class="avatar me-sm-6">
+                <span class="avatar-initial rounded bg-label-success text-heading">
+                  <i class="bx bx-check bx-26px text-success"></i>
+                </span>
+              </div>
+            </div>
+            <hr class="d-none d-sm-block d-lg-none me-6">
+          </div>
+
+          <div class="col-sm-6 col-lg-4">
+            <div class="d-flex justify-content-between align-items-center card-widget-2 pb-4 pb-sm-0">
+              <div>
+                <h4 class="mb-0">{{dados_athenas.data.nexxera.empresas_sem_nexxera}}</h4>
+                <p class="mb-0"></p>
+              </div>
+              <div class="avatar me-lg-6">
+                <span class="avatar-initial rounded bg-label-danger text-heading">
+                  <i class="bx bx-x bx-26px text-danger"></i>
+                </span>
+              </div>
+            </div>
+            <hr class="d-none d-sm-block d-lg-none">
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="row">
+  <!-- Grafico Clientes master -->
+  <div class="col-xxl-4 col-md-6 col-sm-12 mb-6">
+    <div class="card h-100">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="card-title mb-0">
+          <h5 class="m-0 me-2 f-size-23">Clientes</h5>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="card-body">
+        <div class="d-none d-lg-flex vehicles-progress-labels mb-6">
+          <div class="vehicles-progress-label on-the-way-text f-size-18 f-bold" id="header_nao_master">Não Master</div>
+          <div class="vehicles-progress-label unloading-text f-size-18 f-bold" id="header_master">Master</div>
+        </div>
+        <div class="vehicles-overview-progress progress rounded-3 mb-6 bg-transparent overflow-hidden"
+          style="height: 46px">
+          <div class="progress-bar fw-medium text-start shadow-none bg-lighter text-heading px-4 rounded-0"
+            role="progressbar" id="table_nao_master" aria-valuenow="{{dados_operadores_porcentagem.nao_master}}" aria-valuemin="0" aria-valuemax="100">
+            {{dados_operadores_porcentagem.nao_master}}%
+          </div>
+          <div class="progress-bar fw-medium text-start shadow-none bg-primary px-4" role="progressbar" id="table_master"
+            aria-valuenow="{{dados_operadores_porcentagem.master}}" aria-valuemin="0" aria-valuemax="100">
+            {{dados_operadores_porcentagem.master}}%
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+    <!-- Grafico master -->
+    <div class="col-xxl-4 col-md-6 col-sm-12 mb-6">
+      <div class="card h-100">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="card-title mb-0">
+            <h5 class="m-0 me-2 f-size-23">Clientes Masters</h5>
+          </div>
+        </div>
+  
+        <hr>
+  
+        <div class="card-body">
+          <div class="d-none d-lg-flex vehicles-progress-labels mb-6">
+
+            <div class="vehicles-progress-label loading-text f-size-18 f-bold" id="header_mais_de_um">Mais de 1</div>
+            <div class="vehicles-progress-label waiting-text text-nowrap f-size-18 f-bold" id="header_apenas_um">Apenas 1
+            </div>
+          </div>
+          <div class="vehicles-overview-progress progress rounded-3 mb-6 bg-transparent overflow-hidden"
+            style="height: 46px">
+
+            <div class="progress-bar fw-medium text-start shadow-none text-bg-info px-2 px-sm-4" role="progressbar" id="table_mais_de_um"
+              aria-valuenow="{{dados_operadores_porcentagem.mais_de_um_master}}" aria-valuemin="0" aria-valuemax="100">
+              {{dados_operadores_porcentagem.mais_de_um_master}}%
+            </div>
+            <div class="progress-bar fw-medium text-start shadow-none snackbar text-paper px-1 px-sm-3 rounded-0 px-lg-4" id="table_apenas_um"
+              role="progressbar" aria-valuenow="{{dados_operadores_porcentagem.apenas_um_master}}" aria-valuemin="0" aria-valuemax="100">
+              {{dados_operadores_porcentagem.apenas_um_master}}%
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  <!-- Grafico Clientes master -->
+
+  <div class="col-xxl-4 col-md-6 col-sm-12 mb-6">
+    <div class="card h-100">
+      <div class="card-body pb-0">
+        <span class="d-block fw-medium mb-1 f-size-20 f-bold">Clientes com Nexxera</span>
+      </div>
+      <div id="clientes_nexxera" class="mb-2"></div>
+      <div class="p-4 pt-2">
+        <small class="d-block text-center">Percentual de clientes que usam a Nexxera</small>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bancos  -->
+<div class="row mb-6 g-6">
+  <div class="col-12 col-md-6 col-xl-8">
+    <div class="card h-100">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h4 class="card-title m-0 me-2">Bancos</h4>
+
+      </div>
+      <div class="card-body row g-3">
+        <div class="col-md-8">
+          <div id="horizontalbancos"></div>
+        </div>
+        <div class="col-md-4 d-flex justify-content-around align-items-center">
+          <div>
+            <div class="d-flex align-items-baseline">
+              <span class="text-primary me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <div>
+                <p class="mb-0" id="nome_banco_0"></p>
+                <h5 id="percent_0"></h5>
+              </div>
+            </div>
+            <div class="d-flex align-items-baseline my-12">
+              <span class="text-success me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <div>
+                <p class="mb-0" id="nome_banco_1"></p>
+                <h5 id="percent_1"></h5>
+              </div>
+            </div>
+            <div class="d-flex align-items-baseline">
+              <span class="text-danger me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <div>
+                <p class="mb-0" id="nome_banco_2"></p>
+                <h5 id="percent_2"></h5>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="d-flex align-items-baseline">
+              <span class="text-info me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <div>
+                <p class="mb-0" id="nome_banco_3"></p>
+                <h5 id="percent_3"></h5>
+              </div>
+            </div>
+            <div class="d-flex align-items-baseline my-12">
+              <span class="text-secondary me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <div>
+                <p class="mb-0" id="nome_banco_4"></p>
+                <h5 id="percent_4"></h5>
+              </div>
+            </div>
+            <div class="d-flex align-items-baseline">
+              <span class="text-warning me-2"><i class="bx bxs-circle bx-12px"></i></span>
+              <div>
+                <p class="mb-0" id="nome_banco_5"></p>
+                <h5 id="percent_5"><h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 col-xl-4 col-md-6">
+
+    <div class="card text-center h-100">
+      <div class="card-header nav-align-top">
+        <ul class="nav nav-pills" role="tablist">
+          <li class="nav-item">
+            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+              data-bs-target="#navs-pills-browser" aria-controls="navs-pills-browser" aria-selected="true">
+              Quantidade
+            </button>
+          </li>
+          <!-- 
+          <li class="nav-item">
+            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-os"
+              aria-controls="navs-pills-os" aria-selected="false">
+              Movimento
+            </button>
+          </li>
+
+                            <li class="nav-item">
+                              <button
+                                type="button"
+                                class="nav-link"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-pills-country"
+                                aria-controls="navs-pills-country"
+                                aria-selected="false">
+                                Country
+                              </button></li>
+                            -->
+        </ul>
+      </div>
+      <div class="tab-content pt-0">
+        <div class="tab-pane fade show active" id="navs-pills-browser" role="tabpanel">
+          <div class="table-responsive text-start text-nowrap scrollable-table" style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th>Banco</th>
+                  <th>Contas</th>
+                  <th>Clientes</th>
+                </tr>
+              </thead>
+              <tbody>                
+
+                {% for lista, info in lista_bancos.items %}
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <img src="{% static 'media/bancos/' %}{{ info.codigo}}.png" class="img-fluid" width="20" />
+                          <span class="text-heading" style="margin-left: 5px;"> {{lista}}</span>
+                        </div>
+                      </td>
+                      <td class="text-heading">{{info.qtd_contas}}</td>
+                      <td class="text-heading">{{info.qtd_clientes}}</td>
+                    </tr>
+                {% endfor %}      
+             
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="navs-pills-os" role="tabpanel">
+          <div class="table-responsive text-start text-nowrap">
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th>Banco</th>
+                  <th>Movimento</th>
+                  <th class="w-50">Proporção</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="{% static 'assets/img/logo_bancos/itau.svg' %}" alt="Firefox" height="24"
+                        class="me-3" />
+                      <span class="text-heading">Itaú</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">R$ 328.450,45</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 8.37%" aria-valuenow="8.37"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">8.37%</small>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="{% static 'assets/img/logo_bancos/itau.svg' %}" alt="Firefox" height="24"
+                        class="me-3" />
+                      <span class="text-heading">Itaú</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">R$ 328.450,45</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 8.37%" aria-valuenow="8.37"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">8.37%</small>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="{% static 'assets/img/logo_bancos/itau.svg' %}" alt="Firefox" height="24"
+                        class="me-3" />
+                      <span class="text-heading">Itaú</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">R$ 328.450,45</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 8.37%" aria-valuenow="8.37"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">8.37%</small>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="{% static 'assets/img/logo_bancos/itau.svg' %}" alt="Firefox" height="24"
+                        class="me-3" />
+                      <span class="text-heading">Itaú</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">R$ 328.450,45</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 8.37%" aria-valuenow="8.37"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">8.37%</small>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="{% static 'assets/img/logo_bancos/itau.svg' %}" alt="Firefox" height="24"
+                        class="me-3" />
+                      <span class="text-heading">Itaú</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">R$ 328.450,45</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 8.37%" aria-valuenow="8.37"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">8.37%</small>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="navs-pills-country" role="tabpanel">
+          <div class="table-responsive text-start text-nowrap">
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Country</th>
+                  <th>Visits</th>
+                  <th class="w-50">Data In Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <i class="fis fi fi-us rounded-circle fs-3 me-3"></i>
+                      <span class="text-heading">USA</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">87.24k</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 38.12%"
+                          aria-valuenow="38.12" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">38.12%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <i class="fis fi fi-br rounded-circle fs-3 me-3"></i>
+                      <span class="text-heading">Brazil</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">42.68k</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 28.23%"
+                          aria-valuenow="28.23" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">28.23%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <i class="fis fi fi-in rounded-circle fs-3 me-3"></i>
+                      <span class="text-heading">India</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">12.58k</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 14.82%" aria-valuenow="14.82"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">14.82%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <i class="fis fi fi-au rounded-circle fs-3 me-3"></i>
+                      <span class="text-heading">Australia</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">4.13k</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 12.72%"
+                          aria-valuenow="12.72" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">12.72%</small>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <i class="fis fi fi-fr rounded-circle fs-3 me-3"></i>
+                      <span class="text-heading">France</span>
+                    </div>
+                  </td>
+                  <td class="text-heading">2.21k</td>
+                  <td>
+                    <div class="d-flex justify-content-between align-items-center gap-4">
+                      <div class="progress w-100" style="height: 10px">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 7.11%" aria-valuenow="7.11"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="fw-medium">7.11%</small>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+<!--  Bancos -->
+
+<div class="row">
+  <!-- Tabela masters -->
+  <div class="col-12 mb-0">
+    <div class="card scrollable-table-wrapper">
+      <div class="card-datatable table-responsive scrollable-table">
+        <table class="invoice-list-table table table-border-top-0">
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>Cód Operador</th>
+              <th class="cell-fit">Master</th>
+              <th class="text-center">Banco</th>
+              <th class="text-center">Agência</th>
+              <th class="text-center">C/C</th>
+              <th class="text-center">Nexxera</th>
+              <th class="text-center">Cliente</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+
+            {% for usuario in dados_operadores %}
+
+                {% for bancos_operador in usuario.bancos %}
+                    <tr>
+                      <td>
+                        <div class="d-flex justify-content-start align-items-center">
+                          <div class="avatar-wrapper">
+                            <div class="avatar avatar-sm me-2">
+                              <span class="avatar-initial rounded-circle bg-label-warning">{{usuario.iniciais}}</span>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <a href="pages-profile-user.html" class="text-heading text-truncate fw-medium">{{usuario.nome}}</a>
+                            <small class="text-truncate text-body">{{usuario.id_usuario}}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{{bancos_operador.CodigoOperador}}</td>
+
+                      {% if bancos_operador.FlgMaster == "S" %}
+                        <td><span class="badge bg-label-success"> Sim </span></td>
+                      {% else %}
+                        <td><span class="badge bg-label-danger"> Não </span></td>
+                      {% endif %}      
+                      
+                      <td class="text-center padding-right-10 padding-left-10">
+                        <img src="{% static 'media/bancos/' %}{{ bancos_operador.Banco}}.png" class="img-fluid" width="20" />
+        
+                          <span style="margin-top: 3px !important"> {{bancos_operador.Banco}} </span>
+                      </td>
+                      <td class="text-center">
+                        {{bancos_operador.Agencia}}
+                      </td>
+                      <td class="text-center">
+                        {{bancos_operador.ContaCorrente}}
+                      </td>
+
+                      {% if bancos_operador.Nexxcera == "1" %}
+                        <td><span class="badge bg-label-success"> Sim </span></td>
+                      {% else %}
+                        <td><span class="badge bg-label-danger"> Não </span></td>
+                      {% endif %}
+
+                      <td>
+                        {{bancos_operador.CodCli}} - {{bancos_operador.RazaoSocial}}
+                      </td>
+                    </tr>
+                      
+                {% endfor %}                
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--/ Tabela masters -->
+
+</div>
+
+<script>
+  const porcentagem_nexxera = '{{dados_athenas.data.nexxera.porcentagem}}'
+</script>
+
+<script>
+    // Nao master
+    var nao_master = "{{dados_operadores_porcentagem.nao_master}}";
+    var nao_master_float = parseFloat(nao_master.replace(",", "."));
+    var header_nao_master = document.getElementById('header_nao_master');
+    var table_nao_master = document.getElementById('table_nao_master');
+    popula_grafico_operadores_master(header_nao_master, table_nao_master, nao_master, nao_master_float)
+
+    // Master
+    var master = "{{dados_operadores_porcentagem.master}}";
+    var master_float = parseFloat(nao_master.replace(",", "."));
+    var header_master = document.getElementById('header_master');
+    var table_master = document.getElementById('table_master');
+    popula_grafico_operadores_master(header_master, table_master, master, master_float)
+
+    // Mais de um 
+    var mais_de_um = "{{dados_operadores_porcentagem.mais_de_um_master}}";
+    var mais_de_um_float = parseFloat(mais_de_um.replace(",", "."));
+    var header_mais_de_um = document.getElementById('header_mais_de_um');
+    var table_mais_de_um = document.getElementById('table_mais_de_um');
+    popula_grafico_operadores_master(header_mais_de_um, table_mais_de_um, mais_de_um, mais_de_um_float)
+
+    // Apenas um
+    var apenas_um = "{{dados_operadores_porcentagem.apenas_um_master}}";
+    var apenas_um_float = parseFloat(apenas_um.replace(",", "."));
+    var header_apenas_um = document.getElementById('header_apenas_um');
+    var table_apenas_um = document.getElementById('table_apenas_um');
+    popula_grafico_operadores_master(header_apenas_um, table_apenas_um, apenas_um, apenas_um_float)
+    
+    function popula_grafico_operadores_master(elemento, table, progresso, progressoFloat){
+      if (elemento) {
+        elemento.style.width = progressoFloat + '%';
+        elemento.setAttribute('aria-valuenow', progresso); // Atualiza o valor acessível da barra de progresso
+        
+        table.style.width = progressoFloat + '%';
+        table.setAttribute('aria-valuenow', progresso); // Atualiza o valor acessível da barra de progresso
+      } 
+    }
+</script>
+
+<script src="{% static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/sortablejs/sortable.js' %}"></script>
+<script src="{% static 'assets/js/extended-ui-drag-and-drop.js' %}"></script>
+<script src="{% static 'assets/js/app-ecommerce-dashboard.js' %}"></script>
+<script src="{% static 'js/charts_financeiros.js' %}"></script>
+
+<script>
+  const ranking_bancos = JSON.parse('{{ ranking_bancos|escapejs }}');
+  
+  prepara_bancos_relatorio(ranking_bancos)
+
+  function prepara_bancos_relatorio(array){
+    let array_nomes = [];
+    let array_percents = [];
+    const bancosArray = Object.entries(ranking_bancos);
+
+    // Ordenar o array baseado no valor de QtdeContas em ordem decrescente
+    bancosArray.sort((a, b) => b[1].QtdeContas - a[1].QtdeContas);
+    var i = 0
+    bancosArray.forEach(([key, info]) => {
+        var element = document.getElementById("nome_banco_" + i);
+        if (element) {
+            element.textContent = info.nome;
+        }
+
+        array_nomes.push(info.nome);
+        array_percents.push(info.Porcentagem);
+        i ++
+    });
+
+    gera_grafico_rank_bancos(array_nomes, array_percents)
+  }
+</script>
+
+
+
+{% endblock %}
