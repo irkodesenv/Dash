@@ -1,0 +1,1441 @@
+{% extends 'templates/base.html' %}
+
+{% load static %}
+
+{% block 'content' %}
+
+<link href="{% static 'css_dashboard.css' %}" rel="stylesheet">
+<link href="{% static 'css/css_volumetria.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/libs/flatpickr/flatpickr.css'%}" rel="stylesheet">
+<link href="{% static 'assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css'%}" rel="stylesheet">
+
+<div class="alert alert-solid-danger f-size-18" role="alert" id="msg_erro" style="display: none;">
+</div>
+
+
+<div class="row mb-6 pt-3 " style="border-radius:5px; margin-left: 0px; margin-right: 0px; background-color: #FFF;">
+    <!-- EMPRESAS DO GRUPO -->
+    <div class="col-md-3 col-lg-3">
+        <div class="mb-6">
+            <form action="{% url 'relatorios_financeiro:rel_financeiro' %}" method="POST" class="card-body">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label" for="multicol-country" style="font-size: 15px;"> <strong> Empresas do Grupo</strong></label>
+                        <select id="select-clientes" name="select-clientes" class="select2 form-select"
+                            data-allow-clear="true">
+                            <option value="">Selecione</option>
+                            <option value="">IRKO - BPS</option>
+                            <option value="">IRKO - CAMPINAS</option>
+                            <option value="">IRKO - RJ</option>
+                            <option value="">IRKO - SP</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- CLIENTES DA EMPRESA SELECIONADA-->
+    <div class="col-md-3 col-lg-3">
+        <div class="mb-6">
+            <form action="{% url 'relatorios_financeiro:rel_financeiro' %}" method="POST" class="card-body">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label" for="multicol-country" style="font-size: 15px;"><strong> Clientes</strong></label>
+                        <select id="select-clientes" name="select-clientes" class="select2 form-select"
+                            data-allow-clear="true">
+                            <option value="">Selecione</option>
+                            <option value="">386 - E-UB COMERCIO</option>
+                            <option value="">480 - DASSAULT SYSTEMES</option>
+                            <option value="">706 - CHRISTIAN DIOR</option>
+                            <option value="">727 - DOLCE & GABBANA</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--Periodo de consumo -->
+    <div class="col-md-2 col-lg-2">
+        <div class="mb-6">           
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label" for="multicol-country" style="font-size: 15px;"><strong> Período Consumo</strong></label>
+                        <select id="select-clientes" name="select-clientes" class="select2 form-select"
+                            data-allow-clear="true">
+                            <option value="">2024/08-2024/08</option>
+                        </select>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <!--/ Comparativo -->
+    <div class="col-md-2 col-lg-2">
+        <div class="mb-6">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label" for="multicol-country" style="font-size: 15px;"><strong> Período Comparativo</strong></label>
+                        <select id="select-clientes" name="select-clientes" class="select2 form-select"
+                            data-allow-clear="true">
+                            <option value="">2024/07-2024/07</option>
+                        </select>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <div class="col-md-1 col-lg-1 d-flex justify-content-center align-items-center">
+        <button type="button" class="btn btn-primary">Filtrar</button>
+    </div>  
+</div>
+
+
+<div class="row">
+    <!-- Row 1 -->
+    <!-- Trabalhista -->
+    <div class="col-6">
+
+        <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
+            <div class="card text-center h-100" style="min-height: 400px;">
+                <div class="card-header nav-align-top">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item">
+                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                data-bs-target="#navs-pills-browser" aria-controls="navs-pills-browser"
+                                aria-selected="true">
+                                Trabalhista
+                            </button>
+                        </li>
+
+                        <!-- 
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-os"
+                          aria-controls="navs-pills-os"
+                          aria-selected="false">
+                          Operating System
+                        </button>
+                      </li>
+
+                      -->
+
+                    </ul>
+                </div>
+                <div class="tab-content pt-0 pb-4">
+                    <div class="tab-pane fade show active" id="navs-pills-browser" role="tabpanel">
+                        <div class="table-responsive text-start text-nowrap">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th class="th-style-table">Métricas</th>
+                                        <th class="th-style-table">Consumo</th>
+                                        <th class="th-style-table">Comparativo</th>
+                                        <th class="th-style-table">Diferença </th>                                       
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody-class-hr">
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Pró-Labore
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                35 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Funcionários CLT
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Estagiários
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Autonômos
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Admissões
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Demissões
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="navs-pills-os" role="tabpanel">
+                        <div class="table-responsive text-start text-nowrap">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>System</th>
+                                        <th>Visits</th>
+                                        <th class="w-50">Data In Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody-class-hr">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/windows.png" alt="Windows"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Windows</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">875.24k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-success" role="progressbar"
+                                                        style="width: 61.5%" aria-valuenow="61.50" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">61.50%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/mac.png" alt="Mac" height="24"
+                                                    class="me-3" />
+                                                <span class="text-heading">Mac</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">89.68k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                        style="width: 16.67%" aria-valuenow="16.67" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">16.67%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/ubuntu.png" alt="Ubuntu"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Ubuntu</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">37.68k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-info" role="progressbar"
+                                                        style="width: 12.82%" aria-valuenow="12.82" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">12.82%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/chrome.png" alt="Chrome"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Chrome</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">8.34k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-warning" role="progressbar"
+                                                        style="width: 6.25%" aria-valuenow="6.25" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">6.25%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/cent.png" alt="Cent" height="24"
+                                                    class="me-3" />
+                                                <span class="text-heading">Cent</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">2.25k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: 2.76%" aria-valuenow="2.76" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">2.76%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/linux.png" alt="linux"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Linux</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">328k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: 20.14%" aria-valuenow="2.76" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">20.14%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Coluna Fiscal -->
+    <div class="col-6">
+
+        <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
+            <div class="card text-center h-100">
+                <div class="card-header nav-align-top">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item">
+                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                data-bs-target="#navs-pills-browser" aria-controls="navs-pills-browser"
+                                aria-selected="true">
+                                Fiscal / Retenção
+                            </button>
+                        </li>
+
+                        <!-- 
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-os"
+                          aria-controls="navs-pills-os"
+                          aria-selected="false">
+                          Operating System
+                        </button>
+                      </li>
+
+                      -->
+
+                    </ul>
+                </div>
+                <div class="tab-content pt-0 pb-4">
+                    <div class="tab-pane fade show active" id="navs-pills-browser" role="tabpanel">
+                        <div class="table-responsive text-start text-nowrap">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+
+                                        <th class="th-style-table">Métricas</th>
+                                        <th class="th-style-table">Consumo</th>
+                                        <th class="th-style-table">Comparativo</th>
+                                        <th class="th-style-table">Diferença </th>      
+
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody-class-hr">
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Entradas (Produtos)
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+
+                                    </tr>
+                                    <td class="td-table-volumetria-left">
+                                        Saídas (Produtos)
+                                    </td>
+
+                                    <td class="td-table-volumetria-center">
+                                        55
+                                    </td>
+
+                                    <td class="td-table-volumetria-center">
+                                        20
+                                    </td>
+
+                                    <td class="td-table-volumetria-center">
+                                        <div style="margin-left: 0%">
+                                            10 <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i>
+                                                14.82%</small>
+                                        </div>
+
+                                    </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Entradas (Serviços)
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Saídas (Serviços)
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Importações
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            SKU Movimentado
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Filiais
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Estoque (Entradas)
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Estoque (Saídas)
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="navs-pills-os" role="tabpanel">
+                        <div class="table-responsive text-start text-nowrap">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>System</th>
+                                        <th>Visits</th>
+                                        <th class="w-50">Data In Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody-class-hr">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/windows.png" alt="Windows"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Windows</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">875.24k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-success" role="progressbar"
+                                                        style="width: 61.5%" aria-valuenow="61.50" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">61.50%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/mac.png" alt="Mac" height="24"
+                                                    class="me-3" />
+                                                <span class="text-heading">Mac</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">89.68k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                        style="width: 16.67%" aria-valuenow="16.67" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">16.67%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/ubuntu.png" alt="Ubuntu"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Ubuntu</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">37.68k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-info" role="progressbar"
+                                                        style="width: 12.82%" aria-valuenow="12.82" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">12.82%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/chrome.png" alt="Chrome"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Chrome</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">8.34k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-warning" role="progressbar"
+                                                        style="width: 6.25%" aria-valuenow="6.25" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">6.25%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/cent.png" alt="Cent" height="24"
+                                                    class="me-3" />
+                                                <span class="text-heading">Cent</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">2.25k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: 2.76%" aria-valuenow="2.76" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">2.76%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/linux.png" alt="linux"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Linux</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">328k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: 20.14%" aria-valuenow="2.76" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">20.14%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <!-- row 2 -->
+    <!-- Coluna esquerda-->
+    <div class="col-6 mt-6">
+
+        <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
+            <div class="card text-center h-100">
+                <div class="card-header nav-align-top">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item">
+                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                data-bs-target="#navs-pills-browser" aria-controls="navs-pills-browser"
+                                aria-selected="true">
+                                Financeiro
+                            </button>
+                        </li>
+
+                        <!-- 
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-os"
+                          aria-controls="navs-pills-os"
+                          aria-selected="false">
+                          Operating System
+                        </button>
+                      </li>
+
+                      -->
+
+                    </ul>
+                </div>
+                <div class="tab-content pt-0 pb-4">
+                    <div class="tab-pane fade show active" id="navs-pills-browser" role="tabpanel">
+                        <div class="table-responsive text-start text-nowrap">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+
+                                        <th class="th-style-table">Métricas</th>
+                                        <th class="th-style-table">Consumo</th>
+                                        <th class="th-style-table">Comparativo</th>
+                                        <th class="th-style-table">Diferença </th>      
+
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody-class-hr">
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Bancos - Contas Correntes
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Pagamentos Eletrônicos
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Recebimentos
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Reembolso de Despesas
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Fechamento de Câmbio
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="navs-pills-os" role="tabpanel">
+                        <div class="table-responsive text-start text-nowrap">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>System</th>
+                                        <th>Visits</th>
+                                        <th class="w-50">Data In Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody-class-hr">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/windows.png" alt="Windows"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Windows</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">875.24k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-success" role="progressbar"
+                                                        style="width: 61.5%" aria-valuenow="61.50" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">61.50%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/mac.png" alt="Mac" height="24"
+                                                    class="me-3" />
+                                                <span class="text-heading">Mac</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">89.68k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                        style="width: 16.67%" aria-valuenow="16.67" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">16.67%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/ubuntu.png" alt="Ubuntu"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Ubuntu</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">37.68k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-info" role="progressbar"
+                                                        style="width: 12.82%" aria-valuenow="12.82" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">12.82%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/chrome.png" alt="Chrome"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Chrome</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">8.34k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-warning" role="progressbar"
+                                                        style="width: 6.25%" aria-valuenow="6.25" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">6.25%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/cent.png" alt="Cent" height="24"
+                                                    class="me-3" />
+                                                <span class="text-heading">Cent</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">2.25k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: 2.76%" aria-valuenow="2.76" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">2.76%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/linux.png" alt="linux"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Linux</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">328k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: 20.14%" aria-valuenow="2.76" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">20.14%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Coluna direita -->
+    <div class="col-6 mt-6">
+
+        <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
+            <div class="card text-center h-100" style="min-height: 276px;">
+                <div class="card-header nav-align-top">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item">
+                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                data-bs-target="#navs-pills-browser" aria-controls="navs-pills-browser"
+                                aria-selected="true">
+                                Contábil
+                            </button>
+                        </li>
+
+                        <!-- 
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-os"
+                          aria-controls="navs-pills-os"
+                          aria-selected="false">
+                          Operating System
+                        </button>
+                      </li>
+
+                      -->
+
+                    </ul>
+                </div>
+                <div class="tab-content pt-0 pb-4">
+                    <div class="tab-pane fade show active" id="navs-pills-browser" role="tabpanel">
+                        <div class="table-responsive text-start text-nowrap">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+
+                                        <th class="th-style-table">Métricas</th>
+                                        <th class="th-style-table">Consumo</th>
+                                        <th class="th-style-table">Comparativo</th>
+                                        <th class="th-style-table">Diferença </th>      
+
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody-class-hr">
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Lançamentos Contábeis
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Partidas Contábeis
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Ativo Imobilizado
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="td-table-volumetria-left">
+                                            Contas Patrimoniais
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            55
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            20
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            <div style="margin-left: 0%">
+                                                10 <small class="text-success fw-medium"><i
+                                                        class="bx bx-up-arrow-alt"></i> -14.82%</small>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="navs-pills-os" role="tabpanel">
+                        <div class="table-responsive text-start text-nowrap">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>System</th>
+                                        <th>Visits</th>
+                                        <th class="w-50">Data In Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody-class-hr">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/windows.png" alt="Windows"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Windows</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">875.24k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-success" role="progressbar"
+                                                        style="width: 61.5%" aria-valuenow="61.50" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">61.50%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/mac.png" alt="Mac" height="24"
+                                                    class="me-3" />
+                                                <span class="text-heading">Mac</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">89.68k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                        style="width: 16.67%" aria-valuenow="16.67" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">16.67%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/ubuntu.png" alt="Ubuntu"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Ubuntu</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">37.68k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-info" role="progressbar"
+                                                        style="width: 12.82%" aria-valuenow="12.82" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">12.82%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/chrome.png" alt="Chrome"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Chrome</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">8.34k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-warning" role="progressbar"
+                                                        style="width: 6.25%" aria-valuenow="6.25" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">6.25%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/cent.png" alt="Cent" height="24"
+                                                    class="me-3" />
+                                                <span class="text-heading">Cent</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">2.25k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: 2.76%" aria-valuenow="2.76" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">2.76%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="../../assets/img/icons/brands/linux.png" alt="linux"
+                                                    height="24" class="me-3" />
+                                                <span class="text-heading">Linux</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-heading">328k</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center gap-4">
+                                                <div class="progress w-100" style="height: 10px">
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: 20.14%" aria-valuenow="2.76" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="fw-medium">20.14%</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}
