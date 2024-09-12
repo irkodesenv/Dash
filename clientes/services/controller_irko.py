@@ -23,23 +23,35 @@ class ControllerClienteIrko:
             return cadastros_clientes.arr_dados
         
 
-    def retorna_contas_a_pagar_dash(self):
+    def retorna_contas_a_pagar_dash(self, datini,datfim):
         #trocar Api
-        api_clientes = Api(url = f"{URL_API_IRKO}/dash/AgendamentosPendentes")
-
+        array_dados=[
+            
+            datini.replace('/','-'),
+            datfim.replace('/','-'),
+            ['']
+        ]
+       
+        api_clientes = Api(url = f"{URL_API_IRKO}/dash/AgendamentosPendentes/{array_dados}")
+       
         pagamentos_pendentes = ClienteIrko()
         pagamentos_pendentes.arr_dados = api_clientes.get()
-
         if pagamentos_pendentes.arr_dados['success']:
             return pagamentos_pendentes.arr_dados
         else:
             return pagamentos_pendentes.arr_dados
         
 
-    def retorna_doctos_irko_indefinidos(self):
-        #trocar Api
-        api_doctos = Api(url = f"{URL_API_IRKO}/dash/ListaDocIndefinidos")
+    def retorna_doctos_irko_indefinidos(self,datini,datfim):
         
+        array_dados=[
+            datini.replace('/','-'),
+            datfim.replace('/','-'),
+            ['']
+        ]
+        #trocar Api
+        api_doctos = Api(url = f"{URL_API_IRKO}/dash/ListaDocIndefinidos/{array_dados}")
+
         doctos_indefinidos = ClienteIrko()
         doctos_indefinidos.arr_dados = api_doctos.get()
 
@@ -47,3 +59,22 @@ class ControllerClienteIrko:
             return doctos_indefinidos.arr_dados
         else:
             return doctos_indefinidos.arr_dados
+        
+
+    def retorna_doctos_irko_gerais(self,datini,datfim,codigo_empresa):
+        array_dados=[
+            datini,
+            datfim,
+            codigo_empresa
+        ]
+        #print(array_dados)
+        #trocar Api
+        api_doctos = Api(url = f"{URL_API_IRKO}/dash/ListaDocPorCliente")
+        
+        doctos_gerais = ClienteIrko()
+        doctos_gerais.arr_dados = api_doctos.get()
+        
+        if doctos_gerais.arr_dados['success']:
+            return doctos_gerais.arr_dados
+        else:
+            return doctos_gerais.arr_dados

@@ -35,7 +35,7 @@
   if (flatpickrDateTime) {
     flatpickrDateTime.flatpickr({
       enableTime: true,
-      dateFormat: 'Y-m-d H:i'
+      dateFormat: 'd-m-Y H:i'
     });
   }
 
@@ -80,7 +80,7 @@
     const toDate = new Date(Date.now() + 3600 * 1000 * 48);
 
     flatpickrDisabledRange.flatpickr({
-      dateFormat: 'Y-m-d',
+      dateFormat: 'd-m-Y',
       disable: [
         {
           from: fromDate.toISOString().split('T')[0],
@@ -410,3 +410,5 @@ $(function () {
     });
   }
 })();
+
+

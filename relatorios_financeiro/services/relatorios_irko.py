@@ -4,8 +4,11 @@ from central.settings import URL_API_IRKO
 
 
 class RelatorioIrkoService:
-    def __init__(self, arr_clientes):
+
+    def __init__(self, arr_clientes, datini = None, datfim = None):
         self.arr_clientes = arr_clientes
+        self.datini = datini
+        self.datfim = datfim
 
 
     def empresas_nexxcera(self):
@@ -54,4 +57,9 @@ class RelatorioIrkoService:
             return dados_bancos.dados
         
 
+    def doctos_gerais(self):
 
+        parametros = [self.datini, self.datfim, self.arr_clientes]
+        api_docs_gerais = Api(url = f"{URL_API_IRKO}/dash/ListaDocPorCliente/{parametros}")
+
+        return api_docs_gerais.get()

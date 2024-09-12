@@ -158,6 +158,7 @@ class FinanceiroAthenas(Financeiro):
                     'valortotal': formatar_valor(item[2]),
                     'razao': item[3][:30],
                     'totalremessas': item[4],
+                    'doctosfaltantes':item[1] - item[4]
 
                 }
                 
@@ -209,6 +210,7 @@ class FinanceiroAthenas(Financeiro):
                                     P.valor,\
                                     COALESCE(f.NUMERODOCUMENTOFISCAL, p.NUMERODOCUMENTO) AS NUMERODOCUMENTO,\
                                     TP.NOME AS Fornecedor,\
+                                    COALESCE (p.REMESSA,0) AS remessa,\
                                     p.DATAVENCIMENTO"
                             )\
                             .where(f"P.DATAVENCIMENTO BETWEEN '{self.dat_ini}' AND '{self.dat_fim}' AND (P.VALORLIQUIDADO = 0 OR P.VALORLIQUIDADO  IS NULL) AND (p.REMESSA = 0 OR p.REMESSA IS NULL)")\
@@ -235,7 +237,7 @@ class FinanceiroAthenas(Financeiro):
 
             # Processando cada item da lista de tuplas
             for item in data:
-                codigo, empresa, valor, documento, fornecedor,data_vencimento = item
+                codigo, empresa, valor, documento, fornecedor,remessa,data_vencimento = item
                 valor_formatado = formatar_valor(valor)
                 if documento is None:
                     documento=""
@@ -266,7 +268,8 @@ class FinanceiroAthenas(Financeiro):
                     "NumeroRemessa": "",
                     "FlagFof": "2",
                     "FlagNexxera": "0",
-                    "Status": "0"
+                    "Status": "0",
+                    'Color': "#384551" if remessa == 1 else "#ff3e1d"
                 }
                 
                 obj_retorno['data']['ListaIndefinidos'].append(documento)
@@ -318,3 +321,103 @@ class FinanceiroAthenas(Financeiro):
                             .execute()
         return data
     
+
+    def doctos_gerais(self,codigo_empresa):
+        """
+            Gera um resumo das informações de documentos indefinidos das empresas com base em um intervalo de datas que estão pendentes.
+
+            Returns:
+                dict: Um dicionário contendo os seguintes campos:
+                    - data (list of dicts): Lista de dicionários, cada um contendo informações de uma empresa:
+                        - codcli (int): Código da empresa.
+                        - Nome : Nome da empresa.
+                        - valor_total (float): Valor total dos pagamentos.
+                        - razao (str): Razão social da empresa, limitada a 50 caracteres.
+                    
+
+    """
+        
+        data = self.conexao.select("IRK_SYS_EMPIRK ise") \
+                            .joins("INNER JOIN TABLNCFINANCEIRO F ON ise.CODEMP = F.CODIGOEMPRESA \
+                                INNER JOIN TABLNCPARCFINANCEIRO P ON (P.IDMASTER = F.IDMASTER)\
+                                INNER JOIN TABFILIAL TF ON (TF.CODIGOEMPRESA = ise.CODEMP AND TF.CODIGO = 1)\
+                                INNER JOIN TABPESSOAS TP ON (TP.CODIGO = F.CODIGOPESSOA)")\
+                            .values("F.codigoempresa, \
+                                    TF.NOME, \
+                                    P.valor,\
+                                    COALESCE(f.NUMERODOCUMENTOFISCAL, p.NUMERODOCUMENTO) AS NUMERODOCUMENTO,\
+                                    TP.NOME AS Fornecedor,\
+                                    COALESCE (p.REMESSA,0) AS remessa,\
+                                    p.DATAVENCIMENTO"
+                            )\
+                            .where(f"P.DATAVENCIMENTO BETWEEN '{self.dat_ini}' AND '{self.dat_fim}' AND ise.CODEMP='{codigo_empresa}' AND (P.VALORLIQUIDADO = 0 OR P.VALORLIQUIDADO  IS NULL)")\
+                            .order_by("remessa ASC,P.valor DESC")\
+                            .execute()
+        return data
+    
+
+    def monta_array_dados_doctos_gerais(self,data):
+
+
+        try:
+            obj_retorno = {
+                'success': True,
+                'code': 200,
+                'data': {
+                    'ListaCliente': [],
+                }
+            }
+            
+            def formatar_valor(valor):
+                valor_str = f"{valor:,.2f}"
+                valor_formatado = valor_str.replace(",", "X").replace(".", ",").replace("X", ".")
+                return valor_formatado
+
+            # Processando cada item da lista de tuplas
+            for item in data:
+                codigo, empresa, valor, documento, fornecedor,remessa,data_vencimento = item
+                valor_formatado = formatar_valor(valor)
+                if documento is None:
+                    documento=""
+                
+                #formatar data
+                data_vencimento_formatada = data_vencimento.strftime("%d/%m/%Y")
+
+                documento = {
+                    "CodCli": str(codigo),
+                    "DescricaoEmpresa": empresa,
+                    "DataEmissao": "08/08/2024", 
+                    "CodigoFornecedor": "6", 
+                    "DescricaoFornecedor": fornecedor,
+                    "CNPJCPF": "0",
+                    "TipoDocumento": "",
+                    "NumeroDocumento": documento, 
+                    "Valor": valor_formatado,
+                    "Parcela": "1", 
+                    "DataVencimento": data_vencimento_formatada, 
+                    "DataPagamento": "",
+                    "ValorLiquido": str(int(valor * 100)),
+                    "ValorPago": "0",
+                    "Historico": "",
+                    "Banco": "",
+                    "Agencia": "",
+                    "Conta": "",
+                    "BancoRemessa": "",
+                    "NumeroRemessa": "",
+                    "FlagFof": "2",
+                    "FlagNexxera": "0",
+                    "Status": "0",
+                    'Color': "#384551" if remessa == 1 else "#ff3e1d"
+                }
+                
+                obj_retorno['data']['ListaCliente'].append(documento)
+            
+            return obj_retorno
+
+        except Exception as e:
+            print(e)
+            return {
+                'success': False,
+                'code': 500,
+                'message': str(e)
+            }
