@@ -4,10 +4,40 @@
 {% block 'content' %}
 
 <link href="{% static 'css_dashboard.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/libs/flatpickr/flatpickr.css'%}" rel="stylesheet">
+<link href="{% static 'assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css'%}" rel="stylesheet">
+
 <div class="alert alert-solid-danger f-size-18" role="alert" id="msg_erro" style="display: none;">
 </div>
 <!--Painel Geral com documentos que vencem no DIA -->
 {% csrf_token %}
+<div class="row">
+  <div class="col">
+    <div class="card mb-6">
+      <div class="d-flex align-items-center" style="padding: 20px;"> <!-- Usar Flexbox para alinhar itens na mesma linha -->
+        <div class="me-3"> <!-- Espaço entre o input e o botão -->
+          <label for="flatpickr-range" class="form-label f-bold" style="font-size: 18px;">
+            Selecione as datas:
+          </label>
+        </div>
+        <div class="me-3"> <!-- Espaço entre o label e o input -->
+          <input
+              type="text"
+              class="form-control"
+              placeholder="Insira as datas"
+              style="width: 220px;"
+              id="flatpickr-range" />
+        </div>
+        <div> 
+          <button type="button" name="btn_filtro" id="btn_filtro" class="btn btn-primary me-3">Filtrar</button>
+          
+          <button type="button" onclick="window.location.reload()" class="btn btn-danger d-none" name="btn_limpa_filtro" id="btn_limpa_filtro">Limpar Filtro</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row" id="sortable-cards">
   <div class="col-lg-9 col-sm-12">
     <div class="row">
@@ -176,7 +206,7 @@
                 <tr class="text-center f-bold">
                   <th class="f-bold">Nº</th>
                   <th class="f-bold">Cliente</th>
-                  <th class="f-bold">Qtd</th>
+                  <th class="f-bold">Docto Total/Pendente</th>
                   <th class="f-bold">Valor</th>
                   <th class="w-50 f-bold"></th>
                 </tr>
@@ -341,7 +371,7 @@
                 <tr class="text-center">
                   <th class="f-bold">Nº</th>
                   <th class="f-bold">Cliente</th>
-                  <th class="f-bold">Qtd</th>
+                  <th class="f-bold">Docto Total/Pendente</th>
                   <th class="f-bold">Valor</th>
                   <th class="w-50 f-bold" ></th>
                 </tr>
@@ -572,6 +602,107 @@
     </div>
   </div>
 </div>
+
+<!-- Modal - Lista de Documentos  -->
+<div class="modal fade" id="modalDocumentos" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title f-bold" id="exampleModalLabel4" style="color: #5c719e !important">LISTA DE DOCUMENTOS</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+  <div class="modal-body">
+    <div class="scrollable-table" style="max-height: 750px; overflow-y: auto; overflow-x: auto;">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th class="f-bold">CLIENTE</th>
+              <th class="f-bold">VENCIMENTO</th>
+              <th class="f-bold">FORNECEDOR / FAVORECIDO</th>
+              <th class="f-bold">DOCUMENTO</th>
+              <th class="f-bold">VALOR</th>
+            </tr>
+          </thead>
+          <tbody id="ranking_lista_geral">
+            <tr>
+              <!--Quantidade -->
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="" height="24" class="me-3" />
+                  <span class="text-heading"></span>
+                </div>
+              </td>
+              <!-- Dados de Demonstração de Documentos Indefinidos -->
+              <td class="text-danger f-bold"></td>
+              <td class="text-heading"></td>
+              <td class="text-heading"></td>
+              <td class="text-heading"></td>
+              </td>        
+            </tr>
+            
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="" height="24" class="me-3" />
+                  <span class="text-heading"></span>
+                </div>
+              </td>
+              <td class="text-heading"></td>
+              <td class="text-heading"></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="" height="24" class="me-3" />
+                  <span class="text-heading"></span>
+                </div>
+              </td>
+              <td class="text-heading"></td>
+              <td class="text-heading"></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="" height="24" class="me-3" />
+                  <span class="text-heading"></span>
+                </div>
+              </td>
+              <td class="text-heading"></td>
+              <td class="text-heading"></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="" height="24" class="me-3" />
+                  <span class="text-heading"></span>
+                </div>
+              </td>
+              <td class="text-heading"></td>
+              <td class="text-heading"></td>
+              <td>  
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="" height="24" class="me-3" />
+                  <span class="text-heading"></span>
+                </div>
+              </td>
+              <td class="text-heading"></td>
+              <td class="text-heading"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
 <!--<div class="demo-inline-spacing">
   <button
     type="button"
@@ -585,12 +716,17 @@
 <script src="{% static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
 <script src="{% static 'assets/js/app-logistics-dashboard.js' %}"></script>
 <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'assets/js/forms-pickers.js' %}"></script>
 <script src="{% static 'js/chart_dashboard.js' %}"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
 
 <script>
   const carrega_dados_dash = '{% url "dashboard:retornaDadosDashboard" %}';
   const carrega_dados_doctos_indefinidos = '{% url "dashboard:retornaDadosDoctosIndefinidos" %}';
+  const carrega_dados_doctos_gerais = '{% url "dashboard:retornaDadosDoctosGerais" %}';
   const carrega_dados_ranking_docto_indefinido = '{% url "dashboard:retornaRankingDoctoIndefinido" %}';
 
 </script>

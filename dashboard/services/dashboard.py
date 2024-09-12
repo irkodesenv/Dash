@@ -1,27 +1,33 @@
 from relatorios_financeiro.services.financeiro_athenas import FinanceiroAthenas
+from relatorios_financeiro.services.relatorios_irko import RelatorioIrkoService
+from clientes.services.clientes_irko import ClienteIrko
+from conexoes.services.api import Api
+from central.settings import URL_API_IRKO
+
+
 from clientes.services.controller_irko import ControllerClienteIrko
 from datetime import datetime
 from typing import Optional
 
 
 class DashboardService:
-    def __init__(self, array_clientes: Optional[int] = None):
-       self.array_clientes = array_clientes
+    def __init__(self, array_clientes: Optional[int] = None, datini: Optional[int] = None, datfim: Optional[int] = None):
+        self.array_clientes = array_clientes
+        self.dat_ini = datini
+        self.dat_fim = datfim
 
     def recupera_pagamentos_athenas(self):
+        
+        self.dat_ini = datetime.strptime(self.dat_ini, '%d/%m/%Y')
+        datini = self.dat_ini.strftime('%m/%d/%Y')
 
-        #hoje filtramos apenas pelo dia atual
-        hoje = datetime.now()
-        datini = hoje.strftime('%m/%d/%Y')
-        datfim = datini
-
-        #datini="08/01/2024"
-        dados_athenas = FinanceiroAthenas(datini,datfim)
-        # passar datini = dtahoje
+        self.dat_fim = datetime.strptime(self.dat_fim, '%d/%m/%Y')
+        datfim = self.dat_fim.strftime('%m/%d/%Y')
+        dados_athenas = FinanceiroAthenas(datini, datfim)
         dados_dash_athenas = dados_athenas.contas_a_pagar_dash()
 
-        #tratar dados e transformar em array
-        array_dados_dash =  dados_athenas.monta_array_dados(dados_dash_athenas)
+        # Tratar dados e transformar em array
+        array_dados_dash = dados_athenas.monta_array_dados(dados_dash_athenas)
 
         return array_dados_dash
     
@@ -30,7 +36,7 @@ class DashboardService:
 
         dados_irko = ControllerClienteIrko(None)
 
-        return dados_irko.retorna_contas_a_pagar_dash()
+        return dados_irko.retorna_contas_a_pagar_dash(self.dat_ini,self.dat_fim)
     
 
     def combina_dados_athenas_irko(self,dados_athenas,dados_irko):
@@ -87,21 +93,18 @@ class DashboardService:
     def recupera_doctos_indenifidos_irko(self):
 
         dados_irko = ControllerClienteIrko(None)
-        print(dados_irko)
 
-        return dados_irko.retorna_doctos_irko_indefinidos()
+        return dados_irko.retorna_doctos_irko_indefinidos(self.dat_ini,self.dat_fim)
     
 
     def recupera_doctos_indefinidos_athenas(self):
 
-        #hoje filtramos apenas pelo dia atual
-        hoje = datetime.now()
-        datini = hoje.strftime('%m/%d/%Y')
-        datfim = datini
+        self.dat_ini = datetime.strptime(self.dat_ini, '%d/%m/%Y')
+        datini = self.dat_ini.strftime('%m/%d/%Y')
 
-        #datini="08/01/2024"
-        dados_athenas = FinanceiroAthenas(datini,datfim)
-        # passar datini = dtahoje
+        self.dat_fim = datetime.strptime(self.dat_fim, '%d/%m/%Y')
+        datfim = self.dat_fim.strftime('%m/%d/%Y')
+        dados_athenas = FinanceiroAthenas(datini, datfim)
         dados_indefinidos_athenas = dados_athenas.doctos_indefinidos()
 
         pass
@@ -123,7 +126,22 @@ class DashboardService:
         lista_doctos_athenas = dados_athenas.get('data', {}).get('ListaIndefinidos', [])
 
         lista_doctos_combinada = lista_doctos_irko + lista_doctos_athenas
-        lista_doctos_combinada.sort(key=lambda empresa: int(empresa.get('CodCli', '0')), reverse=False)
+        
+        def parse_data_vencimento(data_str):
+            try:
+                return datetime.strptime(data_str, '%d/%m/%Y')
+            except ValueError:
+                return datetime.min 
+            
+        lista_doctos_combinada.sort(
+            key=lambda empresa: (
+                int(empresa.get('CodCli', '0')), 
+                parse_data_vencimento(empresa.get('DataVencimento', '31/12/9999'))  # Ordena por data de vencimento
+            ),
+            reverse=False
+        )
+
+        #lista_doctos_combinada.sort(key=lambda empresa: int(empresa.get('CodCli', '0')), reverse=False)
 
         obj_retorno_combinado = {
                 'success': True,
@@ -152,3 +170,40 @@ class DashboardService:
         print(array_dados_ranking)
 
         return array_dados_ranking
+    
+
+    def recupera_doctos_gerais_athenas(self,codigo_empresa):
+
+        self.dat_ini = datetime.strptime(self.dat_ini, '%d/%m/%Y')
+        datini = self.dat_ini.strftime('%m/%d/%Y')
+
+        self.dat_fim = datetime.strptime(self.dat_fim, '%d/%m/%Y')
+        datfim = self.dat_fim.strftime('%m/%d/%Y')
+
+        dados_athenas = FinanceiroAthenas(datini, datfim)
+
+        dados_gerais_athenas = dados_athenas.doctos_gerais(codigo_empresa)
+        pass
+        #tratar dados e transformar em array
+        array_dados_gerais =  dados_athenas.monta_array_dados_doctos_gerais(dados_gerais_athenas)
+        
+        return array_dados_gerais
+    
+
+    def recupera_dctos_gerais_irko(self):
+        array_dados=[
+            self.dat_ini.replace('/','-'),
+            self.dat_fim.replace('/','-'),
+            self.array_clientes
+        ]
+ 
+        #trocar Api
+        api_doctos = Api(url = f"{URL_API_IRKO}/dash/ListaDocPorCliente/{array_dados}")
+ 
+        doctos_gerais = ClienteIrko()
+        doctos_gerais.arr_dados = api_doctos.get()
+
+        if doctos_gerais.arr_dados['success']:
+            return doctos_gerais.arr_dados
+        else:
+            return doctos_gerais.arr_dados

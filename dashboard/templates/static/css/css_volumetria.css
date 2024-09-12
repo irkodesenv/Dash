@@ -1,0 +1,25 @@
+.td-table-volumetria-left {
+    padding-top: 3px !important; 
+    padding-bottom: 3px !important;
+    font-size: 17px;
+    text-align: left;
+}
+
+.td-table-volumetria-center {
+    padding-top: 3px !important; 
+    padding-bottom: 3px !important;
+    font-size: 17px;
+    text-align: center;
+}
+
+.th-style-table{
+    text-align: center; 
+    padding-bottom: 4px !important;
+    padding-top: 0px !important;
+}
+
+
+.tbody-class-hr{
+    border-top: 2px solid !important; 
+    color: #e4e6e8 !important;
+}
