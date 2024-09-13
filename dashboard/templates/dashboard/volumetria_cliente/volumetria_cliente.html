@@ -15,7 +15,7 @@
 
 <div class="row mb-6 pt-3 " style="border-radius:5px; margin-left: 0px; margin-right: 0px; background-color: #FFF;">
     <!-- EMPRESAS DO GRUPO -->
-    <div class="col-md-3 col-lg-3">
+    <div class="col-md-3 col-lg-2">
         <div class="mb-6">
             <form action="{% url 'relatorios_financeiro:rel_financeiro' %}" method="POST" class="card-body">
                 {% csrf_token %}
@@ -24,11 +24,11 @@
                         <label class="form-label" for="multicol-country" style="font-size: 15px;"> <strong> Empresas do Grupo</strong></label>
                         <select id="select-clientes" name="select-clientes" class="select2 form-select"
                             data-allow-clear="true">
-                            <option value="">Selecione</option>
+                            <option value="">TODAS EMPRESAS</option>
+                            <option value="">IRKO - SP</option>
                             <option value="">IRKO - BPS</option>
                             <option value="">IRKO - CAMPINAS</option>
                             <option value="">IRKO - RJ</option>
-                            <option value="">IRKO - SP</option>
                         </select>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                         <label class="form-label" for="multicol-country" style="font-size: 15px;"><strong> Clientes</strong></label>
                         <select id="select-clientes" name="select-clientes" class="select2 form-select"
                             data-allow-clear="true">
-                            <option value="">Selecione</option>
+                            <option value="">TODOS CLIENTES</option>
                             <option value="">386 - E-UB COMERCIO</option>
                             <option value="">480 - DASSAULT SYSTEMES</option>
                             <option value="">706 - CHRISTIAN DIOR</option>
@@ -87,7 +87,23 @@
         </div>
     </div>
 
-    <div class="col-md-1 col-lg-1 d-flex justify-content-center align-items-center">
+    <!--/ Tipo Demonstração -->
+    <div class="col-md-2 col-lg-2">
+        <div class="mb-6">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label" for="multicol-country" style="font-size: 15px;"><strong> Demonstração</strong></label>
+                        <select id="select-clientes" name="select-clientes" class="select2 form-select"
+                            data-allow-clear="true">
+                            <option value="">ACUMULADO</option>
+                            <option value="">MÉDIA</option>
+                        </select>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <div class="col-md-1 col-lg-1 d-flex justify-content-left align-items-center padding-left: 0px">
         <button type="button" class="btn btn-primary">Filtrar</button>
     </div>  
 </div>
@@ -99,7 +115,7 @@
     <div class="col-6">
 
         <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
-            <div class="card text-center h-100" style="min-height: 400px;">
+            <div class="card text-center h-100" style="min-height: 367px;">
                 <div class="card-header nav-align-top">
                     <ul class="nav nav-pills" role="tablist">
                         <li class="nav-item">
@@ -135,9 +151,11 @@
                                 <thead>
                                     <tr>
                                         <th class="th-style-table">Métricas</th>
-                                        <th class="th-style-table">Consumo</th>
+                                        <th class="th-style-table">Orçado</th>
+                                        <th class="th-style-table">Realizado</th>
+                                        <th class="th-style-table budget-vs-actual"></th>                                       
                                         <th class="th-style-table">Comparativo</th>
-                                        <th class="th-style-table">Diferença </th>                                       
+                                        <th class="th-style-table actual-vs-comparative"></th>                                       
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-class-hr">
@@ -161,6 +179,19 @@
                                                         class="bx bx-down-arrow-alt"></i> -14.82%</small>
                                             </div>
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
 
@@ -184,6 +215,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -206,6 +250,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
 
@@ -229,6 +286,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -251,6 +321,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -273,6 +356,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -467,17 +563,22 @@
                                 <thead>
                                     <tr>
 
+
                                         <th class="th-style-table">Métricas</th>
-                                        <th class="th-style-table">Consumo</th>
+                                        <th class="th-style-table">Orçado</th>
+                                        <th class="th-style-table">Realizado</th>
+                                        <th class="th-style-table budget-vs-actual"></th>                                       
                                         <th class="th-style-table">Comparativo</th>
-                                        <th class="th-style-table">Diferença </th>      
+                                        <th class="th-style-table actual-vs-comparative"></th>
+
+      
 
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-class-hr">
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Entradas (Produtos)
+                                            Entradas (Produto)
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -495,13 +596,26 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
 
                                     </tr>
                                     <td class="td-table-volumetria-left">
-                                        Saídas (Produtos)
+                                        Saídas (Produto)
                                     </td>
 
                                     <td class="td-table-volumetria-center">
@@ -519,11 +633,24 @@
                                         </div>
 
                                     </td>
+
+                                    <td class="td-table-volumetria-center">
+                                        25
+                                    </td>
+
+                                    <td class="td-table-volumetria-center">
+
+                                        <div style="margin-left: 0%">
+                                            5 <small class="text-danger fw-medium"><i
+                                                    class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                        </div>
+                                    </td>
+
                                     </tr>
 
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Entradas (Serviços)
+                                            Entradas (Serviço)
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -541,11 +668,24 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Saídas (Serviços)
+                                            Saídas (Serviço)
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -563,6 +703,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -585,6 +738,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -607,6 +773,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -629,11 +808,24 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Estoque (Entradas)
+                                            Estoque (Entrada)
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -651,11 +843,24 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Estoque (Saídas)
+                                            Estoque (Saída)
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -673,6 +878,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                 </tbody>
@@ -872,9 +1090,11 @@
                                     <tr>
 
                                         <th class="th-style-table">Métricas</th>
-                                        <th class="th-style-table">Consumo</th>
+                                        <th class="th-style-table">Orçado</th>
+                                        <th class="th-style-table">Realizado</th>
+                                        <th class="th-style-table budget-vs-actual"></th>                                       
                                         <th class="th-style-table">Comparativo</th>
-                                        <th class="th-style-table">Diferença </th>      
+                                        <th class="th-style-table actual-vs-comparative"></th>       
 
                                     </tr>
                                 </thead>
@@ -882,7 +1102,7 @@
 
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Bancos - Contas Correntes
+                                            Contas Corrente
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -900,11 +1120,24 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Pagamentos Eletrônicos
+                                            Pagamentos
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -922,6 +1155,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -944,11 +1190,24 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Reembolso de Despesas
+                                            Reembolso Despesa
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -966,11 +1225,24 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Fechamento de Câmbio
+                                            Fechamento Câmbio
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -988,6 +1260,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                 </tbody>
@@ -1147,7 +1432,7 @@
     <div class="col-6 mt-6">
 
         <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
-            <div class="card text-center h-100" style="min-height: 276px;">
+            <div class="card text-center h-100" style="min-height: 257px;">
                 <div class="card-header nav-align-top">
                     <ul class="nav nav-pills" role="tablist">
                         <li class="nav-item">
@@ -1184,9 +1469,11 @@
                                     <tr>
 
                                         <th class="th-style-table">Métricas</th>
-                                        <th class="th-style-table">Consumo</th>
+                                        <th class="th-style-table">Orçado</th>
+                                        <th class="th-style-table">Realizado</th>
+                                        <th class="th-style-table budget-vs-actual"></th>                                       
                                         <th class="th-style-table">Comparativo</th>
-                                        <th class="th-style-table">Diferença </th>      
+                                        <th class="th-style-table actual-vs-comparative"></th>       
 
                                     </tr>
                                 </thead>
@@ -1194,7 +1481,7 @@
 
                                     <tr>
                                         <td class="td-table-volumetria-left">
-                                            Lançamentos Contábeis
+                                            Lançtos Contábeis
                                         </td>
 
                                         <td class="td-table-volumetria-center">
@@ -1212,6 +1499,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -1234,6 +1534,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -1256,6 +1569,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
                                     <tr>
@@ -1278,6 +1604,19 @@
                                             </div>
 
                                         </td>
+
+                                        <td class="td-table-volumetria-center">
+                                            25
+                                        </td>
+
+                                        <td class="td-table-volumetria-center">
+
+                                            <div style="margin-left: 0%">
+                                                5 <small class="text-danger fw-medium"><i
+                                                        class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                            </div>
+                                        </td>
+
                                     </tr>
 
 
@@ -1436,6 +1775,62 @@
     </div>
 
 </div>
+
+<!--<script>
+    function updateTitles() {
+        const budgetVsActualElement = document.getElementById('budget-vs-actual');
+        const actualVsComparativeElement = document.getElementById('actual-vs-comparative');
+
+        if (window.innerWidth >= 1800) {
+            // Tela grande
+            budgetVsActualElement.textContent = 'Orçado x Realizado';
+            actualVsComparativeElement.textContent = 'Realizado x Comparativo';
+        } else {
+            // Tela pequena
+            budgetVsActualElement.textContent = 'Orçado x Real';
+            actualVsComparativeElement.textContent = 'Real x Comparativo';
+        }
+    }
+
+    // Atualizar os títulos ao carregar a página
+    window.addEventListener('load', updateTitles);
+
+    // Atualizar os títulos quando a janela for redimensionada
+    window.addEventListener('resize', updateTitles);
+</script> -->
+
+<script>
+        function updateTitles() {
+            const budgetVsActualElements = document.querySelectorAll('.budget-vs-actual');
+            const actualVsComparativeElements = document.querySelectorAll('.actual-vs-comparative');
+
+            const largeScreenText = {
+                budgetVsActual: 'Orçado x Realizado',
+                actualVsComparative: 'Realizado x Comparativo'
+            };
+
+            const smallScreenText = {
+                budgetVsActual: 'Orçado x Real',
+                actualVsComparative: 'Real x Comparativo'
+            };
+
+            const isLargeScreen = window.innerWidth >= 1800;
+
+            budgetVsActualElements.forEach(element => {
+                element.textContent = isLargeScreen ? largeScreenText.budgetVsActual : smallScreenText.budgetVsActual;
+            });
+
+            actualVsComparativeElements.forEach(element => {
+                element.textContent = isLargeScreen ? largeScreenText.actualVsComparative : smallScreenText.actualVsComparative;
+            });
+        }
+
+        // Atualizar os títulos ao carregar a página
+        window.addEventListener('load', updateTitles);
+
+        // Atualizar os títulos quando a janela for redimensionada
+        window.addEventListener('resize', updateTitles);
+</script>
 
 
 {% endblock %}
