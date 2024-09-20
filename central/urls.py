@@ -20,4 +20,5 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls', namespace="dashboard")),
     path('rel_financeiro/', include('relatorios_financeiro.urls',namespace='relatorios_financeiro')),
     path('bancos/', include('bancos.urls',namespace='bancos')),
+    path('administrativo/', include('administrativo.urls', namespace='administrativo'))
 ]

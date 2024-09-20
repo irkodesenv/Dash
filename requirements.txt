@@ -2,3 +2,4 @@ Django==5.0.7
 setuptools==70.3.0
 fdb==2.0.2
 requests==2.26.0
+whitenoise==6.7.0

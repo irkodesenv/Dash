@@ -234,8 +234,3 @@ def processa_dados_doctos_gerais_irko(datini, datfim, codigo_empresa):
             
         except Exception as e:
             return {'data': {'code': 500, 'message': 'Não foi possível retornar dados.'}, 'success': False}
-        
-
-@login_required(redirect_field_name='login')
-def retorna_volumetria_consumo_cliente(request):
-    return render(request, 'dashboard/volumetria_cliente/volumetria_cliente.html')

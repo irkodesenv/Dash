@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'relatorios_financeiro.apps.RelatoriosFinanceiroConfig',
     'conexoes.apps.ConexoesConfig',
     'clientes.apps.ClientesConfig',
-    'bancos.apps.BancosConfig'
+    'bancos.apps.BancosConfig',
+    'administrativo.apps.AdministrativoConfig'
 ]
 
 MIDDLEWARE = [
