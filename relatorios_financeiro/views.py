@@ -33,7 +33,7 @@ def retorna_relatorio_financeiro(request):
 
     clientes = combina_clientes(clientes_irko, clientes_athenas)
 
-    # Nexxcera
+    # Nexxera
     dados_nexxcera_irko = processa_relatorio_empresas_nexxera_irko([codigo_cliente])
     dados_nexxcera_athenas = processa_relatorio_empresas_nexxera_athenas(codigo_cliente)
 
