@@ -7,8 +7,146 @@ Recorrências
 
 {% block 'content' %}
 
-{% if dados_athenas.success == False %}
+{% if dados_excel.success == False %}
 <div class="alert alert-solid-danger f-size-18" role="alert">
   Estamos com instabilidade na conexão de clientes, por favor acionar a equipe responsável.
 </div>
 {% endif %}
+
+<link href="{% static 'assets/vendor/libs/select2/select2.css' %}" rel="stylesheet">
+
+<div class="row">
+
+  <div class="col-9">
+    <div class="card mb-6">
+
+      <form action="{% url 'relatorios_financeiro:recorrencia' %}" method="POST" class="card-body">
+        {% csrf_token %}
+        <!--<h6>Filtro(s): </h6>-->
+        <div class="row g-12">
+          <div class="col-md-9">
+            <label class="form-label" for="multicol-country">Cliente</label>
+            <select id="select-clientes" name="select-clientes" class="select2 form-select" data-allow-clear="true">
+              <option value="">TODOS</option>
+
+              <option value="{{cliente.Codigo}}" selected></option>
+
+              <option value="{{cliente.Codigo}}"> </option>
+
+            </select>
+          </div>
+
+          <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" name="btn-filtro" id="btn-filtro" class="btn btn-primary me-3">Filtrar</button>
+
+            <button type="button" onclick="window.location.reload()" class="btn btn-danger me-3">Limpar Filtro</button>
+
+          </div>
+        </div>
+      </form>
+    </div>
+    <!--/ Content -->
+  </div>
+
+  <!--Data de HOJE-->
+  <div class="col-lg-3 col-sm-12 pl-5">
+    <div class="row">
+      <div class="col-12">
+        <div class="card" style="height: 111px; justify-content: space-around !important">
+          <div class="card-widget-separator-wrapper">
+            <div class="card-body card-widget-separator">
+              <div class="row gy-4 gy-sm-1">
+                <div class="col-sm-12 col-lg-12">
+                  <div>
+                    <h4 class="mb-0 f-size-28 f-bold text-danger text-center" id="data_vencimento"
+                      name="data_vencimento">21/09/2024</h4>
+                    <p class="mb-0 f-size-23 f-bold text-center">HOJE</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--<div class="col-12 mt-0">
+    <div class="card" style="height: 100px; justify-content: space-around !Important">
+      <div>
+        <h4 class="mb-0 f-size-28 f-bold text-danger text-center">Previsão de Documentos a Pagar - Próximos 7 dias !
+        </h4>
+      </div>
+    </div>
+  </div>-->
+
+  <div class="col">
+
+    <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
+      <div class="card text-center h-100" style="margin-left: 20px; margin-right: 20px;">
+        <div class="card-header nav-align-top">
+          <ul class="nav nav-pills" role="tablist">
+            <li class="nav-item w-100">
+              <h5 class="f-bold text-danger d-flex justify-content-center align-items-center mb-0">
+                Previsão de Documentos a Pagar - Próximos 7 dias !
+              </h5>
+            </li>
+          </ul>
+        </div>
+        <div class="tab-content pt-0 pb-4">
+          <div class="tab-pane fade show active" id="navs-pills-browser" role="tabpanel">
+            <div class="table-responsive text-start text-nowrap">
+              <table class="table table-borderless">
+                <thead style="font-size: 14px; text-align: center; border-bottom: 2px solid #ccc;">
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Fornecedor</th>
+                    <th>Dt Previsão</th>
+                    <th>Último Pagto</th>
+                    <th>Qtd Doctos Pagos</th>
+                  </tr>
+                </thead>
+                <tbody style="font-size: 13px; text-align: center;">
+                  {% if data %}
+                  {% for item in data %}
+                  <tr>
+                    <td>
+                      {{ item.CLIENTE }}
+                    </td>
+
+                    <td>
+                      {{ item.FORNECEDOR }}
+                    </td>
+
+                    <td>
+                      {{ item.ProximaPrevisao }}
+                    </td>
+
+                    <td>
+                      
+                    </td>
+
+                    <td>
+                      
+                    </td>
+
+                  </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td>
+                      colspan="5">Nenhum dado disponível
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
