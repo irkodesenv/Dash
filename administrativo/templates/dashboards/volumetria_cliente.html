@@ -6,12 +6,11 @@
 
 <link href="{% static 'css_dashboard.css' %}" rel="stylesheet">
 <link href="{% static 'css/css_volumetria.css' %}" rel="stylesheet">
-<link href="{% static 'assets/vendor/libs/flatpickr/flatpickr.css'%}" rel="stylesheet">
-<link href="{% static 'assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css'%}" rel="stylesheet">
+
+
 
 <div class="alert alert-solid-danger f-size-18" role="alert" id="msg_erro" style="display: none;">
 </div>
-
 
 <div class="row mb-6 pt-3 " style="border-radius:5px; margin-left: 0px; margin-right: 0px; background-color: #FFF;">
     <!-- EMPRESAS DO GRUPO -->
@@ -62,11 +61,8 @@
         <div class="mb-6">           
                 <div class="row g-4">
                     <div class="col-md-12">
-                        <label class="form-label" for="multicol-country" style="font-size: 15px;"><strong> Período Realizado</strong></label>
-                        <select id="select-clientes" name="select-clientes" class="select2 form-select"
-                            data-allow-clear="true">
-                            <option value="">2024/08-2024/08</option>
-                        </select>
+                        <label class="form-label" for="pick_realizado" style="font-size: 15px;"><strong> Período Realizado</strong></label>
+                        <input type="text" id="pick_realizado" name="pick_realizado" class="form-control" />
                     </div>
                 </div>
         </div>
@@ -77,11 +73,8 @@
         <div class="mb-6">
                 <div class="row g-4">
                     <div class="col-md-12">
-                        <label class="form-label" for="multicol-country" style="font-size: 15px;"><strong> Período Comparativo</strong></label>
-                        <select id="select-clientes" name="select-clientes" class="select2 form-select"
-                            data-allow-clear="true">
-                            <option value="">2024/07-2024/07</option>
-                        </select>
+                        <label class="form-label" for="pick_comparativo" style="font-size: 15px;"><strong> Período Comparativo</strong></label>
+                        <input type="text" id="pick_comparativo" name="pick_comparativo" class="form-control" />
                     </div>
                 </div>
         </div>
@@ -159,217 +152,50 @@
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-class-hr">
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Pró-Labore
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            70
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            50
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                -20 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -28.57%</small>
-                                            </div>
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            40
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 25.00%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
 
 
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Funcionários CLT
-                                        </td>
+                                    {% for key, valores in data.folha.items %}
+                                    
+                                        <tr>
+                                            <td class="td-table-volumetria-left">{{ key }}</td>
+                                
+                                            <td class="td-table-volumetria-center">{{ valores.orcado }}</td>
+                                
+                                            <td class="td-table-volumetria-center">{{ valores.realizado }}</td>
+                                
+                                            <td class="td-table-volumetria-center">
+                                                <div style="margin-left: 0%">
+                                                    {{ valores.realizado_x_orcado }} 
+                                                    <small class="text-success fw-medium">
+                                                        <i class="bx bx-up-arrow-alt"></i> 
+                                                        {% if valores.percent > 0 %}
+                                                            {{valores.percent}}
+                                                        {% else %}
+                                                            0%
+                                                        {% endif %}
+                                                    </small>
+                                                </div>
+                                            </td>
+                                
+                                            <td class="td-table-volumetria-center">{{ valores.comparativo }}</td>
+                                
+                                            <td class="td-table-volumetria-center">
+                                                <div style="margin-left: 0%">
+                                                    {{ valores.realizado_x_comparativo }}
+                                                    <small class="text-success fw-medium">
+                                                        <i class="bx bx-up-arrow-alt"></i>
 
-                                        <td class="td-table-volumetria-center">
-                                            40
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            60
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                20 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 50.00%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            50
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 20.00%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Estagiários
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            60
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            45
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                -15 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -25.00%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            30
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                15 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 50.00%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Autonômos
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            50
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            35
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                -15 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -30.00%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            25
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 40.00%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Admissões
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            35
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            50
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                15 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 42.86%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            40
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 25.00%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Demissões
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            25
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            40
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                15 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 60.00%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            30
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 33.33%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
+                                                        {% if valores.percent_rc > 0 %}
+                                                            {{valores.percent_rc}}%
+                                                        {% else %}
+                                                            0%
+                                                        {% endif %}
+                                                    
+                                                    </small>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -390,7 +216,7 @@
                                         <td>1</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="../../assets/img/icons/brands/windows.png" alt="Windows"
+                                                <img src="" alt="Windows"
                                                     height="24" class="me-3" />
                                                 <span class="text-heading">Windows</span>
                                             </div>
@@ -411,7 +237,7 @@
                                         <td>2</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="../../assets/img/icons/brands/mac.png" alt="Mac" height="24"
+                                                <img src="" alt="Mac" height="24"
                                                     class="me-3" />
                                                 <span class="text-heading">Mac</span>
                                             </div>
@@ -453,7 +279,7 @@
                                         <td>4</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="../../assets/img/icons/brands/chrome.png" alt="Chrome"
+                                                <img src="" alt="Chrome"
                                                     height="24" class="me-3" />
                                                 <span class="text-heading">Chrome</span>
                                             </div>
@@ -913,7 +739,7 @@
                                         <td>1</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="../../assets/img/icons/brands/windows.png" alt="Windows"
+                                                <img src="" alt="Windows"
                                                     height="24" class="me-3" />
                                                 <span class="text-heading">Windows</span>
                                             </div>
@@ -934,7 +760,7 @@
                                         <td>2</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="../../assets/img/icons/brands/mac.png" alt="Mac" height="24"
+                                                <img src="" alt="Mac" height="24"
                                                     class="me-3" />
                                                 <span class="text-heading">Mac</span>
                                             </div>
@@ -976,7 +802,7 @@
                                         <td>4</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="../../assets/img/icons/brands/chrome.png" alt="Chrome"
+                                                <img src="" alt="Chrome"
                                                     height="24" class="me-3" />
                                                 <span class="text-heading">Chrome</span>
                                             </div>
@@ -997,7 +823,7 @@
                                         <td>5</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="../../assets/img/icons/brands/cent.png" alt="Cent" height="24"
+                                                <img src="" alt="Cent" height="24"
                                                     class="me-3" />
                                                 <span class="text-heading">Cent</span>
                                             </div>
@@ -1358,7 +1184,7 @@
                                         <td>4</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="../../assets/img/icons/brands/chrome.png" alt="Chrome"
+                                                <img src="" alt="Chrome"
                                                     height="24" class="me-3" />
                                                 <span class="text-heading">Chrome</span>
                                             </div>
@@ -1703,7 +1529,7 @@
                                         <td>4</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="../../assets/img/icons/brands/chrome.png" alt="Chrome"
+                                                <img src="" alt="Chrome"
                                                     height="24" class="me-3" />
                                                 <span class="text-heading">Chrome</span>
                                             </div>
@@ -1776,28 +1602,6 @@
 
 </div>
 
-<!--<script>
-    function updateTitles() {
-        const budgetVsActualElement = document.getElementById('budget-vs-actual');
-        const actualVsComparativeElement = document.getElementById('actual-vs-comparative');
-
-        if (window.innerWidth >= 1800) {
-            // Tela grande
-            budgetVsActualElement.textContent = 'Orçado x Realizado';
-            actualVsComparativeElement.textContent = 'Realizado x Comparativo';
-        } else {
-            // Tela pequena
-            budgetVsActualElement.textContent = 'Orçado x Real';
-            actualVsComparativeElement.textContent = 'Real x Comparativo';
-        }
-    }
-
-    // Atualizar os títulos ao carregar a página
-    window.addEventListener('load', updateTitles);
-
-    // Atualizar os títulos quando a janela for redimensionada
-    window.addEventListener('resize', updateTitles);
-</script> -->
 
 <script>
         function updateTitles() {
@@ -1831,6 +1635,10 @@
         // Atualizar os títulos quando a janela for redimensionada
         window.addEventListener('resize', updateTitles);
 </script>
+
+
+
+
 
 
 {% endblock %}

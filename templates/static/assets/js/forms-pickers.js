@@ -50,9 +50,10 @@
   }
 
   // Range
-  if (typeof flatpickrRange != undefined) {
+  if (flatpickrRange) {
     flatpickrRange.flatpickr({
-      mode: 'range'
+      mode: 'range',
+      dateFormat: 'dd/mm/YYYY'
     });
   }
 
@@ -180,7 +181,9 @@ $(function () {
     bsRangePickerTime = $('#bs-rangepicker-time'),
     bsRangePickerRange = $('#bs-rangepicker-range'),
     bsRangePickerWeekNum = $('#bs-rangepicker-week-num'),
-    bsRangePickerDropdown = $('#bs-rangepicker-dropdown');
+    bsRangePickerDropdown = $('#bs-rangepicker-dropdown'),
+    pick_realizado = $('#pick_realizado'),
+    pick_comparativo = $('#pick_comparativo');
 
   // Basic
   if (bsRangePickerBasic.length) {
@@ -203,7 +206,7 @@ $(function () {
       timePicker: true,
       timePickerIncrement: 30,
       locale: {
-        format: 'MM/DD/YYYY h:mm A'
+        format: 'DD/MM/YYYY h:mm A'
       },
       opens: isRtl ? 'left' : 'right'
     });
@@ -234,7 +237,32 @@ $(function () {
   if (bsRangePickerDropdown.length) {
     bsRangePickerDropdown.daterangepicker({
       showDropdowns: true,
-      opens: isRtl ? 'left' : 'right'
+      opens: isRtl ? 'left' : 'right',
+      locale: {
+        format: 'DD/MM/YYYY'
+      },
+    });
+  }
+
+
+  if (pick_realizado.length) {
+    pick_realizado.daterangepicker({
+      showDropdowns: true,
+      opens: isRtl ? 'left' : 'right',
+      locale: {
+        format: 'DD/MM/YYYY'
+      },
+    });
+  }
+
+
+  if (pick_comparativo.length) {
+    pick_comparativo.daterangepicker({
+      showDropdowns: true,
+      opens: isRtl ? 'left' : 'right',
+      locale: {
+        format: 'DD/MM/YYYY'
+      },
     });
   }
 
