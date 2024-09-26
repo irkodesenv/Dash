@@ -7,16 +7,14 @@
 <link href="{% static 'css_dashboard.css' %}" rel="stylesheet">
 <link href="{% static 'css/css_volumetria.css' %}" rel="stylesheet">
 
-
-
 <div class="alert alert-solid-danger f-size-18" role="alert" id="msg_erro" style="display: none;">
 </div>
 
 <div class="row mb-6 pt-3 " style="border-radius:5px; margin-left: 0px; margin-right: 0px; background-color: #FFF;">
     <!-- EMPRESAS DO GRUPO -->
-    <div class="col-md-3 col-lg-2">
+    <div class="col-md-2 col-lg-2">
         <div class="mb-6">
-            <form action="{% url 'relatorios_financeiro:rel_financeiro' %}" method="POST" class="card-body">
+            <form action="{% url 'administrativo:retornaVolumetriaConsumoCliente' %}" method="POST" class="card-body">
                 {% csrf_token %}
                 <div class="row g-4">
                     <div class="col-md-12">
@@ -24,35 +22,48 @@
                         <select id="select-clientes" name="select-clientes" class="select2 form-select"
                             data-allow-clear="true">
                             <option value="">TODAS EMPRESAS</option>
-                            <option value="">IRKO - SP</option>
-                            <option value="">IRKO - BPS</option>
-                            <option value="">IRKO - CAMPINAS</option>
-                            <option value="">IRKO - RJ</option>
+                            <option value="1">IRKO - SP</option>
+                            <option value="2">IRKO - BPS</option>
+                            <option value="3">IRKO - CAMPINAS</option>
+                            <option value="4">IRKO - RJ</option>
                         </select>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
     <!-- CLIENTES DA EMPRESA SELECIONADA-->
-    <div class="col-md-3 col-lg-3">
-        <div class="mb-6">
-            <form action="{% url 'relatorios_financeiro:rel_financeiro' %}" method="POST" class="card-body">
+    <div class="col-md-2 col-lg-2">
+        <div class="mb-6">           
                 {% csrf_token %}
                 <div class="row g-4">
                     <div class="col-md-12">
-                        <label class="form-label" for="multicol-country" style="font-size: 15px;"><strong> Clientes</strong></label>
-                        <select id="select-clientes" name="select-clientes" class="select2 form-select"
+                        <label class="form-label" for="cliente" style="font-size: 15px;"><strong> Clientes</strong></label>
+                        <select id="cliente" name="cliente" class="select2 form-select"
                             data-allow-clear="true">
                             <option value="">TODOS CLIENTES</option>
-                            <option value="">386 - E-UB COMERCIO</option>
-                            <option value="">480 - DASSAULT SYSTEMES</option>
-                            <option value="">706 - CHRISTIAN DIOR</option>
-                            <option value="">727 - DOLCE & GABBANA</option>
+
+                            {% for cliente in clientes %}
+                                <option value="{{cliente.Codigo}}">{{cliente.Codigo}} - {{cliente.Razao}}</option>
+                            {% endfor %}
+
                         </select>
                     </div>
                 </div>
-            </form>
+        </div>
+    </div>
+
+    <!-- DESCENDENTES DA EMPRESA SELECIONADA-->
+    <div class="col-md-2 col-lg-2">
+        <div class="mb-6">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label" for="descendentes" style="font-size: 15px;"><strong> Descendentes</strong></label>
+                        <select id="descendentes" name="descendentes" class="select2 form-select"
+                            data-allow-clear="true">
+                            <option value="">TODOS DESCENDENTES</option>
+                        </select>
+                    </div>
+                </div>
         </div>
     </div>
 
@@ -81,15 +92,15 @@
     </div>
 
     <!--/ Tipo Demonstração -->
-    <div class="col-md-2 col-lg-2">
+    <div class="col-md-1 col-lg-1">
         <div class="mb-6">
                 <div class="row g-4">
                     <div class="col-md-12">
-                        <label class="form-label" for="multicol-country" style="font-size: 15px;"><strong> Demonstração</strong></label>
-                        <select id="select-clientes" name="select-clientes" class="select2 form-select"
+                        <label class="form-label" for="demonstracao" style="font-size: 15px;"><strong> Demonstração</strong></label>
+                        <select id="demonstracao" name="demonstracao" class="select2 form-select"
                             data-allow-clear="true">
-                            <option value="">ACUMULADO</option>
-                            <option value="">MÉDIA</option>
+                            <option value="1">ACUMULADO</option>
+                            <option value="2">MÉDIA</option>
                         </select>
                     </div>
                 </div>
@@ -97,15 +108,18 @@
     </div>
 
     <div class="col-md-1 col-lg-1 d-flex justify-content-left align-items-center padding-left: 0px">
-        <button type="button" class="btn btn-primary">Filtrar</button>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
     </div>  
+
+
+    </form>
 </div>
 
 
 <div class="row">
     <!-- Row 1 -->
     <!-- Trabalhista -->
-    <div class="col-6">
+    <div class="col-sm-12 col-md-6 col-lg-6">
 
         <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
             <div class="card text-center h-100" style="min-height: 367px;">
@@ -350,7 +364,7 @@
     </div>
 
     <!-- Coluna Fiscal -->
-    <div class="col-6">
+    <div class="col-sm-12 col-md-6 col-lg-6">
 
         <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
             <div class="card text-center h-100">
@@ -876,7 +890,8 @@
 <div class="row">
     <!-- row 2 -->
     <!-- Coluna esquerda-->
-    <div class="col-6 mt-6">
+
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-md-6 mt-lg-6">
 
         <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
             <div class="card text-center h-100">
@@ -1255,7 +1270,7 @@
     </div>
 
     <!-- Coluna direita -->
-    <div class="col-6 mt-6">
+    <div class="col-sm-12 col-md-6 col-lg-6 mt-md-6 mt-lg-6">
 
         <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
             <div class="card text-center h-100" style="min-height: 257px;">
