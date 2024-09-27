@@ -10,6 +10,7 @@
 <div class="alert alert-solid-danger f-size-18" role="alert" id="msg_erro" style="display: none;">
 </div>
 
+
 <div class="row mb-6 pt-3 " style="border-radius:5px; margin-left: 0px; margin-right: 0px; background-color: #FFF;">
     <!-- EMPRESAS DO GRUPO -->
     <div class="col-md-2 col-lg-2">
@@ -73,7 +74,7 @@
                 <div class="row g-4">
                     <div class="col-md-12">
                         <label class="form-label" for="pick_realizado" style="font-size: 15px;"><strong> Período Realizado</strong></label>
-                        <input type="text" id="pick_realizado" name="pick_realizado" class="form-control" />
+                        <input type="text" id="pick_realizado" name="pick_realizado" value="{{filtros.pick_realizado}}" class="form-control" />
                     </div>
                 </div>
         </div>
@@ -85,7 +86,7 @@
                 <div class="row g-4">
                     <div class="col-md-12">
                         <label class="form-label" for="pick_comparativo" style="font-size: 15px;"><strong> Período Comparativo</strong></label>
-                        <input type="text" id="pick_comparativo" name="pick_comparativo" class="form-control" />
+                        <input type="text" id="pick_comparativo" name="pick_comparativo" value="{{filtros.pick_comparativo}}" class="form-control" />
                     </div>
                 </div>
         </div>
