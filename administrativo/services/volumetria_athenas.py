@@ -4,6 +4,7 @@ from .volumetria_folha import Folha
 from .volumetria_financeiro import Financeiro 
 from accounts.services.pessoa import Pessoa
 from accounts.services.funcionario import Funcionario
+from utils.views import media_periodo_range_data
 
 class VolumetriaAthenas(Ivolumetria):   
     
@@ -16,30 +17,57 @@ class VolumetriaAthenas(Ivolumetria):
         self.data_comparativo_fim = data_comparativo_fim
         
         
-    def controllerMetricas(self): 
-    
-        # Folha
-        metricas_folha = self.controllerFolha()
+    def controllerMetricas(self, demonstracao): 
+        media_realizado = demonstracao
+        media_comparativo = demonstracao
+        
+        if demonstracao == 2:
+            media_realizado = media_periodo_range_data([self.data_ini, self.data_fim])
+            media_comparativo = media_periodo_range_data([self.data_comparativo_ini, self.data_comparativo_fim])
             
-
+        # Folha
+        metricas_folha = self.controllerFolha(media_realizado, media_comparativo)
+        
+        # Financeiro
+        metricas_financeiro = self.controllerFinanceiro(media_realizado, media_comparativo)
+        
+        # Fiscal
+        metricas_fiscal = self.controllerFiscal(media_realizado, media_comparativo)
+        
+        # Contabil
+        metricas_contabil = self.controllerContabil(media_realizado, media_comparativo)
+        
         obj_metricas = {
             'folha': metricas_folha,
-            'fiscal': {},
-            'financeiro': {},
-            'contabil': {}     
+            'financeiro': metricas_financeiro,
+            'fiscal': metricas_fiscal,            
+            'contabil': metricas_contabil     
         }
-        
+    
         return obj_metricas
     
     
-    def controllerFolha(self):        
+    def controllerFolha(self, media_realizado, media_comparativo):        
         funcionario = Funcionario(self.conexao)
+        
         # Realizado
         competencia_atual = Folha(funcionario, codigo_empresa = self.codigo_empresa, data_ini = self.data_ini, data_fim = self.data_fim)  
-        periodo_realizado = competencia_atual.controller_folha()
+        periodo_realizado = competencia_atual.controller_folha(media_realizado)
 
         #Comparativo
         competencia_anterior = Folha(funcionario, codigo_empresa = self.codigo_empresa, data_ini = self.data_comparativo_ini, data_fim = self.data_comparativo_fim)
-        metricas = competencia_anterior.controller_folha_comparativo(periodo_realizado)
+        metricas = competencia_anterior.controller_folha_comparativo(periodo_realizado, media_comparativo)
         
         return metricas
+    
+    
+    def controllerFinanceiro(self, media_realizado, media_comparativo):
+        return {"teste": ""}
+    
+    
+    def controllerFiscal(self, media_realizado, media_comparativo):
+        return {"teste": ""}
+    
+
+    def controllerContabil(self, media_realizado, media_comparativo):
+        return {"teste": ""}

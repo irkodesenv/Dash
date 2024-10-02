@@ -9,81 +9,95 @@ class Folha:
         self.codigo_empresa = codigo_empresa    
         
     
-    def controller_folha(self):
+    def controller_folha(self, media):
         folha = {}
+        
+        if not media:
+            media = 1
         
         contagem_tipo_funcionarios_realizado = self.pessoa.conta_tipo_funcionario(('O', 'N', 'M'), self.data_fim, self.codigo_empresa)
 
         for tipo, quantidade in contagem_tipo_funcionarios_realizado.items():
+            qtd_dividido_por_media = int(quantidade / media)
             folha[tipo] = {
                 "orcado": 0,
-                "realizado": quantidade,
-                "realizado_x_orcado": quantidade - 0,
-                "percent": (quantidade * 0) / 100                
+                "realizado": qtd_dividido_por_media,
+                "realizado_x_orcado": qtd_dividido_por_media - 0,
+                "percent": (qtd_dividido_por_media * 0) / 100                
             }            
         
         # Estagiarios
-        qtd_estagiarios = self.pessoa.contar_estagiarios(self.data_fim, self.codigo_empresa)        
+        qtd_estagiarios = self.pessoa.contar_estagiarios(self.data_fim, self.codigo_empresa)    
+        qtd_estagiario_dividido_por_media = int(qtd_estagiarios / media)    
         folha["Estagiários"] = {
                 "orcado": 0,
-                "realizado": qtd_estagiarios,
-                "realizado_x_orcado": qtd_estagiarios - 0,
-                "percent": (qtd_estagiarios * 0 ) / 100      
+                "realizado": qtd_estagiario_dividido_por_media,
+                "realizado_x_orcado": qtd_estagiario_dividido_por_media - 0,
+                "percent": (qtd_estagiario_dividido_por_media * 0 ) / 100      
             }
         
         # Admissoes
         qtd_admissoes = self.pessoa.contar_admissoes(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_adm_dividido_por_media = int(qtd_admissoes / media)  
         folha["Admissões"] = {
                 "orcado": 0,
-                "realizado": qtd_admissoes,
-                "realizado_x_orcado": qtd_admissoes - 0,
-                "percent": (qtd_admissoes * 0) / 100        
+                "realizado": qtd_adm_dividido_por_media,
+                "realizado_x_orcado": qtd_adm_dividido_por_media - 0,
+                "percent": (qtd_adm_dividido_por_media * 0) / 100        
             }
         
         # Demissoes
         qtd_demissoes = self.pessoa.contar_demissoes(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_demi_dividido_por_media = int(qtd_demissoes / media)  
         folha["Demissões"] = {
                 "orcado": 0,
-                "realizado": qtd_demissoes,
-                "realizado_x_orcado": qtd_demissoes - 0,
-                "percent": (qtd_demissoes * 0) / 100    
+                "realizado": qtd_demi_dividido_por_media,
+                "realizado_x_orcado": qtd_demi_dividido_por_media - 0,
+                "percent": (qtd_demi_dividido_por_media * 0) / 100    
             }
                  
         return folha
     
     
-    def controller_folha_comparativo(self, folha):        
+    def controller_folha_comparativo(self, folha, media):
+        if not media:
+            media = 1  
+                  
         contagem_tipo_funcionarios_realizado = self.pessoa.conta_tipo_funcionario(('O', 'N', 'M'), self.data_fim, self.codigo_empresa)
     
-        for item, quantidade in contagem_tipo_funcionarios_realizado.items():            
+        for item, quantidade in contagem_tipo_funcionarios_realizado.items():
+            qtd_dividido_por_media = int(quantidade / media)            
             folha[item].update({
-                "comparativo": quantidade,
-                "realizado_x_comparativo": folha[item]['realizado'] - quantidade,
-                "percent_rc": round(((folha[item]['realizado'] - quantidade) / quantidade) * 100 ,2) if quantidade != 0 else 0  
+                "comparativo": qtd_dividido_por_media,
+                "realizado_x_comparativo": folha[item]['realizado'] - qtd_dividido_por_media,
+                "percent_rc": round(((folha[item]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2) if quantidade != 0 else 0  
             })
             
         # Estagiarios
         qtd_estagiarios = self.pessoa.contar_estagiarios(self.data_fim, self.codigo_empresa) 
+        qtd_estagiario_dividido_por_media = int(qtd_estagiarios / media)   
         folha["Estagiários"].update({               
-                "comparativo": qtd_estagiarios,
-                "realizado_x_comparativo": folha['Estagiários']['realizado'] - qtd_estagiarios,
-                "percent_rc": round(((folha['Estagiários']['realizado'] - qtd_estagiarios) / qtd_estagiarios),2) * 100 if qtd_estagiarios != 0 else 0        
+                "comparativo": qtd_estagiario_dividido_por_media,
+                "realizado_x_comparativo": folha['Estagiários']['realizado'] - qtd_estagiario_dividido_por_media,
+                "percent_rc": round(((folha['Estagiários']['realizado'] - qtd_estagiario_dividido_por_media) / qtd_estagiario_dividido_por_media),2) * 100 if qtd_estagiario_dividido_por_media != 0 else 0        
             })
         
         # Admissoes
         qtd_admissoes = self.pessoa.contar_admissoes(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_adm_dividido_por_media = int(qtd_admissoes / media)  
         folha["Admissões"].update({
-                "comparativo": qtd_admissoes,
-                "realizado_x_comparativo": folha['Admissões']['realizado'] - qtd_admissoes,
-                "percent_rc": round(((folha['Admissões']['realizado'] - qtd_admissoes) / qtd_admissoes) * 100 ,2) if qtd_admissoes != 0 else 0      
+                "comparativo": qtd_adm_dividido_por_media,
+                "realizado_x_comparativo": folha['Admissões']['realizado'] - qtd_adm_dividido_por_media,
+                "percent_rc": round(((folha['Admissões']['realizado'] - qtd_adm_dividido_por_media) / qtd_adm_dividido_por_media) * 100 ,2) if qtd_adm_dividido_por_media != 0 else 0      
             })
         
         # Demissoes
         qtd_demissoes = self.pessoa.contar_demissoes(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_demi_dividido_por_media = int(qtd_demissoes / media)  
         folha["Demissões"].update({
-                "comparativo": qtd_demissoes,
-                "realizado_x_comparativo": folha['Demissões']['realizado'] - qtd_demissoes,
-                "percent_rc": round(((folha['Demissões']['realizado'] - qtd_demissoes) / qtd_demissoes) * 100,2) if qtd_demissoes != 0 else 0      
+                "comparativo": qtd_demi_dividido_por_media,
+                "realizado_x_comparativo": folha['Demissões']['realizado'] - qtd_demi_dividido_por_media,
+                "percent_rc": round(((folha['Demissões']['realizado'] - qtd_demi_dividido_por_media) / qtd_demi_dividido_por_media) * 100,2) if qtd_demi_dividido_por_media != 0 else 0      
             })
 
         return folha

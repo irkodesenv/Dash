@@ -10,7 +10,6 @@
 <div class="alert alert-solid-danger f-size-18" role="alert" id="msg_erro" style="display: none;">
 </div>
 
-
 <div class="row mb-6 pt-3 " style="border-radius:5px; margin-left: 0px; margin-right: 0px; background-color: #FFF;">
     <!-- EMPRESAS DO GRUPO -->
     <div class="col-md-2 col-lg-2">
@@ -24,9 +23,11 @@
                             data-allow-clear="true">
                             <option value="">TODAS EMPRESAS</option>
                             <option value="1">IRKO - SP</option>
-                            <option value="2">IRKO - BPS</option>
-                            <option value="3">IRKO - CAMPINAS</option>
-                            <option value="4">IRKO - RJ</option>
+                            <!-- 
+                                <option value="2">IRKO - BPS</option>
+                                <option value="3">IRKO - CAMPINAS</option>
+                                <option value="4">IRKO - RJ</option>
+                            -->
                         </select>
                     </div>
                 </div>
@@ -44,7 +45,11 @@
                             <option value="">TODOS CLIENTES</option>
 
                             {% for cliente in clientes %}
-                                <option value="{{cliente.Codigo}}">{{cliente.Codigo}} - {{cliente.Razao}}</option>
+                                {% if cliente.Codigo == filtros.cliente %}
+                                    <option value="{{cliente.Codigo}}" selected>{{cliente.Codigo}} - {{cliente.Razao}}</option>
+                                {% else %}
+                                    <option value="{{cliente.Codigo}}">{{cliente.Codigo}} - {{cliente.Razao}}</option>
+                                {% endif %}                                
                             {% endfor %}
 
                         </select>
@@ -100,8 +105,8 @@
                         <label class="form-label" for="demonstracao" style="font-size: 15px;"><strong> Demonstração</strong></label>
                         <select id="demonstracao" name="demonstracao" class="select2 form-select"
                             data-allow-clear="true">
-                            <option value="1">ACUMULADO</option>
-                            <option value="2">MÉDIA</option>
+                            <option value="1" {% if filtros.demonstracao == 1 %}selected{% endif %}>ACUMULADO</option>
+                            <option value="2" {% if filtros.demonstracao == 2 %}selected{% endif %}>MÉDIA</option>
                         </select>
                     </div>
                 </div>
@@ -1652,9 +1657,50 @@
         window.addEventListener('resize', updateTitles);
 </script>
 
+<script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+
+<script>   
+
+    $( document ).ready(function() {
+        var cliente = $("#cliente").val();
+
+        if(cliente){
+            obter_descendentes(cliente);
+        }
+    });
 
 
+    $('#cliente').on('change', function (e) {
+        obter_descendentes(e.target.value);
+    });
 
+    function obter_descendentes(cliente){
+        $.ajax({
+            url: '{% url "administrativo:obterDadosDescendentes" %}',
+            type: 'POST',
+            dataType: 'JSON',
+            data: { 
+                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), "cliente": cliente, 
+            },
+            success: function(data) {
+                const select_descendentes = $("#descendentes");
 
+                if(data.length > 0){
+                    select_descendentes.empty();
+                    select_descendentes.append("<option value=''> TODOS DESCENDENTES  </option>");
 
+                    data.forEach(filialItem => {
+                        select_descendentes.append("<option value='"+ filialItem.Codigo + "'>" + filialItem.Codigo + " - " + filialItem.Razao + "</option>");
+                    });
+                }else{
+                    select_descendentes.empty();
+                    select_descendentes.append("<option value=''> NÃO POSSUI </option>");
+                }
+            },
+            error: function(error) {
+                console.error('Erro ao obter contas:', error);
+            }
+        });
+    }
+  </script>
 {% endblock %}

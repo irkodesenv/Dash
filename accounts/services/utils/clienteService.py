@@ -1,4 +1,5 @@
 from ..cliente import Cliente
+from typing import List, Dict, Any, Tuple
 
 class ClienteService:
     
@@ -7,11 +8,16 @@ class ClienteService:
         self.cliente = Cliente(self.conexao)
     
     
-    def obter_clientes(self):
+    def obter_clientes(self) -> List[Tuple[Any, Any, Any]]:
         return self.cliente.lista_cadastros()
+    
+    
+    def obter_descendentes(self, codigo_cliente):    
+        descendentes = self.cliente.lista_cadastro_descendentes(codigo_cliente)   
+        return self.formata_dados_clientes_formulario(descendentes)
 
     
-    def formata_dados_clientes_formulario(self, clientes):
+    def formata_dados_clientes_formulario(self, clientes) -> List[Dict[str, Any]]:
         cliente_dados = [
             {
                 'Codigo': cliente[0],
@@ -23,6 +29,6 @@ class ClienteService:
         return cliente_dados
     
 
-    def obter_clientes_formatados_formulario(self):
+    def obter_clientes_formatados_formulario(self) -> List[Dict[str, Any]]:
         clientes = self.obter_clientes()
         return self.formata_dados_clientes_formulario(clientes)
