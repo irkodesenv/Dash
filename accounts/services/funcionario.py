@@ -11,7 +11,6 @@ class Funcionario(Pessoa):
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA = {codigo_empresa}"
 
-        print(codigo_empresa)
         data = (
             self.conexao.select('TABPESSOAS')
             .where(where_clause)

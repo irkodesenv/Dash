@@ -93,11 +93,12 @@ class Folha:
         
         # Demissoes
         qtd_demissoes = self.pessoa.contar_demissoes(self.data_ini, self.data_fim, self.codigo_empresa)
-        qtd_demi_dividido_por_media = int(qtd_demissoes / media)  
+        qtd_demi_dividido_por_media = int(qtd_demissoes / media)
+        
         folha["Demissões"].update({
                 "comparativo": qtd_demi_dividido_por_media,
                 "realizado_x_comparativo": folha['Demissões']['realizado'] - qtd_demi_dividido_por_media,
-                "percent_rc": round(((folha['Demissões']['realizado'] - qtd_demi_dividido_por_media) / qtd_demi_dividido_por_media) * 100,2) if qtd_demi_dividido_por_media != 0 else 0      
+                "percent_rc": round(((folha['Demissões']['realizado'] - qtd_demi_dividido_por_media) / qtd_demi_dividido_por_media) * 100, 2) if qtd_demi_dividido_por_media != 0 else 0      
             })
 
         return folha

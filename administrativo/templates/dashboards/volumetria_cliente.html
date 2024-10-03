@@ -173,7 +173,6 @@
                                 </thead>
                                 <tbody class="tbody-class-hr">
 
-
                                     {% for key, valores in data.folha.items %}
                                     
                                         <tr>
@@ -182,36 +181,61 @@
                                             <td class="td-table-volumetria-center">{{ valores.orcado }}</td>
                                 
                                             <td class="td-table-volumetria-center">{{ valores.realizado }}</td>
-                                
-                                            <td class="td-table-volumetria-center">
-                                                <div style="margin-left: 0%">
-                                                    {{ valores.realizado_x_orcado }} 
-                                                    <small class="text-success fw-medium">
-                                                        <i class="bx bx-up-arrow-alt"></i> 
-                                                        {% if valores.percent > 0 %}
-                                                            {{valores.percent}}
-                                                        {% else %}
-                                                            0%
-                                                        {% endif %}
-                                                    </small>
-                                                </div>
-                                            </td>
-                                
-                                            <td class="td-table-volumetria-center">{{ valores.comparativo }}</td>
-                                
-                                            <td class="td-table-volumetria-center">
-                                                <div style="margin-left: 0%">
-                                                    {{ valores.realizado_x_comparativo }}
-                                                    <small class="text-success fw-medium">
-                                                        <i class="bx bx-up-arrow-alt"></i>
 
-                                                        {% if valores.percent_rc > 0 %}
-                                                            {{valores.percent_rc}}%
-                                                        {% else %}
-                                                            0%
-                                                        {% endif %}
+                                            <td class="td-table-volumetria-center">
+                                                <div class="td-table-volumetria-center-percent">
+                                                        <span>
+                                                            {{ valores.realizado_x_orcado }} 
+                                                        </span>
                                                     
-                                                    </small>
+                                                        <span>                                                                                                                            
+                                                                {% if valores.percent > 0 %}
+                                                                    <small class="text-success fw-medium">                                                                        
+                                                                        {{valores.percent}}%
+                                                                        <i class="bx bx-up-arrow-alt"></i>
+                                                                    </small>
+                                                                {% elif valores.percent < 0  %}
+                                                                    <small class="text-danger fw-medium">                                                                       
+                                                                        {{valores.percent}}%
+                                                                        <i class="bx bx-down-arrow-alt"></i>
+                                                                    </small>
+
+                                                                {% else %}
+                                                                    <small class="text-warning fw-medium">                                                                        
+                                                                        0%
+                                                                        <i class="bx bx-right-arrow-alt"></i>
+                                                                    </small>
+                                                                {% endif %}                                                          
+                                                        </span>
+                                                </div>
+                                            </td>                              
+                                
+                                            <td class="td-table-volumetria-center">{{ valores.comparativo }}</td>                                
+                                        
+                                            <td class="td-table-volumetria-center">
+                                                <div class="td-table-volumetria-center-percent">
+                                                        <span>
+                                                            {{ valores.realizado_x_comparativo }}
+                                                        </span>
+                                                    
+                                                        <span>                                                                                                                            
+                                                            {% if valores.percent_rc > 0 %}
+                                                                <small class="text-success fw-medium">                                                                   
+                                                                    {{valores.percent_rc}}%
+                                                                    <i class="bx bx-up-arrow-alt"></i>
+                                                                </small>
+                                                            {% elif valores.percent_rc < 0  %}
+                                                                <small class="text-danger fw-medium">                                                                   
+                                                                    {{valores.percent_rc}}%
+                                                                    <i class="bx bx-down-arrow-alt"></i>
+                                                                </small>
+                                                            {% else %}
+                                                                <small class="text-warning fw-medium">                                                                   
+                                                                    0%
+                                                                    <i class="bx bx-right-arrow-alt"></i>
+                                                                </small>
+                                                            {% endif %}                                                          
+                                                        </span>
                                                 </div>
                                             </td>
                                         </tr>

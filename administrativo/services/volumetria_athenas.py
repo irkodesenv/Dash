@@ -53,7 +53,7 @@ class VolumetriaAthenas(Ivolumetria):
         # Realizado
         competencia_atual = Folha(funcionario, codigo_empresa = self.codigo_empresa, data_ini = self.data_ini, data_fim = self.data_fim)  
         periodo_realizado = competencia_atual.controller_folha(media_realizado)
-
+            
         #Comparativo
         competencia_anterior = Folha(funcionario, codigo_empresa = self.codigo_empresa, data_ini = self.data_comparativo_ini, data_fim = self.data_comparativo_fim)
         metricas = competencia_anterior.controller_folha_comparativo(periodo_realizado, media_comparativo)
