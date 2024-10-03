@@ -1,88 +1,139 @@
 {% load static %}
 <aside id="layout-menu" class="layout-menu-horizontal menu-horizontal menu bg-menu-theme flex-grow-0">
-    <div class="container-xxl d-flex h-100">
-      <ul class="menu-inner">
-        <!-- Dashboards -->
-        <li class="menu-item active">
-          <a href="javascript:void(0)" class="menu-link menu-toggle">
-            <i class="menu-icon tf-icons bx bx-home-smile"></i>
-            <div data-i18n="Dashboards">Dashboards</div>
-          </a>
-          
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="{% url 'dashboard:dashboard' %}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-pie-chart-alt-2"></i>
-                <div data-i18n="Financeiro">Financeiro</div>
-              </a>
-            </li>
-            <li class="menu-item active">
-              <a href="{% url 'administrativo:retornaVolumetriaConsumoCliente' %}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-pie-chart-alt-2"></i>
-                <div data-i18n="Volumetria">Volumetria</div>
-              </a>
-            </li>
-            <!-- 
-            <li class="menu-item">
-              <a href="dashboards-crm.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-shape-circle"></i>
-                <div data-i18n="Contábil">Contábil</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="app-ecommerce-dashboard.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-cart-alt"></i>
-                <div data-i18n="Fiscal">Fiscal</div>
-              </a>
-            </li>
-           
-            <li class="menu-item">
-              <a href="app-academy-dashboard.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-book-open"></i>
-                <div data-i18n="Folha">Folha</div>
-              </a>
-            </li>
+  <div class="container-xxl d-flex h-100">
+    <ul class="menu-inner">
 
-            <li class="menu-item">
-              <a href="app-academy-dashboard.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-book-open"></i>
-                <div data-i18n="Administrativo">Administrativo</div>
-              </a>
-            </li>
 
-            <li class="menu-item">
-              <a href="app-academy-dashboard.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-book-open"></i>
-                <div data-i18n="Paralegal">Paralegal</div>
-              </a>
-            </li>
-            -->
+      <!-- Home  -->
+      <li class="menu-item active">
+        <a href="javascript:void(0)" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-home-smile"></i>
+          <div data-i18n="Home">Home</div>
+        </a>
+      </li>
 
-          </ul>
-        </li>
+      <!-- Financeiro -->
+      <li class="menu-item">
+        <a href="javascript:void(0)" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons bx bx-receipt"></i>
+          <div data-i18n="Financeiro">Financeiro</div>
+        </a>
+        <ul class="menu-sub">
 
-        <!-- Layouts -->
-        <li class="menu-item">
-          <a href="javascript:void(0)" class="menu-link menu-toggle">
-            <i class="menu-icon tf-icons bx bx-layout"></i>
-            <div data-i18n="Relatórios">Relatórios</div>
-          </a>
+          <!-- Dashboards -->
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="Dashboards">Dashboards</div>
+            </a>
 
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="{% url 'relatorios_financeiro:rel_financeiro' %}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-menu"></i>
-                <div data-i18n="Parâmetros Bancários">Parâmetros Bancários</div>
-              </a>
-            </li>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="{% url 'dashboard:dashboard' %}" class="menu-link">
+                  <div data-i18n="Contas a pagar do dia">Contas a pagar do dia</div>
+                </a>
+              </li>
+            </ul>
+          </li>
 
-            <li class="menu-item active">
-              <a href="{% url 'relatorios_financeiro:recorrencia' %}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-menu"></i>
-                <div data-i18n="Recorrências">Pagamentos Recorrentes</div>
-              </a>
-            </li>
-            <!-- 
+          <!-- Relatorios -->
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
+              <div data-i18n="Relatórios">Relatórios</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="{% url 'relatorios_financeiro:rel_financeiro' %}" class="menu-link">
+                  <div data-i18n="Parâmetros Bancários">Parâmetros Bancários</div>
+                </a>
+              </li>
+
+              <li class="menu-item">
+                <a href="{% url 'relatorios_financeiro:recorrencia' %}" class="menu-link">
+                  <div data-i18n="Recorrências">Pagamentos Recorrentes</div>
+                </a>
+              </li>
+
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+
+      <!-- Administrativo -->
+      <li class="menu-item">
+        <a href="javascript:void(0)" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons bx bx-file"></i>
+          <div data-i18n="Administrativo">Administrativo</div>
+        </a>
+        <ul class="menu-sub">
+
+          <!-- Dashboards -->
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="Dashboards">Dashboards</div>
+            </a>
+
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="{% url 'administrativo:retornaVolumetriaConsumoCliente' %}" class="menu-link">
+                  <div data-i18n="Volumetria">Volumetria</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Relatorios 
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-grid"></i>
+                    <div data-i18n="Relatórios">Relatórios</div>
+                  </a>
+                  <ul class="menu-sub">
+                    <li class="menu-item">
+                      <a href="{% url 'relatorios_financeiro:rel_financeiro' %}" class="menu-link">
+                        <div data-i18n="Parâmetros Bancários">Parâmetros Bancários</div>
+                      </a>
+                    </li>
+      
+                    <li class="menu-item">
+                      <a href="{% url 'relatorios_financeiro:recorrencia' %}" class="menu-link">
+                        <div data-i18n="Recorrências">Pagamentos Recorrentes</div>
+                      </a>
+                    </li>
+      
+                  </ul>
+                </li>
+                -->
+        </ul>
+      </li>
+
+
+      <!-- Layouts -->
+      <!-- 
+      <li class="menu-item">
+        <a href="javascript:void(0)" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons bx bx-layout"></i>
+          <div data-i18n="Relatórios">Relatórios</div>
+        </a>
+
+        <ul class="menu-sub">
+          <li class="menu-item">
+            <a href="{% url 'relatorios_financeiro:rel_financeiro' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-menu"></i>
+              <div data-i18n="Parâmetros Bancários">Parâmetros Bancários</div>
+            </a>
+          </li>
+
+          <li class="menu-item active">
+            <a href="{% url 'relatorios_financeiro:recorrencia' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-menu"></i>
+              <div data-i18n="Recorrências">Pagamentos Recorrentes</div>
+            </a>
+          </li>
+       
             <li class="menu-item">
               <a href="../vertical-menu-template/" class="menu-link" target="_blank">
                 <i class="menu-icon tf-icons bx bx-vertical-center"></i>
@@ -110,9 +161,9 @@
           </ul>
         </li>
         -->
-        
 
-        <!-- Apps 
+
+      <!-- Apps 
         <li class="menu-item">
           <a href="javascript:void(0)" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-customize"></i>
@@ -418,7 +469,7 @@
         </li>
         -->
 
-        <!-- Pages 
+      <!-- Pages 
         <li class="menu-item">
           <a href="javascript:void(0)" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-collection"></i>
@@ -709,7 +760,7 @@
         </li>
         -->
 
-        <!-- Components 
+      <!-- Components 
         <li class="menu-item">
           <a href="javascript:void(0)" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-code-block"></i>
@@ -859,7 +910,7 @@
               </ul>
             </li>
             -->
-            <!-- Extended components 
+      <!-- Extended components 
             <li class="menu-item">
               <a href="javascript:void(0)" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-copy"></i>
@@ -962,7 +1013,7 @@
         </li>
         -->
 
-        <!-- Forms 
+      <!-- Forms 
         <li class="menu-item">
           <a href="javascript:void(0)" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-book-content"></i>
@@ -1078,7 +1129,7 @@
         </li>
         -->
 
-        <!-- Tables 
+      <!-- Tables 
         <li class="menu-item">
           <a href="javascript:void(0)" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-grid-alt"></i>
@@ -1119,7 +1170,7 @@
         </li>
       -->
 
-        <!-- Charts & Maps
+      <!-- Charts & Maps
         <li class="menu-item">
           <a href="javascript:void(0)" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-bar-chart-square"></i>
@@ -1153,6 +1204,6 @@
           </ul>
         </li>
       -->
-      </ul>
-    </div>
-  </aside>
+    </ul>
+  </div>
+</aside>
