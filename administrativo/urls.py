@@ -5,5 +5,7 @@ app_name = 'administrativo'
 urlpatterns = [
     #Dash de volumetria de consumo de Clientes
     path('volumetria/', views.retorna_volumetria_consumo_cliente, name="retornaVolumetriaConsumoCliente"),
-    path('obterDadosDescendentes/', views.obter_descendentes, name="obterDadosDescendentes")
+    path('obterDadosDescendentes/', views.obter_descendentes, name="obterDadosDescendentes"),
+    path('volumetriaFolha', views.volumetria_folha, name="retornaVolumetriaFolha"),
+    path('volumetriaFinanceiro', views.volumetria_financeiro, name="retornaVolumetriaFinanceiro")
 ]
