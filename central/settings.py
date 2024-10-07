@@ -133,7 +133,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'templates' / 'static',
     BASE_DIR / 'dashboard/templates/static',
     BASE_DIR / 'relatorios_financeiro/templates/static',
-    BASE_DIR / 'clientes/templates/static'
+    BASE_DIR / 'clientes/templates/static',
+    BASE_DIR / 'administrativo/templates/static'
 ]
 
 # BD

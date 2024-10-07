@@ -3,11 +3,115 @@ from conexoes.services.firebird import Conexao
 
 class Financeiro:
     
-    def __init__(self, codigo_empresa = None, data_ini = None, data_fim = None):
-        self.conexao = Conexao()
+    def __init__(self, financeiro, codigo_empresa = None, data_ini = None, data_fim = None):
+        self.financeiro = financeiro
+        self.data_ini = data_ini
+        self.data_fim = data_fim
+        self.codigo_empresa = codigo_empresa    
         self.data_cadastro = None
-        self.codigo_empresa = None    
+        
         
   
-    def retorna_contas_a_pagar(self):
-        pass
+    def controller_financeiro_volumetria(self, media):    
+        financeiro = {}
+        
+        if not media:
+            media = 1
+        
+        # Contas correntes      
+        contas_correntes = self.financeiro.retorna_conta_correntes(self.data_fim, self.codigo_empresa)
+        qtd_dividido_por_media_contas = int(len(contas_correntes) / media)
+        
+        financeiro["Contas Correntes"] = {
+            "orcado": 0,
+            "realizado": len(contas_correntes),
+            "realizado_x_orcado": qtd_dividido_por_media_contas - 0,
+            "percent": (qtd_dividido_por_media_contas * 0) / 100                
+        }   
+        
+        # Transacoes
+        transacoes = self.financeiro.retorna_qtd_transacoes(('R', 'P'), self.data_ini, self.data_fim, self.codigo_empresa)        
+        for tipo, quantidade in transacoes:
+            qtd_dividido_por_media = int(quantidade / media)
+            financeiro[tipo] = {
+                "orcado": 0,
+                "realizado": qtd_dividido_por_media,
+                "realizado_x_orcado": qtd_dividido_por_media - 0,
+                "percent": (qtd_dividido_por_media * 0) / 100                
+            }
+            
+        # Variacao cambial 
+        variacao_cambial = self.financeiro.retorna_variacao_cambial(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_dividido_por_variacao_cambial = int(variacao_cambial / media)
+        
+        financeiro["Fechamento Câmbio"] = {
+            "orcado": 0,
+            "realizado": variacao_cambial,
+            "realizado_x_orcado": qtd_dividido_por_variacao_cambial - 0,
+            "percent": (qtd_dividido_por_variacao_cambial * 0) / 100                
+        }          
+        
+        # Reembolso Despesa
+        reembolso_despesa = 0
+        qtd_dividido_por_RD = int(reembolso_despesa / media)
+        
+        financeiro["Reembolso Despesa"] = {
+            "orcado": 0,
+            "realizado": reembolso_despesa,
+            "realizado_x_orcado": qtd_dividido_por_RD - 0,
+            "percent": (qtd_dividido_por_RD * 0) / 100                
+        }    
+        
+        return financeiro
+    
+    
+    
+    def controller_financeiro_volumetria_comparativo(self, financeiro, media):
+         
+        if not media:
+            media = 1
+        
+        # Contas correntes      
+        contas_correntes = self.financeiro.retorna_conta_correntes(self.data_fim, self.codigo_empresa)
+        qtd_dividido_por_media_contas = int(len(contas_correntes) / media)
+        
+        financeiro["Contas Correntes"].update({
+            "comparativo": qtd_dividido_por_media_contas,
+            "realizado_x_comparativo": financeiro['Contas Correntes']['realizado'] - qtd_dividido_por_media_contas,
+            "percent_rc": round(((financeiro['Contas Correntes']['realizado'] - qtd_dividido_por_media_contas) / qtd_dividido_por_media_contas),2) * 100 if qtd_dividido_por_media_contas != 0 else 0       
+        })
+        
+        
+        # Transacoes
+        transacoes = self.financeiro.retorna_qtd_transacoes(('R', 'P'), self.data_ini, self.data_fim, self.codigo_empresa)        
+        for tipo, quantidade in transacoes:
+            qtd_dividido_por_media = int(quantidade / media)            
+            financeiro[tipo].update({
+                "comparativo": qtd_dividido_por_media,
+                "realizado_x_comparativo": financeiro[tipo]['realizado'] - qtd_dividido_por_media,
+                "percent_rc": round(((financeiro[tipo]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2) if quantidade != 0 else 0  
+            })
+            
+            
+        # Variacao cambial 
+        variacao_cambial = self.financeiro.retorna_variacao_cambial(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_dividido_por_variacao_cambial = int(variacao_cambial / media)
+        
+        financeiro["Fechamento Câmbio"].update({
+            "comparativo": qtd_dividido_por_variacao_cambial,
+            "realizado_x_comparativo": financeiro['Fechamento Câmbio']['realizado'] - qtd_dividido_por_variacao_cambial,
+            "percent_rc": round(((financeiro['Fechamento Câmbio']['realizado'] - qtd_dividido_por_variacao_cambial) / qtd_dividido_por_variacao_cambial),2) * 100 if qtd_dividido_por_variacao_cambial != 0 else 0             
+        }) 
+        
+
+        # Reembolso Despesa
+        reembolso_despesa = 0
+        qtd_dividido_por_RD = int(reembolso_despesa / media)
+        
+        financeiro["Reembolso Despesa"].update({
+            "comparativo": qtd_dividido_por_RD,
+            "realizado_x_comparativo": financeiro['Reembolso Despesa']['realizado'] - qtd_dividido_por_RD,
+            "percent_rc": round(((financeiro['Reembolso Despesa']['realizado'] - qtd_dividido_por_RD) / qtd_dividido_por_RD),2) * 100 if qtd_dividido_por_RD != 0 else 0                    
+        })        
+
+        return financeiro  

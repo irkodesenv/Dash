@@ -114,11 +114,9 @@
     </div>
 
     <div class="col-md-1 col-lg-1 d-flex justify-content-left align-items-center padding-left: 0px">
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <button type="button" id="btn-filtrar" class="btn btn-primary">Filtrar</button>
     </div>  
 
-
-    </form>
 </div>
 
 
@@ -171,75 +169,8 @@
                                         <th class="th-style-table actual-vs-comparative"></th>                                       
                                     </tr>
                                 </thead>
-                                <tbody class="tbody-class-hr">
-
-                                    {% for key, valores in data.folha.items %}
-                                    
-                                        <tr>
-                                            <td class="td-table-volumetria-left">{{ key }}</td>
-                                
-                                            <td class="td-table-volumetria-center">{{ valores.orcado }}</td>
-                                
-                                            <td class="td-table-volumetria-center">{{ valores.realizado }}</td>
-
-                                            <td class="td-table-volumetria-center">
-                                                <div class="td-table-volumetria-center-percent">
-                                                        <span>
-                                                            {{ valores.realizado_x_orcado }} 
-                                                        </span>
-                                                    
-                                                        <span>                                                                                                                            
-                                                                {% if valores.percent > 0 %}
-                                                                    <small class="text-success fw-medium">                                                                        
-                                                                        {{valores.percent}}%
-                                                                        <i class="bx bx-up-arrow-alt"></i>
-                                                                    </small>
-                                                                {% elif valores.percent < 0  %}
-                                                                    <small class="text-danger fw-medium">                                                                       
-                                                                        {{valores.percent}}%
-                                                                        <i class="bx bx-down-arrow-alt"></i>
-                                                                    </small>
-
-                                                                {% else %}
-                                                                    <small class="text-warning fw-medium">                                                                        
-                                                                        0%
-                                                                        <i class="bx bx-right-arrow-alt"></i>
-                                                                    </small>
-                                                                {% endif %}                                                          
-                                                        </span>
-                                                </div>
-                                            </td>                              
-                                
-                                            <td class="td-table-volumetria-center">{{ valores.comparativo }}</td>                                
-                                        
-                                            <td class="td-table-volumetria-center">
-                                                <div class="td-table-volumetria-center-percent">
-                                                        <span>
-                                                            {{ valores.realizado_x_comparativo }}
-                                                        </span>
-                                                    
-                                                        <span>                                                                                                                            
-                                                            {% if valores.percent_rc > 0 %}
-                                                                <small class="text-success fw-medium">                                                                   
-                                                                    {{valores.percent_rc}}%
-                                                                    <i class="bx bx-up-arrow-alt"></i>
-                                                                </small>
-                                                            {% elif valores.percent_rc < 0  %}
-                                                                <small class="text-danger fw-medium">                                                                   
-                                                                    {{valores.percent_rc}}%
-                                                                    <i class="bx bx-down-arrow-alt"></i>
-                                                                </small>
-                                                            {% else %}
-                                                                <small class="text-warning fw-medium">                                                                   
-                                                                    0%
-                                                                    <i class="bx bx-right-arrow-alt"></i>
-                                                                </small>
-                                                            {% endif %}                                                          
-                                                        </span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+                                <tbody class="tbody-class-hr" id="volumetria_folha">
+                                  
                                 </tbody>
                             </table>
                         </div>
@@ -919,7 +850,7 @@
 
 <div class="row">
     <!-- row 2 -->
-    <!-- Coluna esquerda-->
+    <!-- Coluna Financeiro-->
 
     <div class="col-sm-12 col-md-6 col-lg-6 mt-md-6 mt-lg-6">
 
@@ -969,183 +900,8 @@
 
                                     </tr>
                                 </thead>
-                                <tbody class="tbody-class-hr">
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Contas Correntes
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            80
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            70
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                -10 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -12.50%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            60
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 16.67%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Pagamentos
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            50
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            40
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                -10 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> 20.00%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            30
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 33.33%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Recebimentos
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            90
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            75
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                -15 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -16.68%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            65
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 13.33%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Reembolso Despesa
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            35
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            50
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                15 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 42.86%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            40
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 25.00%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Fechamento Câmbio
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            80
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            60
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                -20 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -25.00%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            70
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                -10 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -20.00%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
+                                <tbody class="tbody-class-hr" id="volumetria_financeiro">
+                                   
                                 </tbody>
                             </table>
                         </div>
@@ -1682,49 +1438,11 @@
 </script>
 
 <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+<script src="{% static 'dashboards/volumetria.js' %}"></script>
+<script>
+    const descendentes = '{% url "administrativo:obterDadosDescendentes" %}'
+    const folha = '{% url "administrativo:retornaVolumetriaFolha" %}'
+    const financeiro = '{% url "administrativo:retornaVolumetriaFinanceiro" %}'
+</script>
 
-<script>   
-
-    $( document ).ready(function() {
-        var cliente = $("#cliente").val();
-
-        if(cliente){
-            obter_descendentes(cliente);
-        }
-    });
-
-
-    $('#cliente').on('change', function (e) {
-        obter_descendentes(e.target.value);
-    });
-
-    function obter_descendentes(cliente){
-        $.ajax({
-            url: '{% url "administrativo:obterDadosDescendentes" %}',
-            type: 'POST',
-            dataType: 'JSON',
-            data: { 
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), "cliente": cliente, 
-            },
-            success: function(data) {
-                const select_descendentes = $("#descendentes");
-
-                if(data.length > 0){
-                    select_descendentes.empty();
-                    select_descendentes.append("<option value=''> TODOS DESCENDENTES  </option>");
-
-                    data.forEach(filialItem => {
-                        select_descendentes.append("<option value='"+ filialItem.Codigo + "'>" + filialItem.Codigo + " - " + filialItem.Razao + "</option>");
-                    });
-                }else{
-                    select_descendentes.empty();
-                    select_descendentes.append("<option value=''> NÃO POSSUI </option>");
-                }
-            },
-            error: function(error) {
-                console.error('Erro ao obter contas:', error);
-            }
-        });
-    }
-  </script>
 {% endblock %}

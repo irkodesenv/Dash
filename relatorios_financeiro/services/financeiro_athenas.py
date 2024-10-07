@@ -14,7 +14,7 @@ class FinanceiroAthenas(Financeiro):
         self.dat_ini = datini
         self.dat_fim = datfim
         self.codigo_cliente = codigo_cliente
-
+    
 
     def _where_codigo_empresa(self):
         if self.codigo_cliente:
@@ -421,3 +421,45 @@ class FinanceiroAthenas(Financeiro):
                 'code': 500,
                 'message': str(e)
             }
+            
+                   
+    def retorna_conta_correntes(self, data_fim, codigo_empresa):
+        where_clause = f"TIPOCONTA = 1 AND DTREG <= '{data_fim}'"
+
+        if codigo_empresa:
+            where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})"    
+            
+        data = self.conexao.select("TABCONTABANCARIA") \
+                            .values("CODIGOEMPRESA, CODIGO, NOME, AGENCIA, CONTA, CODIGOBANCO, CONTACONTABIL")\
+                            .where(where_clause)\
+                            .execute()      
+        return data
+    
+    
+    def retorna_qtd_transacoes(self, tipo, data_ini, data_fim, codigo_empresa):        
+        where_clause = f"DATAREGISTRO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO in {tipo}"
+
+        if codigo_empresa:
+            where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})" 
+
+        data = self.conexao.select("TABLNCFINANCEIRO lf") \
+                            .joins("INNER JOIN TABLNCPARCFINANCEIRO pf ON lf.IDMASTER = pf.IDMASTER ")\
+                            .where(where_clause) \
+                            .values("CASE WHEN TIPO = 'P' THEN 'Pagamentos' WHEN TIPO = 'R' THEN 'Recebimentos' ELSE 'Não definido' END, COUNT(TIPO)") \
+                            .group_by("lf.TIPO")\
+                            .execute()
+        return data
+
+    
+    def retorna_variacao_cambial(self, data_ini, data_fim, codigo_empresa):
+        where_clause = f"VC.DATA BETWEEN '{data_ini}' AND '{data_fim}'"
+
+        if codigo_empresa:
+            where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})"
+            
+        data = self.conexao.select("TABLNCFINANCEIRO F") \
+                        .joins("INNER JOIN TABVARIACAOCAMBIAL VC ON (F.IDMASTER = VC.IDMASTERFINANCEIRO)")\
+                        .where(where_clause) \
+                        .values("COUNT(F.IDMASTER)") \
+                        .execute()               
+        return data[0][0]
