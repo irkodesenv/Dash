@@ -57,8 +57,53 @@ def retorna_volumetria_consumo_cliente(request):
     return render(request, 'dashboards/volumetria_cliente.html', {"filtros": filtros, "clientes": lista_clientes, "data": data})
 
 
-def filtro_volumetria(request):
-    pass
+def trata_filtro_volumetria(request):
+    pick_realizado = converte_array_data_para_sistema(request.POST.get("filtro[pick_realizado]").replace("['", "").replace("']", "").split(" - "))
+    pick_comparativo = converte_array_data_para_sistema(request.POST.get("filtro[pick_comparativo]").replace("['", "").replace("']", "").split(" - "))
+
+    return {
+        "cliente": request.POST.get("filtro[cliente]"),
+        "demonstracao": int(request.POST.get("filtro[demonstracao]")) if request.POST.get("filtro[demonstracao]") else 1,
+        "descendentes": request.POST.get("filtro[descendentes]"),
+        "data_realizado_ini": pick_realizado[0],
+        "data_realizado_fim": pick_realizado[1],
+        "data_comparativo_ini": pick_comparativo[0],
+        "data_comparativo_fim": pick_comparativo[1]
+    }
+    
+
+def volumetria_folha(request):    
+    filtro = trata_filtro_volumetria(request)
+    conexao = Conexao()
+    
+    volumetria = VolumetriaAthenas(conexao, 
+                                   codigo_empresa = filtro['cliente'], 
+                                   data_ini = filtro['data_realizado_ini'], 
+                                   data_fim = filtro['data_realizado_fim'], 
+                                   data_comparativo_ini = filtro['data_comparativo_ini'], 
+                                   data_comparativo_fim = filtro['data_comparativo_fim']
+                                    )    
+    
+    dados_folha = volumetria.controllerFolha(filtro['demonstracao'])
+    
+    return JsonResponse(dados_folha)  
+
+
+def volumetria_financeiro(request):    
+    filtro = trata_filtro_volumetria(request)
+    conexao = Conexao()
+    
+    volumetria = VolumetriaAthenas(conexao, 
+                                   codigo_empresa = filtro['cliente'], 
+                                   data_ini = filtro['data_realizado_ini'], 
+                                   data_fim = filtro['data_realizado_fim'], 
+                                   data_comparativo_ini = filtro['data_comparativo_ini'], 
+                                   data_comparativo_fim = filtro['data_comparativo_fim']
+                                    )    
+    
+    dados_financeiro = volumetria.controllerFinanceiro(filtro['demonstracao'])
+    
+    return JsonResponse(dados_financeiro)  
 
 
 def obter_descendentes(request):
