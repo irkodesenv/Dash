@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'clientes.apps.ClientesConfig',
     'bancos.apps.BancosConfig',
     'administrativo.apps.AdministrativoConfig',
-    'contabil.apps.ContabilConfig'
+    'contabil.apps.ContabilConfig',
+    'fiscal.apps.FiscalConfig'
 ]
 
 MIDDLEWARE = [
@@ -136,7 +137,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'relatorios_financeiro/templates/static',
     BASE_DIR / 'clientes/templates/static',
     BASE_DIR / 'administrativo/templates/static',
-    BASE_DIR / 'contabil/templates/static'
+    BASE_DIR / 'contabil/templates/static',
+    BASE_DIR / 'fiscal/templates/static'
 ]
 
 # BD
