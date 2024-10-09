@@ -8,5 +8,6 @@ urlpatterns = [
     path('obterDadosDescendentes/', views.obter_descendentes, name="obterDadosDescendentes"),
     path('volumetriaFolha', views.volumetria_folha, name="retornaVolumetriaFolha"),
     path('volumetriaFinanceiro', views.volumetria_financeiro, name="retornaVolumetriaFinanceiro"),
-    path('volumetriaContabil', views.volumetria_contabil, name="retornaVolumetriaContabil")
+    path('volumetriaContabil', views.volumetria_contabil, name="retornaVolumetriaContabil"),
+    path('volumetriaFiscal', views.volumetria_fiscal, name="retornaVolumetriaFiscal")
 ]

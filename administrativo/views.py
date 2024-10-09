@@ -63,6 +63,10 @@ def volumetria_financeiro(request):
     return processar_volumetria_athenas(request, 'controllerFinanceiro')
 
 
+def volumetria_fiscal(request):
+    return processar_volumetria_athenas(request, 'controllerFiscal')
+
+
 def volumetria_contabil(request):
     return processar_volumetria_athenas(request, 'controllerContabil')
 

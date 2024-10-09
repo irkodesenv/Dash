@@ -3,10 +3,12 @@ from conexoes.services.firebird import Conexao
 from .volumetria_folha import Folha
 from .volumetria_financeiro import Financeiro
 from .volumetria_contabil import Contabil
+from .volumetria_fiscal import Fiscal
 from accounts.services.pessoa import Pessoa
 from accounts.services.funcionario import Funcionario
 from relatorios_financeiro.services.financeiro_athenas import FinanceiroAthenas
 from contabil.services.contabil_athenas import ContabilAthenas
+from fiscal.services.fiscal_service import FiscalAthenas
 from utils.views import media_periodo_range_data
 
 class VolumetriaAthenas(Ivolumetria):   
@@ -93,8 +95,25 @@ class VolumetriaAthenas(Ivolumetria):
         return metricas    
             
     
-    def controllerFiscal(self, media_realizado, media_comparativo):
-        return {"teste": ""}
+    def controllerFiscal(self, demonstracao):
+        media_realizado = demonstracao
+        media_comparativo = demonstracao
+        
+        if demonstracao == 2:
+            media_realizado = media_periodo_range_data([self.data_ini, self.data_fim])
+            media_comparativo = media_periodo_range_data([self.data_comparativo_ini, self.data_comparativo_fim])
+        
+        fiscal_athenas = FiscalAthenas(self.conexao)
+        
+        # Realizado
+        contabil_atual = Fiscal(fiscal_athenas, codigo_empresa = self.codigo_empresa, data_ini = self.data_ini, data_fim = self.data_fim)
+        periodo_realizado = contabil_atual.controller_fiscal_volumetria(media_realizado)
+        
+        # Comparativo
+        competencia_anterior = Fiscal(fiscal_athenas, codigo_empresa = self.codigo_empresa, data_ini = self.data_comparativo_ini, data_fim = self.data_comparativo_fim)
+        metricas = competencia_anterior.controller_fiscal_volumetria_comparativo(periodo_realizado, media_comparativo)
+        
+        return metricas
     
 
     def controllerContabil(self, demonstracao):

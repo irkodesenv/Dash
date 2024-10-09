@@ -12,6 +12,7 @@
         obter_volumetria_folha();
         obter_volumetria_contabil();
         obter_volumetria_financeiro();
+        obter_volumetria_fiscal();
     });
 
 
@@ -86,6 +87,26 @@
     }
 
 
+    function obter_volumetria_fiscal(){
+        adicionar_loading("#volumetria_fiscal")
+        $.ajax({
+            url: fiscal,
+            type: 'POST',
+            dataType: 'JSON',
+            data: { 
+                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), "filtro": filtro(), 
+            },
+            success: function(data) {            
+                var tbody = $("#volumetria_fiscal");                  
+                escreve_dados_no_quadro(tbody, data)
+            },
+            error: function(error) {
+                console.error('Erro ao obter contas:', error);
+            }
+        });
+    }
+
+
     function adicionar_loading(quadro){
         tbody = $(quadro);
         tbody.empty();
@@ -122,6 +143,7 @@
         obter_volumetria_financeiro();
         obter_volumetria_contabil();
         obter_volumetria_folha();
+        obter_volumetria_fiscal();
     });
 
 
