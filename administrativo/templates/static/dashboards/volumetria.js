@@ -9,8 +9,9 @@
             obter_descendentes(cliente);
         }   
 
-        obter_volumetria_financeiro();
         obter_volumetria_folha();
+        obter_volumetria_contabil();
+        obter_volumetria_financeiro();
     });
 
 
@@ -34,8 +35,7 @@
             data: { 
                 "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), "filtro": filtro(), 
             },
-            success: function(data) {
-                remover_loading("#loading_folha")
+            success: function(data) {                
                 var tbody = $("#volumetria_folha");                  
                 escreve_dados_no_quadro(tbody, data)
             },
@@ -56,8 +56,27 @@
                 "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), "filtro": filtro(), 
             },
             success: function(data) {
-                remover_loading("#loading_financeiro")
                 var tbody = $("#volumetria_financeiro");                  
+                escreve_dados_no_quadro(tbody, data)
+            },
+            error: function(error) {
+                console.error('Erro ao obter contas:', error);
+            }
+        });
+    }
+
+
+    function obter_volumetria_contabil(){
+        adicionar_loading("#volumetria_contabil")       
+        $.ajax({
+            url: contabil,
+            type: 'POST',
+            dataType: 'JSON',
+            data: { 
+                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(), "filtro": filtro(), 
+            },
+            success: function(data) {
+                var tbody = $("#volumetria_contabil");          
                 escreve_dados_no_quadro(tbody, data)
             },
             error: function(error) {
@@ -100,8 +119,9 @@
 
 
     $('#btn-filtrar').on('click', function (e) {
-        obter_volumetria_folha();
         obter_volumetria_financeiro();
+        obter_volumetria_contabil();
+        obter_volumetria_folha();
     });
 
 

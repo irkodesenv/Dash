@@ -1104,149 +1104,8 @@
 
                                     </tr>
                                 </thead>
-                                <tbody class="tbody-class-hr">
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Lançtos Contábeis
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            50
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            35
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                -15 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -30.00%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            20
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                15 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 75.00%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Partidas Contábeis
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            60
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            70
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 16.67%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            90
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                -20 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -40.00%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Ativo Imobilizado
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            70
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            50
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                -20 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> -28.57%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            30
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                20 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 66.67%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="td-table-volumetria-left">
-                                            Contas Patrimoniais
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            80
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            90
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            <div style="margin-left: 0%">
-                                                10 <small class="text-success fw-medium"><i
-                                                        class="bx bx-up-arrow-alt"></i> 12.50%</small>
-                                            </div>
-
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-                                            75
-                                        </td>
-
-                                        <td class="td-table-volumetria-center">
-
-                                            <div style="margin-left: 0%">
-                                                -15 <small class="text-danger fw-medium"><i
-                                                        class="bx bx-down-arrow-alt"></i> 21.43%</small>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-
-
+                                <tbody class="tbody-class-hr" id="volumetria_contabil">
+                                   
                                 </tbody>
                             </table>
                         </div>
@@ -1443,6 +1302,7 @@
     const descendentes = '{% url "administrativo:obterDadosDescendentes" %}'
     const folha = '{% url "administrativo:retornaVolumetriaFolha" %}'
     const financeiro = '{% url "administrativo:retornaVolumetriaFinanceiro" %}'
+    const contabil = '{% url "administrativo:retornaVolumetriaContabil" %}'
 </script>
 
 {% endblock %}

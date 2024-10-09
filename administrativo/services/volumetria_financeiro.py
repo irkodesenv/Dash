@@ -1,6 +1,4 @@
 
-from conexoes.services.firebird import Conexao
-
 class Financeiro:
     
     def __init__(self, financeiro, codigo_empresa = None, data_ini = None, data_fim = None):
@@ -8,7 +6,6 @@ class Financeiro:
         self.data_ini = data_ini
         self.data_fim = data_fim
         self.codigo_empresa = codigo_empresa    
-        self.data_cadastro = None
         
   
     def controller_financeiro_volumetria(self, media):    

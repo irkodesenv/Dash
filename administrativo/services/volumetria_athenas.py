@@ -1,10 +1,12 @@
 from .Volumetria import Ivolumetria
 from conexoes.services.firebird import Conexao
 from .volumetria_folha import Folha
-from .volumetria_financeiro import Financeiro 
+from .volumetria_financeiro import Financeiro
+from .volumetria_contabil import Contabil
 from accounts.services.pessoa import Pessoa
 from accounts.services.funcionario import Funcionario
 from relatorios_financeiro.services.financeiro_athenas import FinanceiroAthenas
+from contabil.services.contabil_athenas import ContabilAthenas
 from utils.views import media_periodo_range_data
 
 class VolumetriaAthenas(Ivolumetria):   
@@ -103,7 +105,14 @@ class VolumetriaAthenas(Ivolumetria):
             media_realizado = media_periodo_range_data([self.data_ini, self.data_fim])
             media_comparativo = media_periodo_range_data([self.data_comparativo_ini, self.data_comparativo_fim])
             
+        contabil_athenas = ContabilAthenas(self.conexao)
+        
+        # Realizado
+        contabil_atual = Contabil(contabil_athenas, codigo_empresa = self.codigo_empresa, data_ini = self.data_ini, data_fim = self.data_fim)
+        periodo_realizado = contabil_atual.controller_contabil_volumetria(media_realizado)
+        
+        # Comparativo
+        competencia_anterior = Contabil(contabil_athenas, codigo_empresa = self.codigo_empresa, data_ini = self.data_comparativo_ini, data_fim = self.data_comparativo_fim)
+        metricas = competencia_anterior.controller_contabil_volumetria_comparativo(periodo_realizado, media_comparativo)
             
-            
-            
-        return {"teste": ""}
+        return metricas
