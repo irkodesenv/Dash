@@ -42,7 +42,7 @@ class Financeiro:
         
         financeiro["Fechamento Câmbio"] = {
             "orcado": 0,
-            "realizado": variacao_cambial,
+            "realizado": qtd_dividido_por_variacao_cambial,
             "realizado_x_orcado": qtd_dividido_por_variacao_cambial - 0,
             "percent": (qtd_dividido_por_variacao_cambial * 0) / 100                
         }          
