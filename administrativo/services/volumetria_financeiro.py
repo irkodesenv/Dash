@@ -10,7 +10,6 @@ class Financeiro:
         self.codigo_empresa = codigo_empresa    
         self.data_cadastro = None
         
-        
   
     def controller_financeiro_volumetria(self, media):    
         financeiro = {}
@@ -33,7 +32,7 @@ class Financeiro:
         transacoes = self.financeiro.retorna_qtd_transacoes(('R', 'P'), self.data_ini, self.data_fim, self.codigo_empresa)        
         for tipo, quantidade in transacoes:
             qtd_dividido_por_media = int(quantidade / media)
-            financeiro[tipo] = {
+            financeiro[tipo.strip()] = {
                 "orcado": 0,
                 "realizado": qtd_dividido_por_media,
                 "realizado_x_orcado": qtd_dividido_por_media - 0,
@@ -52,7 +51,7 @@ class Financeiro:
         }          
         
         # Reembolso Despesa
-        reembolso_despesa = 0
+        reembolso_despesa = self.financeiro.retorna_qtd_relatorio_despesa(self.data_ini, self.data_fim, self.codigo_empresa)
         qtd_dividido_por_RD = int(reembolso_despesa / media)
         
         financeiro["Reembolso Despesa"] = {
@@ -63,7 +62,6 @@ class Financeiro:
         }    
         
         return financeiro
-    
     
     
     def controller_financeiro_volumetria_comparativo(self, financeiro, media):
@@ -85,12 +83,24 @@ class Financeiro:
         # Transacoes
         transacoes = self.financeiro.retorna_qtd_transacoes(('R', 'P'), self.data_ini, self.data_fim, self.codigo_empresa)        
         for tipo, quantidade in transacoes:
-            qtd_dividido_por_media = int(quantidade / media)            
-            financeiro[tipo].update({
-                "comparativo": qtd_dividido_por_media,
-                "realizado_x_comparativo": financeiro[tipo]['realizado'] - qtd_dividido_por_media,
-                "percent_rc": round(((financeiro[tipo]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2) if quantidade != 0 else 0  
-            })
+            qtd_dividido_por_media = int(quantidade / media)   
+            # Medida paliativa para tratar quando ha movimento em um mes e não tiver no outro  
+            try:       
+                financeiro[tipo.strip()].update({
+                    "comparativo": qtd_dividido_por_media,
+                    "realizado_x_comparativo": financeiro[tipo.strip()]['realizado'] - qtd_dividido_por_media,
+                    "percent_rc": round(((financeiro[tipo.strip()]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2) if quantidade != 0 else 0  
+                })
+            except Exception as e:
+                financeiro[tipo.strip()] = {
+                    "orcado": 0,
+                    "realizado": 0,
+                    "realizado_x_orcado": 0,
+                    "percent": 0,            
+                    "comparativo": qtd_dividido_por_media,
+                    "realizado_x_comparativo": 0 - qtd_dividido_por_media,
+                    "percent_rc": round(((0 - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2) if quantidade != 0 else 0  
+                }
             
             
         # Variacao cambial 
@@ -105,7 +115,7 @@ class Financeiro:
         
 
         # Reembolso Despesa
-        reembolso_despesa = 0
+        reembolso_despesa = self.financeiro.retorna_qtd_relatorio_despesa(self.data_ini, self.data_fim, self.codigo_empresa)
         qtd_dividido_por_RD = int(reembolso_despesa / media)
         
         financeiro["Reembolso Despesa"].update({

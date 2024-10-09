@@ -95,5 +95,15 @@ class VolumetriaAthenas(Ivolumetria):
         return {"teste": ""}
     
 
-    def controllerContabil(self, media_realizado, media_comparativo):
+    def controllerContabil(self, demonstracao):
+        media_realizado = demonstracao
+        media_comparativo = demonstracao
+        
+        if demonstracao == 2:
+            media_realizado = media_periodo_range_data([self.data_ini, self.data_fim])
+            media_comparativo = media_periodo_range_data([self.data_comparativo_ini, self.data_comparativo_fim])
+            
+            
+            
+            
         return {"teste": ""}

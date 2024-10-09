@@ -437,13 +437,13 @@ class FinanceiroAthenas(Financeiro):
     
     
     def retorna_qtd_transacoes(self, tipo, data_ini, data_fim, codigo_empresa):        
-        where_clause = f"DATAREGISTRO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO in {tipo}"
+        where_clause = f"DATAREGISTRO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO in('R', 'P') AND CODIGOTIPODOCUMENTOFISCAL <> 22"
 
         if codigo_empresa:
-            where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})" 
-
+            where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})"
+             
         data = self.conexao.select("TABLNCFINANCEIRO lf") \
-                            .joins("INNER JOIN TABLNCPARCFINANCEIRO pf ON lf.IDMASTER = pf.IDMASTER ")\
+                            .joins("LEFT JOIN TABLNCPARCFINANCEIRO pf ON lf.IDMASTER = pf.IDMASTER")\
                             .where(where_clause) \
                             .values("CASE WHEN TIPO = 'P' THEN 'Pagamentos' WHEN TIPO = 'R' THEN 'Recebimentos' ELSE 'Não definido' END, COUNT(TIPO)") \
                             .group_by("lf.TIPO")\
@@ -462,4 +462,18 @@ class FinanceiroAthenas(Financeiro):
                         .where(where_clause) \
                         .values("COUNT(F.IDMASTER)") \
                         .execute()               
+        return data[0][0]
+    
+    
+    def retorna_qtd_relatorio_despesa(self, data_ini, data_fim, codigo_empresa):        
+        where_clause = f"DATAREGISTRO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO in('R', 'P') AND CODIGOTIPODOCUMENTOFISCAL = 22"
+
+        if codigo_empresa:
+            where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})" 
+
+        data = self.conexao.select("TABLNCFINANCEIRO lf") \
+                            .joins("INNER JOIN TABLNCPARCFINANCEIRO pf ON lf.IDMASTER = pf.IDMASTER")\
+                            .where(where_clause) \
+                            .values("COUNT(TIPO)") \
+                            .execute()
         return data[0][0]
