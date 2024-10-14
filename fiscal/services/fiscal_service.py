@@ -25,6 +25,7 @@ class FiscalAthenas(Fiscal):
         Raises:
             Exception: Captura exceções que possam ocorrer durante a execução da consulta ao banco de dados e retorna {"Erro": 0}.
         """
+
         try:        
             where_clause = f"es.TIPO IN ('E', 'S') AND DATAMOVIMENTO BETWEEN '{data_ini}' AND '{data_fim}'"     
             if codigo_empresa:
