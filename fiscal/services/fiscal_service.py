@@ -1,4 +1,4 @@
-from .fiscal import Fiscal
+from .Fiscal import Fiscal
 
 
 class FiscalAthenas(Fiscal):
