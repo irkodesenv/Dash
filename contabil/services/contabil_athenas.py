@@ -7,7 +7,7 @@ class ContabilAthenas(Contabil):
         self.conexao_bd = conexao_bd
     
     
-    def retorna_qtd_lctos_contabeis(self, data_ini, data_fim, codigo_empresa):
+    def retorna_qtd_lctos_contabeis(self, data_ini, data_fim, codigo_empresa, codigo_filial):
         """
             Retorna a quantidade de lançamentos contábeis registrados em um determinado período, opcionalmente filtrada por código de empresa.
 
@@ -26,7 +26,10 @@ class ContabilAthenas(Contabil):
             where_clause = f"lnc.DATAREGISTRO BETWEEN '{data_ini}' AND '{data_fim}'"
 
             if codigo_empresa:
-                where_clause += f" AND ltc.CODIGOEMPRESA in ({codigo_empresa})" 
+                where_clause += f" AND ltc.CODIGOEMPRESA in ({codigo_empresa})"
+            
+            if codigo_filial:
+                where_clause += f" AND ltc.CODIGOFILIAL in ({codigo_filial})"
 
             data = self.conexao_bd.select("TABLOTECONTABIL ltc") \
                                 .joins("INNER JOIN TABLNCCONTABEIS lnc ON ltc.IDMASTER = lnc.IDMASTER")\
@@ -38,7 +41,7 @@ class ContabilAthenas(Contabil):
             return 0
     
     
-    def retorna_qtd_partidas_contabeis(self, data_ini, data_fim, codigo_empresa):
+    def retorna_qtd_partidas_contabeis(self, data_ini, data_fim, codigo_empresa, codigo_filial):
         """
             Retorna a quantidade de partidas contábeis registradas em um determinado período e opcionalmente filtradas por código de empresa.
 
@@ -58,6 +61,9 @@ class ContabilAthenas(Contabil):
 
             if codigo_empresa:
                 where_clause += f" AND ltc.CODIGOEMPRESA in ({codigo_empresa})" 
+                
+            if codigo_filial:
+                where_clause += f" AND ltc.CODIGOFILIAL in ({codigo_filial})"
 
             data = self.conexao_bd.select("TABLOTECONTABIL ltc") \
                                 .joins("INNER JOIN TABLNCCONTABEIS lnc ON ltc.IDMASTER = lnc.IDMASTER \
@@ -71,7 +77,7 @@ class ContabilAthenas(Contabil):
             return 0
         
         
-    def retorna_qtd_ativo_imobilizado(self, data_ini, data_fim, codigo_empresa):
+    def retorna_qtd_ativo_imobilizado(self, data_ini, data_fim, codigo_empresa, codigo_filial):
         """
             Retorna a quantidade de ativos imobilizados adquiridos em um determinado período, opcionalmente filtrada por código de empresa.
 
@@ -90,7 +96,10 @@ class ContabilAthenas(Contabil):
             where_clause = f"DTAQUISICAO BETWEEN '{data_ini}' AND '{data_fim}'"
 
             if codigo_empresa:
-                where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})" 
+                where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})"
+            
+            if codigo_filial:
+                where_clause += f" AND CODIGOFILIAL in ({codigo_filial})" 
 
             data = self.conexao_bd.select("TABATIVOIMOBILIZADO") \
                                 .joins("INNER JOIN TABLNCCONTABEIS lnc ON ltc.IDMASTER = lnc.IDMASTER \

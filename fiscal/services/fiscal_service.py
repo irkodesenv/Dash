@@ -7,7 +7,7 @@ class FiscalAthenas(Fiscal):
         self.conexao_bd = conexao_bd
         
 
-    def retorna_qtd_entrada_saida_produto(self, data_ini, data_fim, codigo_empresa):
+    def retorna_qtd_entrada_saida_produto(self, data_ini: str, data_fim: str, codigo_empresa:list, codigo_filial: list):
         """
         Retorna a quantidade de movimentações de entrada e saída de produtos e serviços em um determinado período, opcionalmente filtrada por código de empresa.
 
@@ -30,6 +30,9 @@ class FiscalAthenas(Fiscal):
             where_clause = f"es.TIPO IN ('E', 'S') AND DATAMOVIMENTO BETWEEN '{data_ini}' AND '{data_fim}'"     
             if codigo_empresa:
                 where_clause += f" AND es.CODIGOEMPRESA in ({codigo_empresa})" 
+            
+            if codigo_filial:
+                where_clause += f" AND es.CODIGOFILIAL in ({codigo_filial})" 
 
             data = self.conexao_bd.select("TABENTRADASAIDA es") \
                                 .joins("INNER JOIN TABMOVPRODUTOS mp ON (es.IDMASTER = mp.IDMASTER)")\
@@ -50,7 +53,7 @@ class FiscalAthenas(Fiscal):
             return {"Erro": 0}
         
         
-    def retorna_qtd_importacoes(self, data_ini, data_fim, codigo_empresa):
+    def retorna_qtd_importacoes(self, data_ini: str, data_fim: str, codigo_empresa: list, codigo_filial: list):
         """
         Retorna a quantidade de importações registradas em um determinado período, opcionalmente filtrada por código de empresa.
 
@@ -69,6 +72,9 @@ class FiscalAthenas(Fiscal):
             where_clause = f"LPAD(mp.SITUACAOTRIBUTARIA,1) IN (1,2) AND es.TIPO = 'E' AND DATAMOVIMENTO BETWEEN '{data_ini}' AND '{data_fim}'"     
             if codigo_empresa:
                 where_clause += f" AND es.CODIGOEMPRESA in ({codigo_empresa})" 
+                
+            if codigo_filial:
+                where_clause += f" AND es.CODIGOFILIAL in ({codigo_filial})"
 
             data = self.conexao_bd.select("TABENTRADASAIDA es") \
                                 .joins("INNER JOIN TABMOVPRODUTOS mp ON (es.IDMASTER = mp.IDMASTER)")\
@@ -81,7 +87,7 @@ class FiscalAthenas(Fiscal):
             return 0  
         
         
-    def retorna_qtd_filiais(self, data_fim, codigo_empresa):
+    def retorna_qtd_filiais(self, data_fim: str, codigo_empresa: list, codigo_filial: list):
         """
             Retorna a quantidade de filiais registradas até uma data específica, opcionalmente filtrada por código de empresa.
 
@@ -99,6 +105,9 @@ class FiscalAthenas(Fiscal):
             where_clause = f"CODIGO > 1 AND DTREG <= '{data_fim}'"     
             if codigo_empresa:
                 where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})" 
+                
+            if codigo_filial:
+                where_clause += f" AND CODIGO in ({codigo_filial})"
                 
             data = self.conexao_bd.select("TABFILIAL") \
                                 .where(where_clause) \

@@ -1,10 +1,11 @@
 class Fiscal:
     
-    def __init__(self, fiscal, codigo_empresa = None, data_ini = None, data_fim = None):
+    def __init__(self, fiscal, codigo_empresa = None, data_ini = None, data_fim = None, codigo_filial = None):
         self.fiscal = fiscal
         self.data_ini = data_ini
         self.data_fim = data_fim
         self.codigo_empresa = codigo_empresa 
+        self.codigo_filial = codigo_filial
         
         
     def controller_fiscal_volumetria(self, media):
@@ -14,7 +15,7 @@ class Fiscal:
             media = 1
             
         # Entrada / Saida
-        qtd_transacoes = self.fiscal.retorna_qtd_entrada_saida_produto(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_transacoes = self.fiscal.retorna_qtd_entrada_saida_produto(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         for tipo, quantidade in qtd_transacoes:
             qtd_dividido_por_media = int(quantidade / media)
             fiscal[tipo.strip()] = {
@@ -26,7 +27,7 @@ class Fiscal:
             
         
         # Qtd importacoes        
-        qtd_importacoes = self.fiscal.retorna_qtd_importacoes(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_importacoes = self.fiscal.retorna_qtd_importacoes(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_media_dividido_importacoes = int(qtd_importacoes / media)
 
         fiscal["Importações"] = {
@@ -38,7 +39,7 @@ class Fiscal:
         
         
         # Filiais
-        qtd_filiais = self.fiscal.retorna_qtd_filiais(self.data_fim, self.codigo_empresa)
+        qtd_filiais = self.fiscal.retorna_qtd_filiais(self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_media_dividido_filiais = int(qtd_filiais / media)
 
         fiscal["Filiais"] = {
@@ -92,7 +93,7 @@ class Fiscal:
             media = 1
         
         # Entrada / Saida
-        qtd_transacoes = self.fiscal.retorna_qtd_entrada_saida_produto(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_transacoes = self.fiscal.retorna_qtd_entrada_saida_produto(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         for tipo, quantidade in qtd_transacoes:
             qtd_dividido_por_media = int(quantidade / media)   
             # Medida paliativa para tratar quando ha movimento em um mes e não tiver no outro  
@@ -115,7 +116,7 @@ class Fiscal:
           
                 
         # Qtd importacoes        
-        qtd_importacoes = self.fiscal.retorna_qtd_importacoes(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_importacoes = self.fiscal.retorna_qtd_importacoes(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_media_dividido_importacoes = int(qtd_importacoes / media)
         
         fiscal["Importações"].update({
@@ -126,7 +127,7 @@ class Fiscal:
         
         
         # Filiais
-        qtd_filiais = self.fiscal.retorna_qtd_filiais(self.data_fim, self.codigo_empresa)
+        qtd_filiais = self.fiscal.retorna_qtd_filiais(self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_media_dividido_filiais = int(qtd_filiais / media)
         
         fiscal["Filiais"].update({

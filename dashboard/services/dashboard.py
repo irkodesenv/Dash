@@ -167,7 +167,6 @@ class DashboardService:
 
         #tratar dados e transformar em array
         array_dados_ranking =  dados_athenas.monta_array_dados(dados_ranking_athenas)
-        print(array_dados_ranking)
 
         return array_dados_ranking
     

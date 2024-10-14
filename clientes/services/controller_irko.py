@@ -67,7 +67,7 @@ class ControllerClienteIrko:
             datfim,
             codigo_empresa
         ]
-        #print(array_dados)
+
         #trocar Api
         api_doctos = Api(url = f"{URL_API_IRKO}/dash/ListaDocPorCliente")
         

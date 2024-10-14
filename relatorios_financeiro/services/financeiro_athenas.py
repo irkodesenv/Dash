@@ -423,11 +423,14 @@ class FinanceiroAthenas(Financeiro):
             }
             
                    
-    def retorna_conta_correntes(self, data_fim, codigo_empresa):
+    def retorna_conta_correntes(self, data_fim, codigo_empresa, codigo_filial):
         where_clause = f"TIPOCONTA = 1 AND DTREG <= '{data_fim}'"
 
         if codigo_empresa:
-            where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})"    
+            where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})"  
+            
+        if codigo_filial:
+            where_clause += f" AND CODIGOFILIAL in ({codigo_filial})"  
             
         data = self.conexao.select("TABCONTABANCARIA") \
                             .values("CODIGOEMPRESA, CODIGO, NOME, AGENCIA, CONTA, CODIGOBANCO, CONTACONTABIL")\
@@ -436,11 +439,14 @@ class FinanceiroAthenas(Financeiro):
         return data
     
     
-    def retorna_qtd_transacoes(self, tipo, data_ini, data_fim, codigo_empresa):        
+    def retorna_qtd_transacoes(self, tipo, data_ini, data_fim, codigo_empresa, codigo_filial):        
         where_clause = f"DATAREGISTRO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO in('R', 'P') AND CODIGOTIPODOCUMENTOFISCAL <> 22"
 
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})"
+            
+        if codigo_filial:
+            where_clause += f" AND CODIGOFILIAL in ({codigo_filial})"
              
         data = self.conexao.select("TABLNCFINANCEIRO lf") \
                             .joins("LEFT JOIN TABLNCPARCFINANCEIRO pf ON lf.IDMASTER = pf.IDMASTER")\
@@ -451,11 +457,14 @@ class FinanceiroAthenas(Financeiro):
         return data
 
     
-    def retorna_variacao_cambial(self, data_ini, data_fim, codigo_empresa):
+    def retorna_variacao_cambial(self, data_ini, data_fim, codigo_empresa, codigo_filial):
         where_clause = f"VC.DATA BETWEEN '{data_ini}' AND '{data_fim}'"
 
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})"
+        
+        if codigo_filial:
+            where_clause += f" AND F.CODIGOFILIAL in ({codigo_filial})"
             
         data = self.conexao.select("TABLNCFINANCEIRO F") \
                         .joins("INNER JOIN TABVARIACAOCAMBIAL VC ON (F.IDMASTER = VC.IDMASTERFINANCEIRO)")\
@@ -465,11 +474,14 @@ class FinanceiroAthenas(Financeiro):
         return data[0][0]
     
     
-    def retorna_qtd_relatorio_despesa(self, data_ini, data_fim, codigo_empresa):        
+    def retorna_qtd_relatorio_despesa(self, data_ini, data_fim, codigo_empresa, codigo_filial):        
         where_clause = f"DATAREGISTRO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO in('R', 'P') AND CODIGOTIPODOCUMENTOFISCAL = 22"
 
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA in ({codigo_empresa})" 
+        
+        if codigo_filial:
+            where_clause += f" AND lf.CODIGOFILIAL in ({codigo_filial})"
 
         data = self.conexao.select("TABLNCFINANCEIRO lf") \
                             .joins("INNER JOIN TABLNCPARCFINANCEIRO pf ON lf.IDMASTER = pf.IDMASTER")\

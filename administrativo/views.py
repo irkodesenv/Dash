@@ -36,6 +36,7 @@ def processar_volumetria_athenas(request, controller_func):
             JsonResponse: Resposta JSON contendo os dados processados ou mensagem de erro.
     """
     filtro = trata_filtro_volumetria(request)
+    
     conexao = Conexao()
     
     volumetria = VolumetriaAthenas(
@@ -44,7 +45,8 @@ def processar_volumetria_athenas(request, controller_func):
         data_ini=filtro['data_realizado_ini'], 
         data_fim=filtro['data_realizado_fim'], 
         data_comparativo_ini=filtro['data_comparativo_ini'], 
-        data_comparativo_fim=filtro['data_comparativo_fim']
+        data_comparativo_fim=filtro['data_comparativo_fim'],
+        filial=filtro['descendentes']
     )
 
     # Chama o método correspondente

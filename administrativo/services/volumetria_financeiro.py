@@ -1,11 +1,12 @@
 
 class Financeiro:
     
-    def __init__(self, financeiro, codigo_empresa = None, data_ini = None, data_fim = None):
+    def __init__(self, financeiro, codigo_empresa = None, data_ini = None, data_fim = None, codigo_filial = None):
         self.financeiro = financeiro
         self.data_ini = data_ini
         self.data_fim = data_fim
         self.codigo_empresa = codigo_empresa    
+        self.codigo_filial = codigo_filial  
         
   
     def controller_financeiro_volumetria(self, media):    
@@ -15,7 +16,7 @@ class Financeiro:
             media = 1
         
         # Contas correntes      
-        contas_correntes = self.financeiro.retorna_conta_correntes(self.data_fim, self.codigo_empresa)
+        contas_correntes = self.financeiro.retorna_conta_correntes(self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_media_contas = int(len(contas_correntes) / media)
         
         financeiro["Contas Correntes"] = {
@@ -26,7 +27,7 @@ class Financeiro:
         }   
         
         # Transacoes
-        transacoes = self.financeiro.retorna_qtd_transacoes(('R', 'P'), self.data_ini, self.data_fim, self.codigo_empresa)        
+        transacoes = self.financeiro.retorna_qtd_transacoes(('R', 'P'), self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)        
         for tipo, quantidade in transacoes:
             qtd_dividido_por_media = int(quantidade / media)
             financeiro[tipo.strip()] = {
@@ -37,7 +38,7 @@ class Financeiro:
             }
             
         # Variacao cambial 
-        variacao_cambial = self.financeiro.retorna_variacao_cambial(self.data_ini, self.data_fim, self.codigo_empresa)
+        variacao_cambial = self.financeiro.retorna_variacao_cambial(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_variacao_cambial = int(variacao_cambial / media)
         
         financeiro["Fechamento Câmbio"] = {
@@ -48,7 +49,7 @@ class Financeiro:
         }          
         
         # Reembolso Despesa
-        reembolso_despesa = self.financeiro.retorna_qtd_relatorio_despesa(self.data_ini, self.data_fim, self.codigo_empresa)
+        reembolso_despesa = self.financeiro.retorna_qtd_relatorio_despesa(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_RD = int(reembolso_despesa / media)
         
         financeiro["Reembolso Despesa"] = {
@@ -67,7 +68,7 @@ class Financeiro:
             media = 1
         
         # Contas correntes      
-        contas_correntes = self.financeiro.retorna_conta_correntes(self.data_fim, self.codigo_empresa)
+        contas_correntes = self.financeiro.retorna_conta_correntes(self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_media_contas = int(len(contas_correntes) / media)
         
         financeiro["Contas Correntes"].update({
@@ -78,7 +79,7 @@ class Financeiro:
         
         
         # Transacoes
-        transacoes = self.financeiro.retorna_qtd_transacoes(('R', 'P'), self.data_ini, self.data_fim, self.codigo_empresa)        
+        transacoes = self.financeiro.retorna_qtd_transacoes(('R', 'P'), self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)        
         for tipo, quantidade in transacoes:
             qtd_dividido_por_media = int(quantidade / media)   
             # Medida paliativa para tratar quando ha movimento em um mes e não tiver no outro  
@@ -101,7 +102,7 @@ class Financeiro:
             
             
         # Variacao cambial 
-        variacao_cambial = self.financeiro.retorna_variacao_cambial(self.data_ini, self.data_fim, self.codigo_empresa)
+        variacao_cambial = self.financeiro.retorna_variacao_cambial(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_variacao_cambial = int(variacao_cambial / media)
         
         financeiro["Fechamento Câmbio"].update({
@@ -112,7 +113,7 @@ class Financeiro:
         
 
         # Reembolso Despesa
-        reembolso_despesa = self.financeiro.retorna_qtd_relatorio_despesa(self.data_ini, self.data_fim, self.codigo_empresa)
+        reembolso_despesa = self.financeiro.retorna_qtd_relatorio_despesa(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_RD = int(reembolso_despesa / media)
         
         financeiro["Reembolso Despesa"].update({

@@ -6,10 +6,13 @@ class Funcionario(Pessoa):
         pass
     
     
-    def conta_tipo_funcionario(self, tipos, data_fim, codigo_empresa):
+    def conta_tipo_funcionario(self, tipos, data_fim, codigo_empresa, codigo_filial):
         where_clause = f"TIPO in {tipos} AND DATACADASTRO <= '{data_fim}'"
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA = {codigo_empresa}"
+        
+        if codigo_filial:
+            where_clause += f" AND CODIGOFILIAL = {codigo_filial}"
 
         data = (
             self.conexao.select('TABPESSOAS')
@@ -22,7 +25,7 @@ class Funcionario(Pessoa):
         return dict((item[0].strip(), item[1]) for item in data) if data else {}
 
 
-    def contar_estagiarios(self, data_fim, codigo_empresa):
+    def contar_estagiarios(self, data_fim, codigo_empresa, codigo_filial):
         where_clause = f"ESTAGIARIO = 1 AND TIPO = 'O' AND DATACADASTRO <= '{data_fim}'"
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA = {codigo_empresa}"
@@ -37,7 +40,7 @@ class Funcionario(Pessoa):
         return data[0][0] if data else 0
 
 
-    def contar_admissoes(self, data_ini, data_fim, codigo_empresa):
+    def contar_admissoes(self, data_ini, data_fim, codigo_empresa, codigo_filial):
         where_clause = f"DATACADASTRO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO = 'N'"
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA = {codigo_empresa}"
@@ -52,7 +55,7 @@ class Funcionario(Pessoa):
         return data[0][0] if data else 0
 
 
-    def contar_demissoes(self, data_ini, data_fim, codigo_empresa):
+    def contar_demissoes(self, data_ini, data_fim, codigo_empresa, codigo_filial):
         where_clause = f"DATADEMISSAO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO = 'N'"
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA = {codigo_empresa}"

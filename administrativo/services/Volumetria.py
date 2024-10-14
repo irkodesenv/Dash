@@ -7,8 +7,3 @@ class Ivolumetria(ABC):
         clientes = []
         data_periodo = []
         data_comparativo = []
-        
-    
-    @abstractmethod
-    def controllerMetricas(self):
-        pass

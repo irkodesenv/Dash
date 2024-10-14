@@ -1,10 +1,11 @@
 class Contabil:
     
-    def __init__(self, contabil, codigo_empresa = None, data_ini = None, data_fim = None):
+    def __init__(self, contabil, codigo_empresa = None, data_ini = None, data_fim = None, codigo_filial = None):
         self.contabil = contabil
         self.data_ini = data_ini
         self.data_fim = data_fim
-        self.codigo_empresa = codigo_empresa 
+        self.codigo_empresa = codigo_empresa
+        self.codigo_filial = codigo_filial
         
         
     def controller_contabil_volumetria(self, media):
@@ -14,7 +15,7 @@ class Contabil:
             media = 1
             
         # Lancto contabeis    
-        qtd_lcts_contabeis = self.contabil.retorna_qtd_lctos_contabeis(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_lcts_contabeis = self.contabil.retorna_qtd_lctos_contabeis(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_media_lcts_contabeis = int(qtd_lcts_contabeis / media)   
         
         contabil["Lançtos Contábeis"] = {
@@ -26,7 +27,7 @@ class Contabil:
         
         
         # Partidas contabeis
-        qtd_partidas_contabeis = self.contabil.retorna_qtd_partidas_contabeis(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_partidas_contabeis = self.contabil.retorna_qtd_partidas_contabeis(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_media_partida_contabeis = int(qtd_partidas_contabeis / media)   
         
         contabil["Partidas Contábeis"] = {
@@ -38,7 +39,7 @@ class Contabil:
         
         
         # Ativo imobilizado
-        qtd_ativos_imobilizados = self.contabil.retorna_qtd_ativo_imobilizado(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_ativos_imobilizados = self.contabil.retorna_qtd_ativo_imobilizado(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_media_ativo_imobilizado = int(qtd_ativos_imobilizados / media)   
         
         contabil["Ativo Imobilizado"] = {
@@ -56,7 +57,7 @@ class Contabil:
             media = 1
         
         # Lancto contabeis    
-        qtd_lcts_contabeis = self.contabil.retorna_qtd_lctos_contabeis(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_lcts_contabeis = self.contabil.retorna_qtd_lctos_contabeis(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_media_lcts_contabeis = int(qtd_lcts_contabeis / media)   
         
         contabil["Lançtos Contábeis"].update({
@@ -67,7 +68,7 @@ class Contabil:
         
         
         # Partidas contabeis
-        qtd_partidas_contabeis = self.contabil.retorna_qtd_partidas_contabeis(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_partidas_contabeis = self.contabil.retorna_qtd_partidas_contabeis(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_media_partida_contabeis = int(qtd_partidas_contabeis / media)  
         
         contabil["Partidas Contábeis"].update({
@@ -78,7 +79,7 @@ class Contabil:
         
         
         # Ativo imobilizado
-        qtd_ativos_imobilizados = self.contabil.retorna_qtd_ativo_imobilizado(self.data_ini, self.data_fim, self.codigo_empresa)
+        qtd_ativos_imobilizados = self.contabil.retorna_qtd_ativo_imobilizado(self.data_ini, self.data_fim, self.codigo_empresa, self.codigo_filial)
         qtd_dividido_por_media_ativo_imobilizado = int(qtd_ativos_imobilizados / media) 
         
         contabil["Ativo Imobilizado"].update({
