@@ -28,18 +28,19 @@ Recorrências
             <label class="form-label" for="multicol-country">Cliente</label>
             <select id="select-clientes" name="select-clientes" class="select2 form-select" data-allow-clear="true">
               <option value="">TODOS</option>
-
-              <option value="{{cliente.Codigo}}" selected></option>
-
-              <option value="{{cliente.Codigo}}"> </option>
-
+              {% for cliente in clientes %}
+                  {% if cliente == cliente_selecionado %}
+                    <option value="{{cliente.Razao}}" selected>{{cliente.Codigo}} - {{cliente.Razao}}</option>
+                  {% else %}
+                    <option value="{{cliente.Razao}}">{{cliente.Codigo}} - {{cliente.Razao}}</option>
+                  {% endif %}
+              {% endfor %}
             </select>
           </div>
-
           <div class="col-md-3 d-flex align-items-end">
             <button type="submit" name="btn-filtro" id="btn-filtro" class="btn btn-primary me-3">Filtrar</button>
 
-            <button type="button" onclick="window.location.reload()" class="btn btn-danger me-3">Limpar Filtro</button>
+            <button type="submit" onclick="window.location.reload()" class="btn btn-danger me-3">Limpar Filtro</button>
 
           </div>
         </div>
@@ -59,7 +60,7 @@ Recorrências
                 <div class="col-sm-12 col-lg-12">
                   <div>
                     <h4 class="mb-0 f-size-28 f-bold text-danger text-center" id="data_vencimento"
-                      name="data_vencimento">21/09/2024</h4>
+                      name="hoje" id="hoje">02/10/2024</h4>
                     <p class="mb-0 f-size-23 f-bold text-center">HOJE</p>
                   </div>
                 </div>
@@ -81,15 +82,14 @@ Recorrências
   </div>-->
 
   <div class="col">
-
     <div class="col-md-12 order-3 order-lg-12 mb-6 mb-lg-0">
-      <div class="card text-center h-100" style="margin-left: 20px; margin-right: 20px;">
+      <div class="card text-center h-100">
         <div class="card-header nav-align-top">
           <ul class="nav nav-pills" role="tablist">
             <li class="nav-item w-100">
-              <h5 class="f-bold text-danger d-flex justify-content-center align-items-center mb-0">
+              <h4 class="f-bold text-danger d-flex justify-content-center align-items-center mb-0">
                 Previsão de Documentos a Pagar - Próximos 7 dias !
-              </h5>
+              </h4>
             </li>
           </ul>
         </div>
@@ -107,38 +107,19 @@ Recorrências
                   </tr>
                 </thead>
                 <tbody style="font-size: 13px; text-align: center;">
-                  {% if data %}
-                  {% for item in data %}
+                  {% for pagamento in pagamentos %}
                   <tr>
-                    <td>
-                      {{ item.CLIENTE }}
-                    </td>
-
-                    <td>
-                      {{ item.FORNECEDOR }}
-                    </td>
-
-                    <td>
-                      {{ item.ProximaPrevisao }}
-                    </td>
-
-                    <td>
-                      
-                    </td>
-
-                    <td>
-                      
-                    </td>
-
+                    <td>{{ pagamento.cliente }}</td>
+                    <td>{{ pagamento.fornecedor }}</td>
+                    <td>{{ pagamento.data_previsao }}</td>
+                    <td>{{ pagamento.ultimo_pagto }}</td>
+                    <td>{{ pagamento.qtd_doctos }}</td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="5">Nenhum dado disponível</td>
                   </tr>
                   {% endfor %}
-                  {% else %}
-                  <tr>
-                    <td>
-                      colspan="5">Nenhum dado disponível
-                    </td>
-                  </tr>
-                  {% endif %}
                 </tbody>
               </table>
             </div>
@@ -146,7 +127,6 @@ Recorrências
         </div>
       </div>
     </div>
-  </div>
 </div>
 
 {% endblock %}

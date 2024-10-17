@@ -6,19 +6,21 @@ from .services.relatorios_irko import RelatorioIrkoService
 from .services.relatorios_athenas import RelatorioAthenasService
 from clientes.services.controller_irko import ControllerClienteIrko
 from clientes.services.controller_athenas import ControllerClienteAthenas
+from conexoes.services.firebird import Conexao
+from accounts.services.utils.clienteService import ClienteService
 import json
 import logging
 import pandas as pd
 from datetime import datetime, timedelta
 from django.conf import settings
 from .utils.utils import combinar_dados_nexxcera, combinar_dados_bancos
+from central.settings import BASE_DIR, STATIC_URL
 
 logger = logging.getLogger(__name__)
 
-
 @login_required(redirect_field_name='login')
 def retorna_relatorio_financeiro(request):
-
+    
     # Se for uma solicitação Formulario
     if request.method == 'POST':
         filtros = request.POST  
@@ -30,7 +32,7 @@ def retorna_relatorio_financeiro(request):
     
     codigo_cliente = filtros.get('select-clientes', []) 
 
-    #Clientes 
+    # Clientes 
     clientes_irko = processa_clientes_irko([])
     clientes_athenas = processa_clientes_athenas("")
 
@@ -190,80 +192,75 @@ def retorna_operadores(request):
         return JsonResponse(dados_operadores['operadores'], safe=False)
     
 
-
-
 def retorna_recorrencia(request):
     # Carregar o arquivo Excel
-    file_path = 'C:\\Users\\dcesar4152\\Desktop\\recorrencia.xlsx'  # Caminho do arquivo
+    file_path = f'{BASE_DIR}/{STATIC_URL}/media/consumiveis/recorrencia.xlsx'  # Caminho do arquivo
     df = pd.read_excel(file_path)
+
+    # Certifique-se de que a coluna 'VENCIMENTO' está sendo corretamente convertida para o formato datetime (somente data)
+    df['VENCIMENTO'] = pd.to_datetime(df['VENCIMENTO'], errors='coerce').dt.date
+
+    # Remover quaisquer valores de vencimento inválidos (valores que não foram convertidos)
+    df = df.dropna(subset=['VENCIMENTO'])
+
+    # Simular o cálculo de recorrência mensal
+    hoje = datetime.today().date()
+    data_futura = hoje + timedelta(days=7)
+
+    # Lista para armazenar previsões de pagamentos
+    pagamentos = []
+
+    # Filtro de clientes
+    conexao = Conexao()
     
-    # Converter a coluna de vencimento para datetime e extrair o dia do vencimento
-    if 'VENCIMENTO' in df.columns:
-        df['VENCIMENTO'] = pd.to_datetime(df['VENCIMENTO'], errors='coerce')
-        df['DiaDoVencimento'] = df['VENCIMENTO'].dt.day  # Extrair o dia do mês
-    else:
-        return render(request, 'relatorio_financeiro/relatorios/recorrencia.html', {
-            'erro': 'A coluna VENCIMENTO não foi encontrada no arquivo Excel'
-        })
+    # Cadastro de clientes
+    clientes = ClienteService(conexao)    
+    lista_clientes = clientes.obter_clientes_formatados_formulario()
+
+    # Obter o cliente selecionado da requisição
+    cliente_selecionado = request.POST.get('select-clientes')
+
+    if cliente_selecionado:
+        # Filtrar o DataFrame pelo cliente selecionado
+        df = df[df['CLIENTE'] == cliente_selecionado]
+
+    # Agrupar por fornecedor e calcular recorrências
+    fornecedores = df.groupby('FORNECEDOR')
     
-    # Função para calcular o dia de vencimento mais frequente (moda)
-    def calcular_dia_padrao(grupo):
-        return grupo
-        # Calcular o dia de vencimento mais frequente para o grupo (cliente + fornecedor)
-        try:
-            moda_dia = grupo['DiaDoVencimento'].mode()
+    for fornecedor, grupo in fornecedores:
+        # Obter o último vencimento registrado
+        ultimo_vencimento = grupo['VENCIMENTO'].max()
 
-            return moda_dia[0] if not moda_dia.empty else None
-        except Exception as e:
-            print(e)
+        # Verificar se o último vencimento é uma data válida
+        if ultimo_vencimento:
+            # Supondo recorrência mensal, o próximo vencimento será no mesmo dia no próximo mês
+            proximo_vencimento = ultimo_vencimento + timedelta(days=30)
 
+            # Se o próximo vencimento estiver dentro dos próximos 7 dias, adicionar à lista
+            if hoje <= proximo_vencimento <= data_futura:
+                
+                # Obter o último pagamento e tratar se for NaT (não pago)
+                ultimo_pagto = grupo['PAGTO'].max()
+                if pd.isna(ultimo_pagto):
+                    ultimo_pagto_str = 'Não pago'
+                else:
+                    ultimo_pagto_str = ultimo_pagto.strftime('%d/%m/%Y')
+                
+                qtd_doctos = grupo.shape[0]
 
-    # Agrupar por CLIENTE e FORNECEDOR e calcular a moda do DiaDoVencimento
-    df['DiaPadrao'] = df.groupby(['CLIENTE', 'FORNECEDOR'])['DiaDoVencimento'].transform(calcular_dia_padrao)
+                pagamentos.append({
+                    'cliente': grupo['CLIENTE'].iloc[0],  # Assume-se que todos os registros no grupo tenham o mesmo cliente
+                    'fornecedor': fornecedor,
+                    'data_previsao': proximo_vencimento.strftime('%d/%m/%Y'),
+                    'ultimo_pagto': ultimo_pagto.strftime('%d/%m/%Y') if pd.notna(ultimo_pagto) else 'Não pago',
+                    'qtd_doctos': qtd_doctos
+                })
 
-    moda_dia = df['DiaDoVencimento'].mode()
-    df['DiaPadrao'] = moda_dia[0]
-
-    # Definir a data de hoje
-    hoje = datetime.today()
-
-    # Função para calcular o próximo pagamento com base no DiaPadrao
-    def calcular_proxima_previsao(row):
-        dia_padrao = row['DiaPadrao']
-        if pd.isnull(dia_padrao):
-            return None
-        
-        # Se o dia atual é menor ou igual ao DiaPadrao, o próximo pagamento é este mês
-        if hoje.day <= dia_padrao:
-            return datetime(hoje.year, hoje.month, int(dia_padrao))
-        else:
-            # Caso contrário, o próximo pagamento será no mês seguinte
-            proximo_mes = hoje + timedelta(days=30)  # Ajuste para o próximo mês
-            return datetime(proximo_mes.year, proximo_mes.month, int(dia_padrao))
-
-    # Calcular a próxima previsão de pagamento para cada linha
-    df['ProximaPrevisao'] = df.apply(calcular_proxima_previsao, axis=1)
-
-    # Filtrar os pagamentos que ocorrem nos próximos 7 dias
-    proximos_7_dias = hoje + timedelta(days=7)
-    df_proximos_7_dias = df[(df['ProximaPrevisao'] >= hoje) & (df['ProximaPrevisao'] <= proximos_7_dias)]
-
-    # Contar o número de fornecedores nos próximos 7 dias
-    contagem_fornecedores_proximos_7_dias = df_proximos_7_dias.groupby(['CLIENTE', 'FORNECEDOR']).size()
-
-    # Selecionar as colunas relevantes para o painel
-    df_painel = df_proximos_7_dias[['CLIENTE', 'FORNECEDOR', 'ProximaPrevisao']]
-
-    # Preparar os dados para o template
+    # Verifique o conteúdo da lista de pagamentos
     context = {
-        'df_painel': df_painel.to_dict(orient='records'),  # Transformar o DataFrame em uma lista de dicionários
-        'contagem_fornecedores': contagem_fornecedores_proximos_7_dias.to_dict(),  # Contagem de fornecedores
-        'data': df.to_dict(orient='records')
+        'pagamentos': pagamentos,
+        'clientes' : lista_clientes,
+        'cliente_selecionado': cliente_selecionado,
     }
     
-    # Renderizar o template com os dados
     return render(request, 'relatorios_financeiro/relatorios/recorrencia.html', context)
-
-
-def serializer_df(df):
-    print(df)
