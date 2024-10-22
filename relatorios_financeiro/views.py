@@ -255,6 +255,14 @@ def retorna_recorrencia(request):
                     'ultimo_pagto': ultimo_pagto.strftime('%d/%m/%Y') if pd.notna(ultimo_pagto) else 'Não pago',
                     'qtd_doctos': qtd_doctos
                 })
+    
+    # Substituir valores nulos na coluna 'cliente' por strings vazias para evitar erro de comparação
+    for pagamento in pagamentos:
+        if not isinstance(pagamento['cliente'], str):
+            pagamento['cliente'] = 'Cliente não identificado'
+
+    # Ordenar a lista de pagamentos por ordem alfabética pelo nome do cliente
+    pagamentos = sorted(pagamentos, key=lambda x: x['cliente'])
 
     # Verifique o conteúdo da lista de pagamentos
     context = {
