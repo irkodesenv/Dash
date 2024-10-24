@@ -10,7 +10,13 @@ class Financeiro:
         
   
     def controller_financeiro_volumetria(self, media):    
-        financeiro = {}
+        financeiro = {
+            "Contas Correntes": 0,
+            "Pagamentos": 0,
+            "Recebimentos":0,
+            "Fechamento Câmbio": 0,
+            "Reembolso Despesa": 0       
+        } 
         
         if not media:
             media = 1
@@ -73,8 +79,8 @@ class Financeiro:
         
         financeiro["Contas Correntes"].update({
             "comparativo": qtd_dividido_por_media_contas,
-            "realizado_x_comparativo": financeiro['Contas Correntes']['realizado'] - qtd_dividido_por_media_contas,
-            "percent_rc": round(((financeiro['Contas Correntes']['realizado'] - qtd_dividido_por_media_contas) / qtd_dividido_por_media_contas),2) * 100 if qtd_dividido_por_media_contas != 0 else 0       
+            "realizado_x_comparativo": financeiro['Contas Correntes']['realizado'] - qtd_dividido_por_media_contas,      
+            "percent_rc": f"{round(((financeiro['Contas Correntes']['realizado'] - qtd_dividido_por_media_contas) / qtd_dividido_por_media_contas),2)}" if qtd_dividido_por_media_contas != 0 else 0   
         })
         
         
@@ -86,8 +92,8 @@ class Financeiro:
             try:       
                 financeiro[tipo.strip()].update({
                     "comparativo": qtd_dividido_por_media,
-                    "realizado_x_comparativo": financeiro[tipo.strip()]['realizado'] - qtd_dividido_por_media,
-                    "percent_rc": round(((financeiro[tipo.strip()]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2) if quantidade != 0 else 0  
+                    "realizado_x_comparativo": financeiro[tipo.strip()]['realizado'] - qtd_dividido_por_media,  
+                    "percent_rc": f"{round(((financeiro[tipo.strip()]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2)}" if qtd_dividido_por_media != 0 else 0                    
                 })
             except Exception as e:
                 financeiro[tipo.strip()] = {
@@ -107,8 +113,8 @@ class Financeiro:
         
         financeiro["Fechamento Câmbio"].update({
             "comparativo": qtd_dividido_por_variacao_cambial,
-            "realizado_x_comparativo": financeiro['Fechamento Câmbio']['realizado'] - qtd_dividido_por_variacao_cambial,
-            "percent_rc": round(((financeiro['Fechamento Câmbio']['realizado'] - qtd_dividido_por_variacao_cambial) / qtd_dividido_por_variacao_cambial),2) * 100 if qtd_dividido_por_variacao_cambial != 0 else 0             
+            "realizado_x_comparativo": financeiro['Fechamento Câmbio']['realizado'] - qtd_dividido_por_variacao_cambial,           
+            "percent_rc": f"{round(((financeiro['Fechamento Câmbio']['realizado'] - qtd_dividido_por_variacao_cambial) / qtd_dividido_por_variacao_cambial) * 100, 2)}" if qtd_dividido_por_variacao_cambial != 0 else 0                  
         }) 
         
 
@@ -119,7 +125,7 @@ class Financeiro:
         financeiro["Reembolso Despesa"].update({
             "comparativo": qtd_dividido_por_RD,
             "realizado_x_comparativo": financeiro['Reembolso Despesa']['realizado'] - qtd_dividido_por_RD,
-            "percent_rc": round(((financeiro['Reembolso Despesa']['realizado'] - qtd_dividido_por_RD) / qtd_dividido_por_RD),2) * 100 if qtd_dividido_por_RD != 0 else 0                    
+            "percent_rc": f"{round(((financeiro['Reembolso Despesa']['realizado'] - qtd_dividido_por_RD) / qtd_dividido_por_RD) * 100, 2)}" if qtd_dividido_por_RD != 0 else 0                  
         })        
 
         return financeiro  

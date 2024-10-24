@@ -9,7 +9,17 @@ class Fiscal:
         
         
     def controller_fiscal_volumetria(self, media):
-        fiscal = {}
+        fiscal = {
+            "Entradas (Produto)": 0,
+            "Entradas (Serviço)": 0,
+            "Saidas (Produto)":0,
+            "Saidas (Serviço)": 0,
+            "Importações": 0,
+            "Filiais": 0,
+            "SKU Movimentado": 0,
+            "Estoque (Entrada)": 0,    
+            "Estoque (Saída)": 0            
+        }
         
         if not media:
             media = 1
@@ -101,7 +111,7 @@ class Fiscal:
                 fiscal[tipo.strip()].update({
                     "comparativo": qtd_dividido_por_media,
                     "realizado_x_comparativo": fiscal[tipo.strip()]['realizado'] - qtd_dividido_por_media,
-                    "percent_rc": round(((fiscal[tipo.strip()]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2) if quantidade != 0 else 0  
+                    "percent_rc": f"{round(((fiscal[tipo.strip()]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2)}" if qtd_dividido_por_media != 0 else 0                 
                 })
             except Exception as e:
                 fiscal[tipo.strip()] = {
@@ -122,7 +132,7 @@ class Fiscal:
         fiscal["Importações"].update({
             "comparativo": qtd_media_dividido_importacoes,
             "realizado_x_comparativo": fiscal['Importações']['realizado'] - qtd_media_dividido_importacoes,
-            "percent_rc": round(((fiscal['Importações']['realizado'] - qtd_media_dividido_importacoes) / qtd_media_dividido_importacoes),2) * 100 if qtd_media_dividido_importacoes != 0 else 0             
+            "percent_rc": f"{round(((fiscal['Importações']['realizado'] - qtd_media_dividido_importacoes) / qtd_media_dividido_importacoes) * 100, 2)}" if qtd_media_dividido_importacoes != 0 else 0               
         })  
         
         
@@ -133,7 +143,7 @@ class Fiscal:
         fiscal["Filiais"].update({
             "comparativo": qtd_media_dividido_filiais,
             "realizado_x_comparativo": fiscal['Filiais']['realizado'] - qtd_media_dividido_filiais,
-            "percent_rc": round(((fiscal['Filiais']['realizado'] - qtd_media_dividido_filiais) / qtd_media_dividido_filiais),2) * 100 if qtd_media_dividido_filiais != 0 else 0             
+            "percent_rc": f"{round(((fiscal['Filiais']['realizado'] - qtd_media_dividido_filiais) / qtd_media_dividido_filiais) * 100, 2)}" if qtd_media_dividido_filiais != 0 else 0              
         }) 
         
         
@@ -144,7 +154,7 @@ class Fiscal:
         fiscal["SKU Movimentado"].update({
             "comparativo": qtd_media_dividido_sku,
             "realizado_x_comparativo": fiscal['SKU Movimentado']['realizado'] - qtd_media_dividido_sku,
-            "percent_rc": round(((fiscal['SKU Movimentado']['realizado'] - qtd_media_dividido_sku) / qtd_media_dividido_sku),2) * 100 if qtd_media_dividido_sku != 0 else 0             
+            "percent_rc": f"{round(((fiscal['SKU Movimentado']['realizado'] - qtd_media_dividido_sku) / qtd_media_dividido_sku) * 100, 2)}" if qtd_media_dividido_sku != 0 else 0             
         }) 
         
         
@@ -154,8 +164,8 @@ class Fiscal:
         
         fiscal["Estoque (Entrada)"].update({
             "comparativo": qtd_media_dividido_estoque_entrada,
-            "realizado_x_comparativo": fiscal['Estoque (Entrada)']['realizado'] - qtd_media_dividido_estoque_entrada,
-            "percent_rc": round(((fiscal['Estoque (Entrada)']['realizado'] - qtd_media_dividido_estoque_entrada) / qtd_media_dividido_estoque_entrada),2) * 100 if qtd_media_dividido_estoque_entrada != 0 else 0             
+            "realizado_x_comparativo": fiscal['Estoque (Entrada)']['realizado'] - qtd_media_dividido_estoque_entrada,    
+            "percent_rc": f"{round(((fiscal['Estoque (Entrada)']['realizado'] - qtd_media_dividido_estoque_entrada) / qtd_media_dividido_estoque_entrada) * 100, 2)}" if qtd_media_dividido_estoque_entrada != 0 else 0 
         }) 
         
         # Estoque (Saida)
@@ -165,7 +175,7 @@ class Fiscal:
         fiscal["Estoque (Saída)"].update({
             "comparativo": qtd_media_dividido_estoque_saida,
             "realizado_x_comparativo": fiscal['Estoque (Saída)']['realizado'] - qtd_media_dividido_estoque_saida,
-            "percent_rc": round(((fiscal['Estoque (Saída)']['realizado'] - qtd_media_dividido_estoque_saida) / qtd_media_dividido_estoque_saida),2) * 100 if qtd_media_dividido_estoque_saida != 0 else 0             
+            "percent_rc": f"{round(((fiscal['Estoque (Saída)']['realizado'] - qtd_media_dividido_estoque_saida) / qtd_media_dividido_estoque_saida) * 100, 2)}" if qtd_media_dividido_estoque_saida != 0 else 0  
         }) 
         
         return fiscal

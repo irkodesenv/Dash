@@ -17,8 +17,8 @@ def retorna_volumetria_consumo_cliente(request):
     lista_clientes = clientes.obter_clientes_formatados_formulario()
     
     filtros = {
-        "pick_realizado": ['11/09/2024 - 10/10/2024'],
-        "pick_comparativo": ['11/08/2024 - 10/09/2024']
+        "pick_realizado": ['11/10/2024 - 10/11/2024'],
+        "pick_comparativo": ['11/09/2024 - 10/10/2024']
     }  
         
     return render(request, 'dashboards/volumetria_cliente.html', {"filtros": filtros, "clientes": lista_clientes})

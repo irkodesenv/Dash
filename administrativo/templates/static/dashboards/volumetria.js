@@ -183,22 +183,24 @@
 
 
     function escreve_dados_no_quadro(tbody, data){
+        console.log(data)
         copia_tbody = tbody;
         // Limpar dados
         copia_tbody.empty()
         Object.entries(data).forEach(([key, value]) => {
+
             const linha = `
                 <tr>
                     <td class='td-table-volumetria-left'>${key}</td>
                     
-                    <td class='td-table-volumetria-center'>${value.orcado}</td>
+                    <td class='td-table-volumetria-center'>${value.orcado ? (value.orcado):(0)}</td>
     
-                    <td class='td-table-volumetria-center'>${value.realizado}</td>
+                    <td class='td-table-volumetria-center'>${value.realizado ? (value.realizado):(0)}</td>
 
                     <td class="td-table-volumetria-center">
                         <div class="td-table-volumetria-center-percent">
                             <span>
-                                ${value.realizado}
+                                ${value.realizado_x_orcado ? (value.realizado_x_orcado):(0)}
                             </span>
                                             
                             <span>                                                                           
@@ -222,12 +224,12 @@
                         </div>
                     </td> 
 
-                    <td class="td-table-volumetria-center"> ${value.comparativo}</td>   
+                    <td class="td-table-volumetria-center"> ${value.comparativo ? (value.comparativo):(0)}</td>   
                     
                     <td class="td-table-volumetria-center">
                         <div class="td-table-volumetria-center-percent">
                             <span>
-                                ${value.realizado_x_comparativo}
+                                ${value.realizado_x_comparativo ? (value.realizado_x_comparativo):(0)}
                             </span>
                                             
                             <span>                                                                           

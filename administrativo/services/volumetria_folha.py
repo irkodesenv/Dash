@@ -10,7 +10,14 @@ class Folha:
         self.codigo_filial = codigo_filial
     
     def controller_folha(self, media):
-        folha = {}
+        folha = {
+            "Autônomos": 0,
+            "Funcionários CLT": 0,
+            "Pró Labore":0,
+            "Estagiários": 0,
+            "Admissões": 0,
+            "Demissões": 0          
+        }      
         
         if not media:
             media = 1
@@ -70,7 +77,7 @@ class Folha:
             folha[item].update({
                 "comparativo": qtd_dividido_por_media,
                 "realizado_x_comparativo": folha[item]['realizado'] - qtd_dividido_por_media,
-                "percent_rc": round(((folha[item]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2) if quantidade != 0 else 0  
+                "percent_rc": f"{round(((folha[item]['realizado'] - qtd_dividido_por_media) / qtd_dividido_por_media) * 100 ,2)}" if qtd_dividido_por_media != 0 else 0  
             })
             
         # Estagiarios
@@ -79,7 +86,7 @@ class Folha:
         folha["Estagiários"].update({               
                 "comparativo": qtd_estagiario_dividido_por_media,
                 "realizado_x_comparativo": folha['Estagiários']['realizado'] - qtd_estagiario_dividido_por_media,
-                "percent_rc": round(((folha['Estagiários']['realizado'] - qtd_estagiario_dividido_por_media) / qtd_estagiario_dividido_por_media),2) * 100 if qtd_estagiario_dividido_por_media != 0 else 0        
+                "percent_rc": f"{round(((folha['Estagiários']['realizado'] - qtd_estagiario_dividido_por_media) / qtd_estagiario_dividido_por_media) * 100, 2)}" if qtd_estagiario_dividido_por_media != 0 else 0  
             })
         
         # Admissoes
@@ -88,7 +95,7 @@ class Folha:
         folha["Admissões"].update({
                 "comparativo": qtd_adm_dividido_por_media,
                 "realizado_x_comparativo": folha['Admissões']['realizado'] - qtd_adm_dividido_por_media,
-                "percent_rc": round(((folha['Admissões']['realizado'] - qtd_adm_dividido_por_media) / qtd_adm_dividido_por_media) * 100 ,2) if qtd_adm_dividido_por_media != 0 else 0      
+                "percent_rc": f"{round(((folha['Admissões']['realizado'] - qtd_adm_dividido_por_media) / qtd_adm_dividido_por_media) * 100 ,2)}" if qtd_adm_dividido_por_media != 0 else 0        
             })
         
         # Demissoes
@@ -97,8 +104,10 @@ class Folha:
         
         folha["Demissões"].update({
                 "comparativo": qtd_demi_dividido_por_media,
-                "realizado_x_comparativo": folha['Demissões']['realizado'] - qtd_demi_dividido_por_media,
-                "percent_rc": round(((folha['Demissões']['realizado'] - qtd_demi_dividido_por_media) / qtd_demi_dividido_por_media) * 100, 2) if qtd_demi_dividido_por_media != 0 else 0      
+                "realizado_x_comparativo": folha['Demissões']['realizado'] - qtd_demi_dividido_por_media,           
+                "percent_rc": f"{round(((folha['Demissões']['realizado'] - qtd_demi_dividido_por_media) / qtd_demi_dividido_por_media) * 100, 2)}" if qtd_demi_dividido_por_media != 0 else 0         
             })
+        
+        
 
         return folha

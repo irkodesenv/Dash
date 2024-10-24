@@ -9,7 +9,11 @@ class Contabil:
         
         
     def controller_contabil_volumetria(self, media):
-        contabil = {}
+        contabil = {
+            "Lançtos Contábeis": 0,
+            "Partidas Contábeis": 0,
+            "Ativo Imobilizado":0                    
+        }
         
         if not media:
             media = 1
@@ -63,7 +67,7 @@ class Contabil:
         contabil["Lançtos Contábeis"].update({
             "comparativo": qtd_dividido_por_media_lcts_contabeis,
             "realizado_x_comparativo": contabil['Lançtos Contábeis']['realizado'] - qtd_dividido_por_media_lcts_contabeis,
-            "percent_rc": round(((contabil['Lançtos Contábeis']['realizado'] - qtd_dividido_por_media_lcts_contabeis) / qtd_dividido_por_media_lcts_contabeis),2) * 100 if qtd_dividido_por_media_lcts_contabeis != 0 else 0       
+            "percent_rc": f"{round(((contabil['Lançtos Contábeis']['realizado'] - qtd_dividido_por_media_lcts_contabeis) / qtd_dividido_por_media_lcts_contabeis) * 100 ,2)}" if qtd_dividido_por_media_lcts_contabeis != 0 else 0
         })
         
         
@@ -74,7 +78,7 @@ class Contabil:
         contabil["Partidas Contábeis"].update({
             "comparativo": qtd_dividido_por_media_partida_contabeis,
             "realizado_x_comparativo": contabil['Partidas Contábeis']['realizado'] - qtd_dividido_por_media_partida_contabeis,
-            "percent_rc": round(((contabil['Partidas Contábeis']['realizado'] - qtd_dividido_por_media_partida_contabeis) / qtd_dividido_por_media_partida_contabeis),2) * 100 if qtd_dividido_por_media_partida_contabeis != 0 else 0       
+            "percent_rc": f"{round(((contabil['Partidas Contábeis']['realizado'] - qtd_dividido_por_media_partida_contabeis) / qtd_dividido_por_media_partida_contabeis) * 100 ,2)}" if qtd_dividido_por_media_partida_contabeis != 0 else 0 
         })
         
         
@@ -84,8 +88,8 @@ class Contabil:
         
         contabil["Ativo Imobilizado"].update({
             "comparativo": qtd_dividido_por_media_ativo_imobilizado,
-            "realizado_x_comparativo": contabil['Ativo Imobilizado']['realizado'] - qtd_dividido_por_media_ativo_imobilizado,
-            "percent_rc": round(((contabil['Ativo Imobilizado']['realizado'] - qtd_dividido_por_media_ativo_imobilizado) / qtd_dividido_por_media_ativo_imobilizado),2) * 100 if qtd_dividido_por_media_ativo_imobilizado != 0 else 0       
+            "realizado_x_comparativo": contabil['Ativo Imobilizado']['realizado'] - qtd_dividido_por_media_ativo_imobilizado,            
+            "percent_rc": f"{round(((contabil['Ativo Imobilizado']['realizado'] - qtd_dividido_por_media_ativo_imobilizado) / qtd_dividido_por_media_ativo_imobilizado) * 100 ,2)}" if qtd_dividido_por_media_ativo_imobilizado != 0 else 0 
         })
         
         return contabil
