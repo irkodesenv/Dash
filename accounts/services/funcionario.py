@@ -7,7 +7,7 @@ class Funcionario(Pessoa):
     
     
     def conta_tipo_funcionario(self, tipos, data_fim, codigo_empresa, codigo_filial):
-        where_clause = f"TIPO in {tipos} AND DATACADASTRO <= '{data_fim}'"
+        where_clause = f"TIPO in {tipos} AND DATACADASTRO <= '{data_fim}' and SITUACAO = 1"
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA = {codigo_empresa}"
         
@@ -26,7 +26,7 @@ class Funcionario(Pessoa):
 
 
     def contar_estagiarios(self, data_fim, codigo_empresa, codigo_filial):
-        where_clause = f"ESTAGIARIO = 1 AND TIPO = 'O' AND DATACADASTRO <= '{data_fim}'"
+        where_clause = f"ESTAGIARIO = 1 AND TIPO = 'O' AND DATACADASTRO <= '{data_fim}' and SITUACAO = 1"
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA = {codigo_empresa}"
 
@@ -41,7 +41,7 @@ class Funcionario(Pessoa):
 
 
     def contar_admissoes(self, data_ini, data_fim, codigo_empresa, codigo_filial):
-        where_clause = f"DATACADASTRO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO = 'N'"
+        where_clause = f"DATACADASTRO BETWEEN '{data_ini}' AND '{data_fim}' AND TIPO = 'N' and SITUACAO = 1"
         if codigo_empresa:
             where_clause += f" AND CODIGOEMPRESA = {codigo_empresa}"
 

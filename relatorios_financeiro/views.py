@@ -8,6 +8,7 @@ from clientes.services.controller_irko import ControllerClienteIrko
 from clientes.services.controller_athenas import ControllerClienteAthenas
 from conexoes.services.firebird import Conexao
 from accounts.services.utils.clienteService import ClienteService
+from dateutil.relativedelta import relativedelta
 import json
 import logging
 import pandas as pd
@@ -202,11 +203,12 @@ def retorna_recorrencia(request):
 
     # Remover quaisquer valores de vencimento inválidos (valores que não foram convertidos)
     df = df.dropna(subset=['VENCIMENTO'])
-
+    
     # Simular o cálculo de recorrência mensal
     hoje = datetime.today().date()
+    
     data_futura = hoje + timedelta(days=7)
-
+    
     # Lista para armazenar previsões de pagamentos
     pagamentos = []
 
@@ -232,13 +234,19 @@ def retorna_recorrencia(request):
         ultimo_vencimento = grupo['VENCIMENTO'].max()
 
         # Verificar se o último vencimento é uma data válida
-        if ultimo_vencimento:
-            # Supondo recorrência mensal, o próximo vencimento será no mesmo dia no próximo mês
-            proximo_vencimento = ultimo_vencimento + timedelta(days=30)
+        if ultimo_vencimento:          
+            
+            # Calculando a diferença de meses
+            diferenca_meses = relativedelta(hoje, ultimo_vencimento)
 
+            # A diferença total em meses
+            total_meses = (diferenca_meses.years * 12 + diferenca_meses.months) +1 
+
+            # Supondo recorrência mensal, o próximo vencimento será no mesmo dia no próximo mês
+            proximo_vencimento = ultimo_vencimento + timedelta(days=30*total_meses)    
+            
             # Se o próximo vencimento estiver dentro dos próximos 7 dias, adicionar à lista
-            if hoje <= proximo_vencimento <= data_futura:
-                
+            if hoje <= proximo_vencimento <= data_futura:             
                 # Obter o último pagamento e tratar se for NaT (não pago)
                 ultimo_pagto = grupo['PAGTO'].max()
                 if pd.isna(ultimo_pagto):
@@ -269,6 +277,7 @@ def retorna_recorrencia(request):
         'pagamentos': pagamentos,
         'clientes' : lista_clientes,
         'cliente_selecionado': cliente_selecionado,
+        'dt_hoje': hoje.strftime('%d/%m/%Y')
     }
     
     return render(request, 'relatorios_financeiro/relatorios/recorrencia.html', context)
